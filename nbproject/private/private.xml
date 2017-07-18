@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/app/Http/Requests/UpdateUser.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Models/Serverlist.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/composer.json</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/app/Http/Requests/StoreUser.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/services/Containers/ServerContainer.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Gateway/Http/Controllers/GatewayController.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/services/Providers/GatewayServiceProvider.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Permissions/Http/Controllers/PermissionController.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/resources/views/pages/home.blade.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/app/Http/Requests/Permission.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Transformers/serverTransformer.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Transformers/Transformer.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Models/User.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Models/Permissions.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Server/Http/Controllers/ServerController.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/services/Providers/UserServiceProvider.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Users/Http/Controllers/UserController.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/services/Providers/RoleServiceProvider.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/app/Http/Requests/assignPermissionRole.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/services/Containers/RoleContainer.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/services/Providers/PermissionServiceProvider.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/services/Contracts/PermissionContract.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/app/Http/Requests/LoginUser.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Models/Mt4gateway.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Roles/Http/Controllers/RolesController.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/services/Containers/PermissionContainer.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/services/Containers/UserContainer.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/resources/views/pages/login.blade.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/resources/lang/en/user.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/app/Http/Requests/assignRoleToUser.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/resources/views/pages/create_user.blade.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Transformers/UserTransformer.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/services/Containers/GatewayContainer.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Transformers/GatewayTransformer.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Transformers/RoleTransformer.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/services/Providers/ServerServiceProvider.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/app/Http/Requests/updateRole.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/app/Http/Requests/updatePermission.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/services/Contracts/UserContract.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Common/Common.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Transformers/permissionTransformer.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Configs/routes.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Models/Role.php</file>
+        </group>
+    </open-files>
+</project-private>
