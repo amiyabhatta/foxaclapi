@@ -60,5 +60,7 @@ Route::group(['prefix' => 'api/v1'], function () {
         Route::put('server/{id}', 'Server\Http\Controllers\ServerController@update');
         Route::delete('server/{id}', 'Server\Http\Controllers\ServerController@destroy');
         
+        //Server List to be shown in user create page
+         Route::get('serverlist', 'Server\Http\Controllers\ServerController@serverlist');
     });
 });

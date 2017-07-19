@@ -56,6 +56,10 @@ class ServerContainer extends Base implements ServerContract
      * @return type
      */
     
+    public function getServerListForUserCreate(){       
+        return response()->json($this->servermodel->getAllServerLists());
+    }
+    
     
     public function createServer($request){
         

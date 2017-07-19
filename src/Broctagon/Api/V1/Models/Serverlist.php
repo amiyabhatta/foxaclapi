@@ -80,4 +80,9 @@ class Serverlist extends Model
        return $this->join('mt4gateway','mt4gateway.id','=','serverlist.GatewayID')                   
                    ->paginate($limit);  
     }
+    
+    public function getAllServerLists(){        
+       return $this->select('id','servername')->get();
+                   
+    }
 }
