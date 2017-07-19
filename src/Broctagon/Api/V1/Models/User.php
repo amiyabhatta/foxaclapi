@@ -7,6 +7,7 @@ use Fox\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Fox\Models\UserHasRole;
 use Fox\Models\user_server_access;
+use Fox\Models\Mt4gateway;
 
 class User extends Authenticatable
 {
@@ -32,7 +33,7 @@ class User extends Authenticatable
     public function getAllUsers($limit)
     {
         return $this->select('id', 'name', 'email', 'created_at')
-                    ->where('email','!=','james@gmail.com')
+                        ->where('email', '!=', 'james@gmail.com')
                         ->paginate($limit);
     }
 
@@ -231,19 +232,20 @@ class User extends Authenticatable
 
         return false;
     }
-    
-    public function getUserServerDetails($user_id,$server_name = null){
-        
+
+    public function getUserServerDetails($user_id, $server_name = null)
+    {
+
         $user_server_access = new user_server_access;
-        $result = $user_server_access->select('serverlist.servername', 'serverlist.ipaddress', 'serverlist.username','serverlist.password','serverlist.databasename','serverlist.GatewayID')
-                       ->leftjoin('users','user_server_access.user_id', '=', 'users.id')
-                       ->leftjoin('serverlist','serverlist.id', '=', 'user_server_access.server_id')                       
-                       ->where('user_server_access.user_id','=',$user_id)
-                       ->where('serverlist.servername','=',$server_name)
-                       ->get();
+        $result = $user_server_access->select('serverlist.servername', 'serverlist.ipaddress', 'serverlist.username', 'serverlist.password', 'serverlist.databasename', 'serverlist.GatewayID')
+                ->leftjoin('users', 'user_server_access.user_id', '=', 'users.id')
+                ->leftjoin('serverlist', 'serverlist.id', '=', 'user_server_access.server_id')
+                ->where('user_server_access.user_id', '=', $user_id)
+                ->where('serverlist.servername', '=', $server_name)
+                ->get();
         $server_array = [];
         $i = 0;
-        foreach ($result as $serverdetails){
+        foreach ($result as $serverdetails) {
             $server_array[$i]['server_name'] = $serverdetails['servername'];
             $server_array[$i]['server_ip'] = $serverdetails['ipaddress'];
             $server_array[$i]['server_username'] = $serverdetails['username'];
@@ -255,23 +257,51 @@ class User extends Authenticatable
         return $server_array;
     }
 
-    public function getUserPermissionDetails($user_id){
-               
+    public function getUserPermissionDetails($user_id)
+    {
+
         $result = $this->select('permissions.name')
-                       ->leftjoin('users_has_roles','users.id', '=', 'users_has_roles.user_id')
-                       ->leftjoin('roles_has_permissions','users_has_roles.roles_id', '=', 'roles_has_permissions.role_id')
-                       ->leftjoin('permissions','roles_has_permissions.permissions_id', '=', 'permissions.id')                       
-                       ->where('users.id','=',$user_id)                       
-                       ->get();
-        
+                ->leftjoin('users_has_roles', 'users.id', '=', 'users_has_roles.user_id')
+                ->leftjoin('roles_has_permissions', 'users_has_roles.roles_id', '=', 'roles_has_permissions.role_id')
+                ->leftjoin('permissions', 'roles_has_permissions.permissions_id', '=', 'permissions.id')
+                ->where('users.id', '=', $user_id)
+                ->get();
+
         $permission_array = [];
         $i = 0;
-        foreach ($result as $permissiondetails){
-            $permission_array[$i]['tab_name'] = $permissiondetails['name'];           
+        foreach ($result as $permissiondetails) {
+            $permission_array[$i]['tab_name'] = $permissiondetails['name'];
             $i++;
-        }        
+        }
         return $permission_array;
     }
-    
-    
+
+    public function getUserGatewayDetails($server_name)
+    {
+        $gw_model = new Mt4gateway();
+        $gw_result = $gw_model->select('gateway_name', 'host', 'port', 'master_password', 'mt4gateway.username')
+                        ->join('serverlist', 'serverlist.GatewayID', '=', 'mt4gateway.id')
+                        ->where('serverlist.servername', '=', $server_name)->first();
+        $gw_details = [];
+        $gw_details[0]['gateway_name'] = $gw_result->gateway_name;
+        $gw_details[0]['host'] = $gw_result->host;
+        $gw_details[0]['port'] = $gw_result->port;
+        $gw_details[0]['master_password'] = $gw_result->master_password;
+        $gw_details[0]['username'] = $gw_result->username;
+
+        return $gw_details;
+    }
+
+    public function getDbDetails()
+    {
+
+        $db_detials = [];
+        $db_detials[0]['host'] = env('DB_HOST', false);
+        $db_detials[0]['db_name'] = env('DB_DATABASE', false);
+        $db_detials[0]['db_username'] = env('DB_USERNAME', false);
+        $db_detials[0]['db_password'] = env('DB_PASSWORD', false);
+        
+        return $db_detials;
+    }
+
 }

@@ -84,10 +84,13 @@ class UserContainer extends Base implements UserContract
         $server_name = $request->input('server_name');
         $server_details = $this->usermodel->getUserServerDetails($user->id,$server_name);
         $tab_details = $this->usermodel->getUserPermissionDetails($user->id);
+        $gateway_details = $this->usermodel->getUserGatewayDetails($request->input('server_name'));
+        $db_detials = $this->usermodel->getDbDetails();
+        
         
         $token = encrypt($token);
         // all good so return the token
-        return $this->setStatusCode(200)->respondWithToken(compact('token','server_details','tab_details'));
+        return $this->setStatusCode(200)->respondWithToken(compact('token','server_details','tab_details','gateway_details','db_detials'));
     }
     
     
