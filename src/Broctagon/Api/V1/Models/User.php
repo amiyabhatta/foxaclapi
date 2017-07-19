@@ -283,11 +283,16 @@ class User extends Authenticatable
                         ->join('serverlist', 'serverlist.GatewayID', '=', 'mt4gateway.id')
                         ->where('serverlist.servername', '=', $server_name)->first();
         $gw_details = [];
-        $gw_details[0]['gateway_name'] = $gw_result->gateway_name;
-        $gw_details[0]['host'] = $gw_result->host;
-        $gw_details[0]['port'] = $gw_result->port;
-        $gw_details[0]['master_password'] = $gw_result->master_password;
-        $gw_details[0]['username'] = $gw_result->username;
+        if ($gw_result) {            
+            $gw_details[0]['gateway_name'] = $gw_result->gateway_name;
+            $gw_details[0]['host'] = $gw_result->host;
+            $gw_details[0]['port'] = $gw_result->port;
+            $gw_details[0]['master_password'] = $gw_result->master_password;
+            $gw_details[0]['username'] = $gw_result->username;
+        }
+        else {
+            $gw_details = [];
+        }
 
         return $gw_details;
     }
@@ -300,7 +305,7 @@ class User extends Authenticatable
         $db_detials[0]['db_name'] = env('DB_DATABASE', false);
         $db_detials[0]['db_username'] = env('DB_USERNAME', false);
         $db_detials[0]['db_password'] = env('DB_PASSWORD', false);
-        
+
         return $db_detials;
     }
 
