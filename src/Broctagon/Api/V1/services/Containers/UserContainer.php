@@ -212,5 +212,35 @@ class UserContainer extends Base implements UserContract
                     'status_code' => 403
         ]);  
     }
+    
+    public function logout(){
+         JWTAuth::invalidate(JWTAuth::getToken());
+        return $this->respond(['status_code' => 401, 'message' => trans('user.logout')]);
+    }
+    
+    public function Uilogin($request){
+        
+        $credentials = $request->only('email', 'password');       
+
+        try {
+            // attempt to verify the credentials and create a token for the user
+            if (!$token = JWTAuth::attempt($credentials)) {
+
+                // return $this->setStatusCode(401)->respondWithError('Invalid Credentials');
+                return $this->setStatusCode(200)->respond(['message' => trans('user.invalid_creds'),
+                            'status_code' => 404]);
+            }
+        }
+        catch (JWTException $e) {
+            // something went wrong whilst attempting to encode the token
+
+            return $this->setStatusCode(200)->respond(['message' => trans('user.not_create_token'),
+                        'status_code' => 500]);
+        }
+        
+        $token = encrypt($token);
+        // all good so return the token
+        return $this->setStatusCode(200)->respondWithToken(compact('token')); 
+    }
 
 }

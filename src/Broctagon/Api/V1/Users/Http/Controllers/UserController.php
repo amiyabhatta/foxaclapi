@@ -11,6 +11,7 @@ use App\Http\Requests\UpdateUser;
 use Illuminate\Http\Request;
 use App\Http\Requests\assignRoleToUser;
 use Illuminate\Support\Facades\View;
+use App\Http\Requests\UiLogin;
 
 class UserController extends Controller
 {
@@ -74,5 +75,14 @@ class UserController extends Controller
        
        return View::make('pages.home')->with(compact('user_data'));
     }
+    
+    public function logout(){
+        
+        return $this->userContainer->logout();
+        
+    }
 
+    public function uilogin(UiLogin $request){         
+       return $this->userContainer->Uilogin($request); 
+    }
 }
