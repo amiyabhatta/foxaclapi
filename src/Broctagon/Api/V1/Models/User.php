@@ -40,7 +40,7 @@ class User extends Authenticatable
             $query->where('id','=',$id);
         }
         $result = $query->paginate($limit);
-        return $result;
+        return $result; 
     }
 
     /**

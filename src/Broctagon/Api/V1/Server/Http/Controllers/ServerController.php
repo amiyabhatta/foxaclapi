@@ -25,7 +25,7 @@ class ServerController extends Controller
     
     public function index($id = NULL)
     {
-        return $this->fractal->createData($this->serverContainer->getServerList($id))->toJson();
+       return $this->fractal->createData($this->serverContainer->getServerList($id))->toJson();
     }
 
     /**
