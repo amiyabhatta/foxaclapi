@@ -11,18 +11,18 @@
   |
  */
 
-Route::get('/dashboard', 'Users\Http\Controllers\UserController@dashboard');
-
+Route::get('/', function () {
+    //return view('welcome');
+    return View::make('pages.home');
+});
+Route::get('/home', function () {
+    //return view('welcome');
+    return View::make('pages.home');
+});
 Route::get('/login', function () {
     //return view('welcome');
     return View::make('pages.login');
 });
-
-Route::get('create/user', function () {
-    //return view('welcome');
-    return View::make('pages.create_user');
-});
-
 
 Route::group(['prefix' => 'api/v1'], function () {
 

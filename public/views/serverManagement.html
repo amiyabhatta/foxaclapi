@@ -1,0 +1,38 @@
+<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12"  ng-init="server.getServers();">
+    <div class="card mb-4">
+        <div class="card-block">           
+            <a ui-sref="createUser()" class="btn btn-primary mb-4">Create Server </a>
+            <div id="no-more-tables" class="table-responsive">               
+                <table  class="table table-striped cf">
+                    <thead class="cf">
+                        <tr>
+                            <th>S. no.</th>
+                            <th>Name</th>
+                            <th>IP Address</th>
+                            <th>User Name</th>
+                            <th>Password</th>
+                            <th>Database Name</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>                       
+                        <tr ng-repeat="ser in server.servers">
+                            <td>{{ser.id}}</td>
+                            <td>{{ser.servername}}</td>
+                            <td>{{ser.ipaddress}}</td>
+                            <td>{{ser.username}}</td>
+                            <td>{{ser.password}}</td>
+                            <td>{{ser.databasename}}</td>
+                            <td>
+                                <a href="#" class="btn btn-sm btn-primary"><i class="fa fa-pencil-square" aria-hidden="true"></i>
+                                </a>
+                                <a href="#" class="btn btn-sm btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i>
+                                </a>
+                            </td>
+                        </tr>                       
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

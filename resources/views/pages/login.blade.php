@@ -1,10 +1,10 @@
 @extends('layouts.login')
 @section('content')
 
-<div class="row">
+<div class="row" ng-app="authApp">
     <div class="login_back text-center">
-        <a href="index.html"><img  class="mb-4" src="{{asset('assets/images/white_logo_2.png')}}"></a>
-        <form class="form-horizontal" action="" method="post">
+        <a href="index.html"><img  class="mb-4" src="assets/images/white_logo_2.png"></a>
+        <form action="logincheck" method="post">
             <fieldset>
                 <!-- Name input-->
                 <div class="form-group text-left">
@@ -12,6 +12,7 @@
 
                     <div class="col-12 no-padding position_rel">
                         <i class="fa fa-user"></i>
+                        
                         <input id="email" name="email" type="text" placeholder="Your Email" class="form-control pl-4">
                     </div>
                 </div>
@@ -22,7 +23,7 @@
 
                     <div class="col-12 no-padding position_rel">
                         <i class="fa fa-lock"></i>
-                        <input id="password" name="email" type="password" placeholder="Your password" class="form-control pl-4">
+                        <input id="password" name="password" type="password" placeholder="Your password" class="form-control pl-4">
                     </div>
                 </div>
 
@@ -38,7 +39,7 @@
                 <div class="form-group text-center forgot_password">
                     <button type="button" data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap">Forgot Password?</button>
                 </div>
-
+                
             </fieldset>
         </form>
     </div>

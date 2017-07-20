@@ -1,0 +1,30 @@
+<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12"  ng-init="gateway.getGateways()">
+    <div class="card mb-4">
+        <div class="card-block">           
+            <a ui-sref="createUser()" class="btn btn-primary mb-4">Create Gateway </a>
+            <div id="no-more-tables" class="table-responsive">               
+                <table  class="table table-striped cf">
+                    <thead class="cf">
+                        <tr>
+                            <th>S. no.</th>
+                            <th>Name</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>                       
+                        <tr ng-repeat="gats in gateway.gateways">
+                            <td>{{gats.id}}</td>
+                            <td>{{gats.servername}}</td>
+                            <td>
+                                <a href="#" class="btn btn-sm btn-primary"><i class="fa fa-pencil-square" aria-hidden="true"></i>
+                                </a>
+                                <a href="#" class="btn btn-sm btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i>
+                                </a>
+                            </td>
+                        </tr>                       
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -3,7 +3,7 @@
 <head>
     @include('includes.head')
 </head>
-<body>
+<body ng-app="authApp">
 	<div class="container-fluid" id="wrapper">
 		<div class="row">
 			<nav class="sidebar col-xs-12 col-sm-4 col-lg-3 col-xl-2 bg-faded sidebar-style-1">
@@ -14,15 +14,23 @@
 				<header class="page-header row justify-center">
 					@include('includes.header')
 				</header>
-				
+				<!--
 				<section class="row">
                                     @yield('content')
-				</section>
+				</section> -->
+                                <!--<br><br><br>
+                                <a ui-sref="auth()">auth</a><br>
+                                <a ui-sref="home()">Home</a><br>
+                                <a ui-sref="users()">users</a><br><br><br>-->
+                                
+                                <div class="container">
+                                        <div ui-view></div>
+                                </div> 
+
+                            
 			</main>
 		</div>
 	</div>
-
-	
 
      @include('includes.footer')    
  </body>

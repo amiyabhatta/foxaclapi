@@ -11,6 +11,7 @@
 	<title>Medialoot Bootstrap 4 Dashboard Template</title>
 
     <!-- Bootstrap core CSS -->
+   
     <link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!--Fonts-->

@@ -6,7 +6,7 @@
     
     <script src="assets/js/chart.min.js"></script>
     <script src="assets/js/chart-data.js"></script>
-    <script src="assets/js/easypiechart.js"></script>
+    <!-- <script src="assets/js/easypiechart.js"></script> -->
     <script src="jassets/s/easypiechart-data.js"></script>
     <script src="assets/js/bootstrap-datepicker.js"></script>
     <script src="assets/js/custom.js"></script>
@@ -23,3 +23,18 @@
     </script>    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
 
+     <!-- Application Dependencies -->
+    <script src="node_modules/angular/angular.js"></script>
+    <script src="node_modules/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="node_modules/satellizer/dist/satellizer.js"></script>
+
+    <!-- Application Scripts -->
+    <script src="scripts/app.js"></script>
+    <script src="scripts/authController.js"></script>
+    <script src="scripts/userController.js"></script>
+    <script src="scripts/dashboardController.js"></script>
+    
+    <script src="scripts/gatewayController.js"></script>
+    <script src="scripts/permissionController.js"></script>
+    <script src="scripts/roleController.js"></script>
+    <script src="scripts/serverController.js"></script>
