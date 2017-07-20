@@ -30,11 +30,17 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function getAllUsers($limit)
+    public function getAllUsers($limit,$id)
     {
-        return $this->select('id', 'name', 'email', 'created_at')
-                        ->where('email', '!=', 'james@gmail.com')
-                        ->paginate($limit);
+        $query = $this->select('id', 'name', 'email', 'created_at')
+                        ->where('email', '!=', 'james@gmail.com');
+                        //->paginate($limit);
+        
+        if($id){
+            $query->where('id','=',$id);
+        }
+        $result = $query->paginate($limit);
+        return $result;
     }
 
     /**

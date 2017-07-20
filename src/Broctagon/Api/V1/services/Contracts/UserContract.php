@@ -11,7 +11,7 @@ interface UserContract {
     /**
      * list all users
      */
-    public function getUsers();
+    public function getUsers($id);
     
     /**
      * User Login

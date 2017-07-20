@@ -59,7 +59,7 @@ class Permissions extends Model
         try {
             $permission->save();
         }
-        catch (\Exception $exc) {            
+        catch (\Exception $exc) {
             return false;
         }
 
@@ -99,10 +99,15 @@ class Permissions extends Model
      * @param type $request
      * @return boolean
      */
-    public function getAllPermission($limit)
+    public function getAllPermission($limit, $id = NULL)
     {
-        return $this->select('id', 'name')
-                        ->paginate($limit);
+        $query = $this->select('id', 'name');
+        if ($id) {
+            $query->where('id', '=', $id);
+        }
+        $result = $query->paginate($limit);
+
+        return $result;
     }
 
 }

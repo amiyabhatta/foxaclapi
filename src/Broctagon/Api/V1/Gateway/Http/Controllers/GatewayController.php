@@ -24,10 +24,10 @@ class GatewayController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id = NULL)
     {
        
-       return $this->fractal->createData($this->gatewayContainer->gatewaytList())->toJson();
+       return $this->fractal->createData($this->gatewayContainer->gatewaytList($id))->toJson();
     }
 
     /**

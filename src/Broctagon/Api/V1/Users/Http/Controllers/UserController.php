@@ -27,9 +27,9 @@ class UserController extends Controller
      * @author Dibya lochan Nayak <dibyalochan.nayak@broctagon.com>
      * @return Json
      */
-    public function index()
-    {
-        return $this->fractal->createData($this->userContainer->getUsers())->toJson();
+    public function index($id = NUll)
+    {       
+        return $this->fractal->createData($this->userContainer->getUsers($id))->toJson();
     }
 
     /**

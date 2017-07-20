@@ -33,11 +33,11 @@ class GatewayContainer extends Base implements GatewayContract
      * @author Dibya lochan Nayak <dibyalochan.nayak@broctagon.com>
      * @return Collection
      */
-    public function gatewaytList()
+    public function gatewaytList($id)
     {
         $limit = Input::get('limit', 2);
 
-        $gw = $this->gatewaymodel->getAllGwList($limit);
+        $gw = $this->gatewaymodel->getAllGwList($limit,$id);
 
         $queryParams = array_diff_key($_GET, array_flip(['page']));
 

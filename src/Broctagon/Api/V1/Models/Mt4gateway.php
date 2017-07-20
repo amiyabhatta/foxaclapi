@@ -6,19 +6,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class Mt4gateway extends Model
 {
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'host', 'port','master_password','username','gateway_name'
+        'host', 'port', 'master_password', 'username', 'gateway_name'
     ];
-    
     protected $table = 'mt4gateway';
-    
-    public function addGateway($request){
-    
+
+    public function addGateway($request)
+    {
+
         try {
             $this->gateway_name = $request->input('gatewayname');
             $this->host = $request->input('host');
@@ -32,33 +33,35 @@ class Mt4gateway extends Model
         }
         return true;
     }
-    
-    public function updateGateway($request){
-        
+
+    public function updateGateway($request)
+    {
+
         $gateway = $this->find($request->segment(4));
-        
+
         if (!$gateway) {
             return false;
         }
-        
-      
-        $gateway->gateway_name = $request->input('gatewayname');        
+
+
+        $gateway->gateway_name = $request->input('gatewayname');
         $gateway->host = $request->input('host');
         $gateway->port = $request->input('port');
         $gateway->master_password = $request->input('password');
         $gateway->username = $request->input('username');
-       
-        try{
+
+        try {
             $gateway->save();
         }
-        catch(\Exception $exc){            
-           return false; 
+        catch (\Exception $exc) {
+            return false;
         }
         return true;
     }
-    
-    public function deleteGateway($id){
-        
+
+    public function deleteGateway($id)
+    {
+
         $gw = $this->find($id);
 
         if (!$gw) {
@@ -73,9 +76,18 @@ class Mt4gateway extends Model
         }
         return true;
     }
-    
-    public function getAllGwList($limit){
-       return $this->select('*')
-                   ->paginate($limit);  
+
+    public function getAllGwList($limit, $id)
+    {
+        $query = $this->select('*');
+
+        if ($id) {
+            $query->where('id', "=", $id);
+        }
+
+        $result = $query->paginate($limit);
+
+        return $result;
     }
+
 }

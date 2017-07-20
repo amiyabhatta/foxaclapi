@@ -32,11 +32,11 @@ class ServerContainer extends Base implements ServerContract
      * Paginator adapter is used for pagination.     * 
      * @return Collection
      */
-    public function getServerList()
+    public function getServerList($id)
     {
         $limit = Input::get('limit', 20);
         
-        $server = $this->servermodel->getAllServerList($limit);
+        $server = $this->servermodel->getAllServerList($limit,$id);
 
         $queryParams = array_diff_key($_GET, array_flip(['page']));
 

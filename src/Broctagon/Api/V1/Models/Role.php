@@ -19,12 +19,18 @@ class Role extends Model
         'role', 'role_slug'
     ];
 
-    public function getAllRoles($limit)
+    public function getAllRoles($limit, $id = NULL)
     {
 
-        return $this->select('id', 'role', 'role_slug')
-                        ->where('role_slug', '!=', 'super_administrator')
-                        ->paginate($limit);
+        $query = $this->select('id', 'role', 'role_slug');
+        
+        if ($id) {
+            $query->where('id', '=', $id);
+        }
+
+        $query->where('role_slug', '!=', 'super_administrator');
+        $result = $query->paginate($limit);
+        return $result;
     }
 
     /**
@@ -106,7 +112,7 @@ class Role extends Model
      */
     public function assignRoletoPerm($request)
     {
-        
+
         $role_has_perm = new roleHasPermission;
 
         //Update 
@@ -129,21 +135,21 @@ class Role extends Model
         }
 
         //Insert
-        $check_role = $this->find($request->segment(4));        
-        if($check_role){
-        $role_has_perm->role_id = $request->segment(4);
-        $role_has_perm->permissions_id = $request->input('permission_id');
-        $role_has_perm->action = $request->input('action');
+        $check_role = $this->find($request->segment(4));
+        if ($check_role) {
+            $role_has_perm->role_id = $request->segment(4);
+            $role_has_perm->permissions_id = $request->input('permission_id');
+            $role_has_perm->action = $request->input('action');
 
-        try {
-            $role_has_perm->save();
-            return true;
+            try {
+                $role_has_perm->save();
+                return true;
+            }
+            catch (\Exception $e) {
+                return false;
+            }
         }
-        catch (\Exception $e) {
-            return false;
-        }
-        }
-        
+
         return false;
     }
 

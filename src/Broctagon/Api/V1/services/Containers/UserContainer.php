@@ -35,11 +35,11 @@ class UserContainer extends Base implements UserContract
      * @author Dibya lochan Nayak <dibyalochan.nayak@broctagon.com>
      * @return Collection
      */
-    public function getUsers()
-    {
+    public function getUsers($id)
+    {        
         $limit = Input::get('limit', 20);
 
-        $user = $this->usermodel->getAllUsers($limit);
+        $user = $this->usermodel->getAllUsers($limit,$id);
 
         $queryParams = array_diff_key($_GET, array_flip(['page']));
 

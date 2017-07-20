@@ -138,12 +138,12 @@ class PermissionContainer extends Base implements PermissionContract
      * Paginator adapter is used for pagination.    
      * @return Collection
      */
-    public function getPermission()
+    public function getPermission($id = NULL)
     {
         
         $limit = Input::get('limit', 20);
        
-        $permission = $this->permissionModel->getAllPermission($limit);
+        $permission = $this->permissionModel->getAllPermission($limit,$id);
         
         $queryParams = array_diff_key($_GET, array_flip(['page']));
 

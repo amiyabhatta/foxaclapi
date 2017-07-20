@@ -26,9 +26,9 @@ class RolesController extends Controller
     }
     
     
-    public function index()
-    {        
-        return $this->fractal->createData($this->roleContainer->getRoles())->toJson();  
+    public function index($id = null)
+    {           
+        return $this->fractal->createData($this->roleContainer->getRoles($id))->toJson();  
     }
 
     /**

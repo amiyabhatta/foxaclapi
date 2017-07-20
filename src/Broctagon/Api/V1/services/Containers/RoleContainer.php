@@ -136,12 +136,12 @@ class RoleContainer extends Base implements RoleContract
      * Paginator adapter is used for pagination.    
      * @return Collection
      */
-    public function getRoles()
+    public function getRoles($id)
     {
         
         $limit = Input::get('limit', 20);
        
-        $role = $this->roleModel->getAllRoles($limit);        
+        $role = $this->roleModel->getAllRoles($limit,$id);        
 
         $queryParams = array_diff_key($_GET, array_flip(['page']));
 
