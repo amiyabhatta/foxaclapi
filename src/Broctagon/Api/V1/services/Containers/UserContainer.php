@@ -23,10 +23,11 @@ class UserContainer extends Base implements UserContract
     private $usermodel;
     private $roleModel;
 
-    public function __construct($userTransformer, $user)
+    public function __construct($userTransformer, $user, $global_setting)
     {
         $this->userTransformer = $userTransformer;
         $this->usermodel = $user;
+        $this->globalSettingOm = $global_setting;
     }
 
     /**
@@ -36,10 +37,10 @@ class UserContainer extends Base implements UserContract
      * @return Collection
      */
     public function getUsers($id)
-    {        
+    {
         $limit = Input::get('limit', 20);
 
-        $user = $this->usermodel->getAllUsers($limit,$id);
+        $user = $this->usermodel->getAllUsers($limit, $id);
 
         $queryParams = array_diff_key($_GET, array_flip(['page']));
 
@@ -64,9 +65,11 @@ class UserContainer extends Base implements UserContract
         //$credentials = $request->only('email', 'password');
         $credentials = $request->only('manager_id', 'password');
 
+        $custom_value = $request->only('server_name');
+
         try {
             // attempt to verify the credentials and create a token for the user
-            if (!$token = JWTAuth::attempt($credentials)) {
+            if (!$token = JWTAuth::attempt($credentials, $custom_value)) {
 
                 // return $this->setStatusCode(401)->respondWithError('Invalid Credentials');
                 return $this->setStatusCode(200)->respond(['message' => trans('user.invalid_creds'),
@@ -79,32 +82,29 @@ class UserContainer extends Base implements UserContract
             return $this->setStatusCode(200)->respond(['message' => trans('user.not_create_token'),
                         'status_code' => 500]);
         }
-        
+
         $user = JWTAuth::authenticate($token);
         $server_name = $request->input('server_name');
-        $server_details = $this->usermodel->getUserServerDetails($user->id,$server_name);
+        $server_details = $this->usermodel->getUserServerDetails($user->id, $server_name);
         $tab_details = $this->usermodel->getUserPermissionDetails($user->id);
         $gateway_details = $this->usermodel->getUserGatewayDetails($request->input('server_name'));
         $db_detials = $this->usermodel->getDbDetails();
-        
-        
+
+
         $token = encrypt($token);
         // all good so return the token
-        return $this->setStatusCode(200)->respondWithToken(compact('token','server_details','tab_details','gateway_details','db_detials'));
+        return $this->setStatusCode(200)->respondWithToken(compact('token', 'server_details', 'tab_details', 'gateway_details', 'db_detials'));
     }
-    
-    
-    
-    
-    
-    public function createUser($request){
-        
+
+    public function createUser($request)
+    {
+
         //check user permission (only Superadmin having permission)
         $check_user_role = common::checkRole();
 
         if ($check_user_role == 'super_administrator') {
 
-           $res = $this->usermodel->addUser($request);
+            $res = $this->usermodel->addUser($request);
 
             if (!$res) {
                 return $this->setStatusCode(500)->respond([
@@ -124,10 +124,11 @@ class UserContainer extends Base implements UserContract
                     'status_code' => 403
         ]);
     }
-    
-    public function updateUser($request){
-        
-         //check user permission (only Superadmin having permission)
+
+    public function updateUser($request)
+    {
+
+        //check user permission (only Superadmin having permission)
         $check_user_role = common::checkRole();
 
         if ($check_user_role == 'super_administrator') {
@@ -152,9 +153,10 @@ class UserContainer extends Base implements UserContract
                     'status_code' => 403
         ]);
     }
-    
-    public function deleteUser($request){
-        
+
+    public function deleteUser($request)
+    {
+
         $check_user_role = common::checkRole();
 
         if ($check_user_role == 'super_administrator') {
@@ -162,19 +164,19 @@ class UserContainer extends Base implements UserContract
             $res = $this->usermodel->deleteUser($request);
 
             if (!$res) {
-                
+
                 return $this->setStatusCode(404)->respond([
                             'message' => trans('user.not_found'),
                             'status_code' => 404
                 ]);
             }
-            elseif ($res === 'error') {                
+            elseif ($res === 'error') {
                 return $this->setStatusCode(500)->respond([
                             'message' => trans('user.some_error_occur'),
                             'status_code' => 500
                 ]);
             }
-            
+
             return $this->setStatusCode(201)->respond([
                         'message' => trans('user.delete_sucess'),
                         'status_code' => 201
@@ -186,21 +188,22 @@ class UserContainer extends Base implements UserContract
                     'status_code' => 403
         ]);
     }
-    
-    public function assignRole($request){
-       $check_user_role = common::checkRole();
+
+    public function assignRole($request)
+    {
+        $check_user_role = common::checkRole();
 
         if ($check_user_role == 'super_administrator') {
 
             $res = $this->usermodel->assignRoleToUser($request);
 
             if (!$res) {
-               return $this->setStatusCode(500)->respond([
+                return $this->setStatusCode(500)->respond([
                             'message' => trans('user.some_error_occur'),
                             'status_code' => 500
                 ]);
-            }            
-            
+            }
+
             return $this->setStatusCode(200)->respond([
                         'message' => (($request->input('action')) ? trans('user.role_assign') : trans('user.role_assign_update')),
                         'status_code' => 200
@@ -210,17 +213,19 @@ class UserContainer extends Base implements UserContract
         return $this->setStatusCode(403)->respond([
                     'message' => trans('user.permission_denied'),
                     'status_code' => 403
-        ]);  
+        ]);
     }
-    
-    public function logout(){
-         JWTAuth::invalidate(JWTAuth::getToken());
+
+    public function logout()
+    {
+        JWTAuth::invalidate(JWTAuth::getToken());
         return $this->respond(['status_code' => 401, 'message' => trans('user.logout')]);
     }
-    
-    public function Uilogin($request){
-        
-        $credentials = $request->only('email', 'password');       
+
+    public function Uilogin($request)
+    {
+
+        $credentials = $request->only('email', 'password');
 
         try {
             // attempt to verify the credentials and create a token for the user
@@ -237,10 +242,68 @@ class UserContainer extends Base implements UserContract
             return $this->setStatusCode(200)->respond(['message' => trans('user.not_create_token'),
                         'status_code' => 500]);
         }
-        
+
         $token = encrypt($token);
         // all good so return the token
-        return $this->setStatusCode(200)->respondWithToken(compact('token')); 
+        return $this->setStatusCode(200)->respondWithToken(compact('token'));
+    }
+
+    public function setGlobalAlertOm($request)
+    {
+        //get server name from token
+        $payload = JWTAuth::parseToken()->getPayload();
+        $server_name = $payload->get('server_name');
+        $res = $this->globalSettingOm->saveSetting($request, $server_name);
+
+        if (!$res) {
+            return $this->setStatusCode(500)->respond([
+                        'message' => trans('user.some_error_occur'),
+                        'status_code' => 500
+            ]);
+        }
+
+        return $this->setStatusCode(200)->respond([
+                    'message' => (trans('user.global_alert')),
+                    'status_code' => 200
+        ]);
+    }
+
+    public function getGlobalAlertOm()
+    {
+        $payload = JWTAuth::parseToken()->getPayload();
+        $server_name = $payload->get('server_name');
+        $getGloablSettingData = $this->globalSettingOm->getSetting($server_name);
+
+        $ret = [];
+
+        foreach ($getGloablSettingData as $key => $dt) {
+            $ret[$dt->alert_type]['volume_limit1'] = $dt->volume_limit1;
+            $ret[$dt->alert_type]['volume_limit2'] = $dt->volume_limit2;
+            $ret[$dt->alert_type]['avg_volume_limit1'] = $dt->avg_volume_limit1;
+            $ret[$dt->alert_type]['avg_volume_limit2'] = $dt->avg_volume_limit2;
+            $ret[$dt->alert_type]['index_limit'] = $dt->index_limit;
+        }
+
+        return response()->json($ret);
+    }
+
+    public function deleteGlobalAlertOm()
+    {
+        $payload = JWTAuth::parseToken()->getPayload();
+        $server_name = $payload->get('server_name');
+        $deleteGloablSettingData = $this->globalSettingOm->deleteSetting($server_name);
+        
+        if (!$deleteGloablSettingData) {
+            return $this->setStatusCode(500)->respond([
+                        'message' => trans('user.some_error_occur'),
+                        'status_code' => 500
+            ]);
+        }
+
+        return $this->setStatusCode(200)->respond([
+                    'message' => (trans('user.global_alert_delete')),
+                    'status_code' => 200
+        ]);
     }
 
 }

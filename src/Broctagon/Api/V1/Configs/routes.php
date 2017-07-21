@@ -67,5 +67,10 @@ Route::group(['prefix' => 'api/v1'], function () {
 
         //logout
         Route::post('logout', 'Users\Http\Controllers\UserController@logout');
+        
+        //Set global alert for Overall Monitoring
+       Route::post('setglobalalertom', 'Users\Http\Controllers\UserController@setGlobalAlertOm');
+       Route::get('getglobalalertom', 'Users\Http\Controllers\UserController@getGlobalAlertOm');
+       Route::delete('deleteglobalalertom', 'Users\Http\Controllers\UserController@deleteGlobalAlertOm');
     });
 });

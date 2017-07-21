@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
 use Fox\Transformers\UserTransformer;
 use Fox\Models\User;
+use Fox\Models\glb_alert_setting_OM;
 
 class UserServiceProvider extends ServiceProvider {
 
@@ -25,8 +26,9 @@ class UserServiceProvider extends ServiceProvider {
          */
         $userTransformer = new UserTransformer;
         $user = new User;
-        App::bind('Fox\Services\Contracts\UserContract', function() use($userTransformer, $user) {
-            return new UserContainer($userTransformer, $user);
+        $global_setting = new glb_alert_setting_OM;
+        App::bind('Fox\Services\Contracts\UserContract', function() use($userTransformer, $user, $global_setting) {
+            return new UserContainer($userTransformer, $user, $global_setting);
         });
     }
 

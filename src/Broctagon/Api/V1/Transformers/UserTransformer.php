@@ -11,6 +11,7 @@ class UserTransformer extends Fractal\TransformerAbstract {
         return [
             'id' => $user['id'],
             'name' => $user['name'],
+            'manager_id' => $user['manager_id'],
             'email' => $user['email'],            
             'links' => [
                 'rel' => 'self',

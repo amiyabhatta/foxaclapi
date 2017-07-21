@@ -64,4 +64,8 @@ return [
     'server_not_found' => 'Server Id Not Found',
     'server_create_sucess' => 'Server Created Sucessfully',
     'server_update_sucess' => 'Server Updated Sucessfully',
+    
+    //Global alert setting for Overall Monitoring
+    'global_alert' => 'Alert Value saved Sucessfully',
+    'global_alert_delete' => 'Alert Deleted Sucessfully'
 ];

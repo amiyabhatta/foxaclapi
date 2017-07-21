@@ -85,4 +85,19 @@ class UserController extends Controller
     public function uilogin(UiLogin $request){         
        return $this->userContainer->Uilogin($request); 
     }
+    
+    //Set global alert for Overall Monitoring
+    public function setGlobalAlertOm(Request $request){         
+       return $this->userContainer->setGlobalAlertOm($request); 
+    }
+    
+    //Get global alert for Overall monitoring
+    public function getGlobalAlertOm(){       
+       return $this->userContainer->getGlobalAlertOm(); 
+    }
+    //Delete global alert for overall monitoring
+    public function deleteglobalalertom(){
+       return $this->userContainer->deleteGlobalAlertOm();  
+    }
+       
 }

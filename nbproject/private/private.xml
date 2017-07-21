@@ -5,7 +5,6 @@
         <group>
             <file>file:/home/amiya/amiya/projects/foxaclapi/app/Http/Requests/UpdateUser.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Models/Serverlist.php</file>
-            <file>file:/home/amiya/amiya/projects/foxaclapi/composer.json</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/app/Http/Requests/StoreUser.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/services/Containers/ServerContainer.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Gateway/Http/Controllers/GatewayController.php</file>
@@ -25,20 +24,19 @@
             <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/services/Containers/RoleContainer.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/services/Providers/PermissionServiceProvider.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/services/Contracts/PermissionContract.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/app/Http/Requests/UiLogin.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/app/Http/Requests/LoginUser.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Models/Mt4gateway.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Roles/Http/Controllers/RolesController.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/services/Containers/PermissionContainer.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/services/Containers/UserContainer.php</file>
-            <file>file:/home/amiya/amiya/projects/foxaclapi/resources/views/pages/login.blade.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/resources/lang/en/user.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/.env</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/app/Http/Requests/assignRoleToUser.php</file>
-            <file>file:/home/amiya/amiya/projects/foxaclapi/resources/views/pages/create_user.blade.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Transformers/UserTransformer.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/services/Containers/GatewayContainer.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Transformers/GatewayTransformer.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Transformers/RoleTransformer.php</file>
-            <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/services/Providers/ServerServiceProvider.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/app/Http/Requests/updateRole.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/app/Http/Requests/updatePermission.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/services/Contracts/UserContract.php</file>

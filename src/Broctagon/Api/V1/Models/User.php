@@ -32,7 +32,7 @@ class User extends Authenticatable
 
     public function getAllUsers($limit,$id)
     {
-        $query = $this->select('id', 'name', 'email', 'created_at')
+        $query = $this->select('*')
                         ->where('email', '!=', 'james@gmail.com');
                         //->paginate($limit);
         
@@ -76,7 +76,7 @@ class User extends Authenticatable
                     });
         }
         catch (\Exception $exc) {
-            return $exc;
+            return FALSE;
         }
         return true;
     }
@@ -144,7 +144,7 @@ class User extends Authenticatable
                 $i++;
             }
             $result = array_diff($assign_server, $ids);
-            $result = array_diff($assign_server, $ids);
+            //$result = array_diff($assign_server, $ids);
 
             if (count($result)) {
                 foreach ($result as $server_id) {
