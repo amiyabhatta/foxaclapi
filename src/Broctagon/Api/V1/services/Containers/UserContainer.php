@@ -253,7 +253,9 @@ class UserContainer extends Base implements UserContract
         //get server name from token
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
-        $res = $this->globalSettingOm->saveSetting($request, $server_name);
+        $userinfo = JWTAuth::parseToken()->authenticate();
+        $login_id = $userinfo->manager_id;
+        $res = $this->globalSettingOm->saveSetting($request, $server_name, $login_id);
 
         if (!$res) {
             return $this->setStatusCode(500)->respond([
@@ -272,7 +274,9 @@ class UserContainer extends Base implements UserContract
     {
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
-        $getGloablSettingData = $this->globalSettingOm->getSetting($server_name);
+        $userinfo = JWTAuth::parseToken()->authenticate();
+        $login_id = $userinfo->manager_id;
+        $getGloablSettingData = $this->globalSettingOm->getSetting($server_name, $login_id);
 
         $ret = [];
 
@@ -291,7 +295,9 @@ class UserContainer extends Base implements UserContract
     {
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
-        $deleteGloablSettingData = $this->globalSettingOm->deleteSetting($server_name);
+        $userinfo = JWTAuth::parseToken()->authenticate();
+        $login_id = $userinfo->manager_id;
+        $deleteGloablSettingData = $this->globalSettingOm->deleteSetting($server_name, $login_id);
         
         if (!$deleteGloablSettingData) {
             return $this->setStatusCode(500)->respond([

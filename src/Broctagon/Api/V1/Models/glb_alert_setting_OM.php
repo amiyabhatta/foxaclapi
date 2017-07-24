@@ -12,10 +12,12 @@ class glb_alert_setting_OM extends Model
     ];
     protected $table = 'glb_alert_setting_om';
 
-    public function saveSetting($request, $servername)
+    public function saveSetting($request, $servername, $login)
     {
 
-        $server = $this->where('server_name', '=', $servername)->first();
+        $server = $this->where('server_name', '=', $servername)
+                       ->where('login','=',$login)
+                       ->first();
 
         //Delete Details
         $alert_type = ['bo_buy', 'bo_sell', 'fx_buy', 'fx_sell', 'index_buy', 'index_sell'];
@@ -27,6 +29,7 @@ class glb_alert_setting_OM extends Model
             foreach ($symbol_type_array as $symbo_type) {
                 $input[$key][$symbo_type] = $request->input($type . '_' . $symbo_type);
                 $input[$key]['server_name'] = $servername;
+                $input[$key]['login'] = $login;
             }
         }
 
@@ -38,6 +41,7 @@ class glb_alert_setting_OM extends Model
 
                     $this->where('server_name', $servername)
                             ->where('alert_type', $input_update['alert_type'])
+                            ->where('login',$login)
                             ->update(array(
                                 "volume_limit1" => $input_update['volume_limit1'],
                                 "volume_limit2" => $input_update['volume_limit2'],
@@ -66,17 +70,21 @@ class glb_alert_setting_OM extends Model
     }
 
     //Get global setting
-    public function getSetting($servername)
+    public function getSetting($servername, $login)
     {
         return $this->select('*')
-                        ->where('server_name', $servername)->get();
+                    ->where('login',$login)
+                    ->where('server_name', $servername)
+                    ->get();
     }
 
     //Delete global setting
-    public function deleteSetting($servername)
+    public function deleteSetting($servername, $login)
     {
         try {
-            $this->where('server_name', '=', $servername)->delete();
+            $this->where('login', '=', $login)
+                 ->where('server_name', '=', $servername)
+                 ->delete();
         }
         catch (\Exception $exc) {
             return FALSE;
