@@ -72,5 +72,10 @@ Route::group(['prefix' => 'api/v1'], function () {
        Route::post('setglobalalertom', 'Users\Http\Controllers\UserController@setGlobalAlertOm');
        Route::get('getglobalalertom', 'Users\Http\Controllers\UserController@getGlobalAlertOm');
        Route::delete('deleteglobalalertom', 'Users\Http\Controllers\UserController@deleteGlobalAlertOm');
+       
+         //Set Bo Alert
+       Route::post('saveboalert', 'Users\Http\Controllers\UserController@setBoAlert');
+       Route::get('getboalert', 'Users\Http\Controllers\UserController@getBoAlert');
+       Route::delete('deleteboalert', 'Users\Http\Controllers\UserController@deleteBoAlert');
     });
 });

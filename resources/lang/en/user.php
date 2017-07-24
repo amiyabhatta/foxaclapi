@@ -67,5 +67,10 @@ return [
     
     //Global alert setting for Overall Monitoring
     'global_alert' => 'Alert Value saved Sucessfully',
-    'global_alert_delete' => 'Alert Deleted Sucessfully'
+    'global_alert_delete' => 'Alert deleted Sucessfully',
+    
+    //Bo alert setting
+    'bo_alert_setting' => 'Bo alert setting saved sucessfully',
+    'bo_alert_setting_delete' => 'Bo alert setting deleted sucessfully',
+    
 ];

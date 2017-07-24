@@ -23,11 +23,12 @@ class UserContainer extends Base implements UserContract
     private $usermodel;
     private $roleModel;
 
-    public function __construct($userTransformer, $user, $global_setting)
+    public function __construct($userTransformer, $user, $global_setting, $bo_alert)
     {
         $this->userTransformer = $userTransformer;
         $this->usermodel = $user;
         $this->globalSettingOm = $global_setting;
+        $this->bolAlertSetting = $bo_alert;
     }
 
     /**
@@ -286,6 +287,8 @@ class UserContainer extends Base implements UserContract
             $ret[$dt->alert_type]['avg_volume_limit1'] = $dt->avg_volume_limit1;
             $ret[$dt->alert_type]['avg_volume_limit2'] = $dt->avg_volume_limit2;
             $ret[$dt->alert_type]['index_limit'] = $dt->index_limit;
+            $ret[$dt->alert_type]['server'] = $dt->server_name;            
+            $ret[$dt->alert_type]['login'] = $dt->login;
         }
 
         return response()->json($ret);
@@ -308,6 +311,77 @@ class UserContainer extends Base implements UserContract
 
         return $this->setStatusCode(200)->respond([
                     'message' => (trans('user.global_alert_delete')),
+                    'status_code' => 200
+        ]);
+    }
+    
+    
+    //Bo alert setting
+    
+    public function setBoAlert($request)
+    {        
+        //get server name from token
+        $payload = JWTAuth::parseToken()->getPayload();
+        $server_name = $payload->get('server_name');
+        $userinfo = JWTAuth::parseToken()->authenticate();
+        $login_id = $userinfo->manager_id;     
+        $res = $this->bolAlertSetting->saveBoAlertSetting($request, $server_name, $login_id);
+
+        if (!$res) {
+            return $this->setStatusCode(500)->respond([
+                        'message' => trans('user.some_error_occur'),
+                        'status_code' => 500
+            ]);
+        }
+
+        return $this->setStatusCode(200)->respond([
+                    'message' => (trans('user.bo_alert_setting')),
+                    'status_code' => 200
+        ]);
+    }
+
+    public function getBoAlert()
+    {
+        
+        $payload = JWTAuth::parseToken()->getPayload();
+        $server_name = $payload->get('server_name');
+        $userinfo = JWTAuth::parseToken()->authenticate();
+        $login_id = $userinfo->manager_id;
+        $getGloablSettingData = $this->bolAlertSetting->getBoAlertSetting($server_name, $login_id);
+
+        $ret = [];
+
+        foreach ($getGloablSettingData as $key => $dt) {
+            $ret[$dt->alert_type]['volume_limit1'] = $dt->volume_limit1;
+            $ret[$dt->alert_type]['volume_limit2'] = $dt->volume_limit2;
+            $ret[$dt->alert_type]['avg_volume_limit1'] = $dt->avg_volume_limit1;
+            $ret[$dt->alert_type]['avg_volume_limit2'] = $dt->avg_volume_limit2;
+            $ret[$dt->alert_type]['index_limit'] = $dt->index_limit;
+            $ret[$dt->alert_type]['server'] = $dt->server_name;
+            $ret[$dt->alert_type]['symbol'] = $dt->symbol;
+            $ret[$dt->alert_type]['login'] = $dt->login;
+        }
+
+        return response()->json($ret);
+    }
+
+    public function deleteBoAlert()
+    {
+        $payload = JWTAuth::parseToken()->getPayload();
+        $server_name = $payload->get('server_name');
+        $userinfo = JWTAuth::parseToken()->authenticate();
+        $login_id = $userinfo->manager_id;
+        $deleteGloablSettingData = $this->bolAlertSetting->deleteBoAlertSetting($server_name, $login_id);
+        
+        if (!$deleteGloablSettingData) {
+            return $this->setStatusCode(500)->respond([
+                        'message' => trans('user.some_error_occur'),
+                        'status_code' => 500
+            ]);
+        }
+
+        return $this->setStatusCode(200)->respond([
+                    'message' => (trans('user.bo_alert_setting_delete')),
                     'status_code' => 200
         ]);
     }

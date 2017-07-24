@@ -99,5 +99,20 @@ class UserController extends Controller
     public function deleteglobalalertom(){
        return $this->userContainer->deleteGlobalAlertOm();  
     }
+    
+    //Save bo alert setting
+    public function setBoAlert(Request $request){        
+       return $this->userContainer->setBoAlert($request); 
+    }
+    
+    //Get bo alert setting
+     public function getBoAlert(Request $request){       
+       return $this->userContainer->getBoAlert($request); 
+    }
+    
+    //Delete bo alert setting
+    public function deleteBoalert(){
+       return $this->userContainer->deleteBoAlert();  
+    }
        
 }
