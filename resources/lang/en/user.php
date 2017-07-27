@@ -73,4 +73,10 @@ return [
     'bo_alert_setting' => 'Bo alert setting saved sucessfully',
     'bo_alert_setting_delete' => 'Bo alert setting deleted sucessfully',
     
+    //Users Trade Alert
+    'trade_alert_save' => 'Trade alert saved sucessfully',
+    'trade_alert_update' => 'Trade alert updated sucessfully',
+    'trade_alert_delete' => 'Trade alert deleted sucessfully',
+    'trade_alert_already_assign' => 'Login already assign to same server and manager id'
+    
 ];

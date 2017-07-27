@@ -32,14 +32,12 @@ class User extends Authenticatable
 
     public function getAllUsers($limit,$id)
     {
+        $query = $this->select('*')
+                        ->where('email', '!=', 'james@gmail.com');
+                        //->paginate($limit);
         
         if($id){
-            $query = $this->select('users.id','users.name','users.manager_id','users.email','user_server_access.server_id')
-                          ->leftjoin('user_server_access', 'user_server_access.user_id', '=', 'users.id')
-                          ->where('users.email', '!=', 'james@gmail.com')
-                         ->where('users.id','=',$id);
-        }else{
-            $query = $this->select('*')->where('email', '!=', 'james@gmail.com');
+            $query->where('id','=',$id);
         }
         $result = $query->paginate($limit);        
         return $result; 

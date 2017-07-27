@@ -294,13 +294,13 @@ class UserContainer extends Base implements UserContract
         return response()->json($ret);
     }
 
-    public function deleteGlobalAlertOm()
+    public function deleteGlobalAlertOm($request)
     {
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
         $userinfo = JWTAuth::parseToken()->authenticate();
         $login_id = $userinfo->manager_id;
-        $deleteGloablSettingData = $this->globalSettingOm->deleteSetting($server_name, $login_id);
+        $deleteGloablSettingData = $this->globalSettingOm->deleteSetting($server_name, $login_id,$request);
         
         if (!$deleteGloablSettingData) {
             return $this->setStatusCode(500)->respond([

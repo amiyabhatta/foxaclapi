@@ -163,7 +163,8 @@ return [
         Fox\Services\Providers\RoleServiceProvider::class,
         Fox\Services\Providers\PermissionServiceProvider::class,
         Fox\Services\Providers\GatewayServiceProvider::class,
-        Fox\Services\Providers\ServerServiceProvider::class
+        Fox\Services\Providers\ServerServiceProvider::class,
+        Fox\Services\Providers\AlertServiceProvider::class
 
     ],
 

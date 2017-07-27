@@ -96,8 +96,8 @@ class UserController extends Controller
        return $this->userContainer->getGlobalAlertOm(); 
     }
     //Delete global alert for overall monitoring
-    public function deleteglobalalertom(){
-       return $this->userContainer->deleteGlobalAlertOm();  
+    public function deleteglobalalertom(Request $request){
+       return $this->userContainer->deleteGlobalAlertOm($request);  
     }
     
     //Save bo alert setting

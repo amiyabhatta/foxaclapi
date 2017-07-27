@@ -30,6 +30,9 @@ class Bo_alert_setting extends Model
                 $input[$key]['server_name'] = $servername;
                 $input[$key]['login'] = $login;
                 $input[$key]['symbol'] = $request->input('symbol');
+                if(!count($server)){
+                  $input[$key]['created_at'] = date('Y-m-d H:i:s');                  
+                }
             }
         }
 

@@ -77,5 +77,12 @@ Route::group(['prefix' => 'api/v1'], function () {
        Route::post('saveboalert', 'Users\Http\Controllers\UserController@setBoAlert');
        Route::get('getboalert', 'Users\Http\Controllers\UserController@getBoAlert');
        Route::delete('deleteboalert', 'Users\Http\Controllers\UserController@deleteBoAlert');
+       
+       //User Trade
+       Route::get('usertrade/{id?}', 'Alert\Http\Controllers\AlertController@getTradeAlert');
+       Route::post('saveusertrade', 'Alert\Http\Controllers\AlertController@saveUserTrade');
+       Route::put('updateusertrade/{id}', 'Alert\Http\Controllers\AlertController@updateUserTrade');
+       Route::delete('deleteusertrade/{id}', 'Alert\Http\Controllers\AlertController@deleteUserTrade');
+       
     });
 });
