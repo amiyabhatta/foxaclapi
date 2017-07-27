@@ -19,6 +19,7 @@ class glb_alert_setting_OM extends Model
                 ->where('login', '=', $login)
                 ->get();
 
+
         $exist_record = [];
         foreach ($server as $server_exist_record) {
             $exist_record[$server_exist_record->alert_type]['volume_limit1'] = $server_exist_record->volume_limit1;
@@ -47,27 +48,69 @@ class glb_alert_setting_OM extends Model
             }
         }
 
+        
+        
 
 
         if (count($server)) {
-            foreach ($input as $input_update) {
+//            foreach ($input as $input_update) {
+//                try {
+//                    $alert_type = $input_update['alert_type'];
+//                    $this->where('server_name', $servername)
+//                            ->where('alert_type', $input_update['alert_type'])
+//                            ->where('login', $login)
+//                            ->update(array(
+//                                "volume_limit1" => ($input_update['volume_limit1'] ? $input_update['volume_limit1'] : $exist_record[$alert_type]['volume_limit1']),
+//                                "volume_limit2" => ($input_update['volume_limit2'] ? $input_update['volume_limit2'] : $exist_record[$alert_type]['volume_limit2'] ),
+//                                "avg_volume_limit1" => ($input_update['avg_volume_limit1'] ? $input_update['avg_volume_limit1'] : $exist_record[$alert_type]['avg_volume_limit1']),
+//                                "avg_volume_limit2" => ($input_update['avg_volume_limit2'] ? $input_update['avg_volume_limit2'] : $exist_record[$alert_type]['avg_volume_limit2']),
+//                                "index_limit" => ($input_update['index_limit'] ? $input_update['index_limit'] : $exist_record[$alert_type]['index_limit']),
+//                    ));
+//                }
+//                catch (\Exception $exc) {
+//                    //return FALSE;
+//                    dd($exc);
+//                }
+//            }
+             foreach ($server as $input_update) {
+                 
+                //Check alert type is available is there or not
+                $check_type =  $this->where('server_name', '=', $servername)
+                                    ->where('login', '=', $login)
+                                    ->where('alert_type','=',$input_update->alert_type)
+                                    ->get(); 
+                 
                 try {
-                    $alert_type = $input_update['alert_type'];
+                     $volume_limit1 = $request->input($input_update->alert_type.'_'.'volume_limit1');
+                     $volume_limit2 = $request->input($input_update->alert_type.'_'.'volume_limit2');
+                     $avg_volume_limit1 = $request->input($input_update->alert_type.'_'.'avg_volume_limit1');
+                     $avg_volume_limit2 = $request->input($input_update->alert_type.'_'.'avg_volume_limit2');
+                     $index_limit = $request->input($input_update->alert_type.'_'.'index_limit');
+                     
+                     $post_volume_limit1 = (isset($volume_limit1)) ? $volume_limit1 : $exist_record[$input_update->alert_type]['volume_limit1']; 
+                     $post_volume_limit2 = (isset($volume_limit2)) ? $volume_limit2 : $exist_record[$input_update->alert_type]['volume_limit2']; 
+                     $post_avg_volume_limit1 = (isset($avg_volume_limit1)) ? $avg_volume_limit1 : $exist_record[$input_update->alert_type]['avg_volume_limit1']; 
+                     $post_avg_volume_limit2 = (isset($avg_volume_limit2)) ? $avg_volume_limit2 : $exist_record[$input_update->alert_type]['avg_volume_limit2']; 
+                     $post_index_limit = (isset($index_limit)) ? $index_limit : $exist_record[$input_update->alert_type]['index_limit']; 
+                    
+                    
                     $this->where('server_name', $servername)
                             ->where('alert_type', $input_update['alert_type'])
                             ->where('login', $login)
                             ->update(array(
-                                "volume_limit1" => ($input_update['volume_limit1'] ? $input_update['volume_limit1'] : $exist_record[$alert_type]['volume_limit1']),
-                                "volume_limit2" => ($input_update['volume_limit2'] ? $input_update['volume_limit2'] : $exist_record[$alert_type]['volume_limit2'] ),
-                                "avg_volume_limit1" => ($input_update['avg_volume_limit1'] ? $input_update['avg_volume_limit1'] : $exist_record[$alert_type]['avg_volume_limit1']),
-                                "avg_volume_limit2" => ($input_update['avg_volume_limit2'] ? $input_update['avg_volume_limit2'] : $exist_record[$alert_type]['avg_volume_limit2']),
-                                "index_limit" => ($input_update['index_limit'] ? $input_update['index_limit'] : $exist_record[$alert_type]['index_limit']),
+                                "volume_limit1" => $post_volume_limit1,
+                                "volume_limit2" => $post_volume_limit2,
+                                "avg_volume_limit1" => $post_avg_volume_limit1,
+                                "avg_volume_limit2" => $post_avg_volume_limit2,
+                                "index_limit" => $post_index_limit,
                     ));
                 }
                 catch (\Exception $exc) {
                     return FALSE;
+                    //dd($exc);
                 }
             }
+            
             return true;
         }
         else {
@@ -78,7 +121,7 @@ class glb_alert_setting_OM extends Model
             catch (\Exception $exc) {
                 return FALSE;
             }
-
+            //dd("test1");
             return true;
         }
     }
@@ -101,7 +144,12 @@ class glb_alert_setting_OM extends Model
               $this->where('login', '=', $login)
                         ->where('server_name', '=', $servername)
                         ->where('alert_type', '=',$request->input('delete_type'))
-                        ->delete();  
+                        ->update(array(
+                                "volume_limit1" => '',
+                                "volume_limit2" => '',
+                                "avg_volume_limit1" => '',
+                                "avg_volume_limit2" => '',
+                                "index_limit" => ''));  
             }
             else {
                 $this->where('login', '=', $login)
