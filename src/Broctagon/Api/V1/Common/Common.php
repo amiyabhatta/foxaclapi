@@ -7,11 +7,9 @@ use Carbon\Carbon;
 use Tymon\JWTAuth\Facades\JWTAuth;
 Use Fox\Models\UserHasRole;
 
-
 class Common extends Base
 {
 
-  
     /**
      * 
      * @param type $loggedinUserId
@@ -25,6 +23,7 @@ class Common extends Base
                 ->get();
         return $results[0]->roles_id;
     }
+
     /**
      * Get Current Language
      * 
@@ -39,16 +38,24 @@ class Common extends Base
     {
         $userRole = new UserHasRole;
         $userinfo = JWTAuth::parseToken()->authenticate();
-        
+
         $role = $userRole->select('role_slug')
-                         ->leftjoin('roles','roles.id', '=', 'users_has_roles.roles_id')
-                         ->where('users_has_roles.user_id','=',$userinfo->id)->first(); 
-        
-        if(count($role)){
-           return $role->role_slug;
+                        ->leftjoin('roles', 'roles.id', '=', 'users_has_roles.roles_id')
+                        ->where('users_has_roles.user_id', '=', $userinfo->id)->first();
+
+        if (count($role)) {
+            return $role->role_slug;
         }
         return false;
     }
 
-    
+    //Get server name and manager id from Token
+    public static function serverManagerId()
+    {
+        $payload = JWTAuth::parseToken()->getPayload();
+        $userinfo = JWTAuth::parseToken()->authenticate();
+
+        return array('server_name' => $payload->get('server_name'), 'login' => $userinfo->manager_id);
+    }
+
 }

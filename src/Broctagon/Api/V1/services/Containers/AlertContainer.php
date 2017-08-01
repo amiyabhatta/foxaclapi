@@ -20,9 +20,12 @@ class AlertContainer extends Base implements AlertContract
 
     protected $userTransformer;
 
-    public function __construct($usertrade)
+    public function __construct($usertrade, $lasttrade, $reportgroup, $reportgroupuser)
     {
         $this->usertrade = $usertrade;
+        $this->lasttrade = $lasttrade;
+        $this->reportgroup = $reportgroup;
+        $this->reportgroupuser = $reportgroupuser;
     }
 
     /**
@@ -46,7 +49,8 @@ class AlertContainer extends Base implements AlertContract
         }
         return $this->setStatusCode(200)->respond([
                     'message' => (trans('user.trade_alert_save')),
-                    'status_code' => 200
+                    'status_code' => 200,
+                    'last_insert_id' => $res,
         ]);
     }
 
@@ -107,8 +111,191 @@ class AlertContainer extends Base implements AlertContract
         $login_id = $userinfo->manager_id;
 
         $res = $this->usertrade->getTradeValue($server_name, $login_id, $id);
-        
+
         return response()->json($res);
+    }
+
+    /**
+     * Get Last Trades.
+     * Paginator adapter is used for pagination.     * 
+     * @return Collection
+     */
+    public function getLastTradeList($id)
+    {
+        $servermgrId = common::serverManagerId();
+
+        $res = $this->lasttrade->getlatsTradeList($servermgrId['server_name'], $servermgrId['login'], $id);
+
+        return response()->json($res);
+    }
+
+    public function updateLastTradeList($id, $request)
+    {
+        $servermgrId = common::serverManagerId();
+
+        $res = $this->lasttrade->updatelatsTrade($servermgrId['server_name'], $servermgrId['login'], $id, $request);
+
+        if (!$res) {
+            return $this->setStatusCode(500)->respond([
+                        'message' => trans('user.some_error_occur'),
+                        'status_code' => 500
+            ]);
+        }
+
+        return $this->setStatusCode(200)->respond([
+                    'message' => (trans('user.trade_update')),
+                    'status_code' => 200
+        ]);
+    }
+
+    public function createWhiteLabel($request)
+    {
+        $check_user_role = common::checkRole();
+
+        if ($check_user_role == 'super_administrator') {
+
+            $res = $this->lasttrade->createWl($request);
+
+            if (!$res) {
+                return $this->setStatusCode(500)->respond([
+                            'message' => trans('user.some_error_occur'),
+                            'status_code' => 500
+                ]);
+            }
+
+            return $this->setStatusCode(200)->respond([
+                        'message' => (trans('user.wl_created')),
+                        'status_code' => 200
+            ]);
+        }
+        return $this->setStatusCode(403)->respond([
+                    'message' => trans('user.permission_denied'),
+                    'status_code' => 403
+        ]);
+    }
+
+    public function updateWhiteLabel($request, $id)
+    {
+        $check_user_role = common::checkRole();
+
+        if ($check_user_role == 'super_administrator') {
+
+            $res = $this->lasttrade->updateWl($request, $id);
+
+            if (!$res) {
+                return $this->setStatusCode(500)->respond([
+                            'message' => trans('user.some_error_occur'),
+                            'status_code' => 500
+                ]);
+            }
+
+            return $this->setStatusCode(200)->respond([
+                        'message' => (trans('user.wl_update')),
+                        'status_code' => 200
+            ]);
+        }
+        return $this->setStatusCode(403)->respond([
+                    'message' => trans('user.permission_denied'),
+                    'status_code' => 403
+        ]);
+    }
+
+    public function deleteWhiteLabel($id)
+    {
+        $check_user_role = common::checkRole();
+
+        if ($check_user_role == 'super_administrator') {
+
+            $res = $this->lasttrade->deleteWl($id);
+
+            if (!$res) {
+                return $this->setStatusCode(500)->respond([
+                            'message' => trans('user.some_error_occur'),
+                            'status_code' => 500
+                ]);
+            }
+
+            return $this->setStatusCode(200)->respond([
+                        'message' => (trans('user.wl_delete')),
+                        'status_code' => 200
+            ]);
+        }
+        return $this->setStatusCode(403)->respond([
+                    'message' => trans('user.permission_denied'),
+                    'status_code' => 403
+        ]);
+    }
+
+    /*
+     * Save Report and group
+     */
+
+    public function saveReportGroup($request)
+    {
+        $servermgrId = common::serverManagerId();
+
+        $res = $this->reportgroup->saveReportGroup($servermgrId['server_name'], $servermgrId['login'], $request);
+
+        if (!$res) {
+            return $this->setStatusCode(500)->respond([
+                        'message' => trans('user.some_error_occur'),
+                        'status_code' => 500
+            ]);
+        }
+
+        return $this->setStatusCode(200)->respond([
+                    'message' => (trans('user.trade_group_created')),
+                    'status_code' => 200
+        ]);
+    }
+
+    public function updateReportGroup($request)
+    {
+
+        $servermgrId = common::serverManagerId();
+
+        $res = $this->reportgroup->updateReportGroup($servermgrId['server_name'], $servermgrId['login'], $request);
+
+        if (!$res) {
+            return $this->setStatusCode(500)->respond([
+                        'message' => trans('user.some_error_occur'),
+                        'status_code' => 500
+            ]);
+        }
+
+        return $this->setStatusCode(200)->respond([
+                    'message' => (trans('user.trade_group_updated')),
+                    'status_code' => 200
+        ]);
+    }
+
+    public function getTradeList($id)
+    {
+
+        $servermgrId = common::serverManagerId();
+
+        $res = $this->reportgroup->getTradeGrpList($servermgrId['server_name'], $servermgrId['login'], $id);
+
+        return $res;
+    }
+
+    public function deleteTradeList($request)
+    {
+        $servermgrId = common::serverManagerId();
+
+        $res = $this->reportgroup->deleteTradeGrpList($servermgrId['server_name'], $servermgrId['login'], $request);
+        
+        if (!$res) {
+            return $this->setStatusCode(500)->respond([
+                        'message' => trans('user.some_error_occur'),
+                        'status_code' => 500
+            ]);
+        }
+
+        return $this->setStatusCode(200)->respond([
+                    'message' => (trans('user.trade_group_deleted')),
+                    'status_code' => 200
+        ]);
     }
 
 }

@@ -8,6 +8,7 @@
             <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Models/Serverlist.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/app/Http/Requests/StoreUser.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/services/Containers/ServerContainer.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/app/Http/Requests/createWhiteLabel.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Gateway/Http/Controllers/GatewayController.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/services/Providers/GatewayServiceProvider.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Permissions/Http/Controllers/PermissionController.php</file>
@@ -27,6 +28,7 @@
             <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/services/Containers/RoleContainer.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/services/Providers/PermissionServiceProvider.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/services/Contracts/PermissionContract.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Models/lasttrade_whitelabels.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Models/Mt4gateway.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Roles/Http/Controllers/RolesController.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/services/Containers/PermissionContainer.php</file>
@@ -37,14 +39,15 @@
             <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/services/Containers/GatewayContainer.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Transformers/GatewayTransformer.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Transformers/UserTransformer.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Alert/Http/Controllers/LastTradeController.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Transformers/RoleTransformer.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Alert/Http/Controllers/AlertController.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/app/Http/Requests/updateRole.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/services/Containers/AlertContainer.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/app/Http/Requests/updatePermission.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/services/Contracts/UserContract.php</file>
-            <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Common/Common.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Transformers/permissionTransformer.php</file>
+            <file>file:/home/amiya/amiya/projects/foxaclapi/app/Http/Requests/updateWhiteLabel.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Configs/routes.php</file>
             <file>file:/home/amiya/amiya/projects/foxaclapi/src/Broctagon/Api/V1/Models/Role.php</file>
         </group>

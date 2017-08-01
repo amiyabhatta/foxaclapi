@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
 
-class user_trade extends Request
+class reportgroup extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,8 +23,9 @@ class user_trade extends Request
      */
     public function rules()
     {
-        return [            
-            'volume' => 'required',
+        return [
+           'group_name' => 'required|unique:report_group',
+           'login' => 'required'
         ];
     }
 }

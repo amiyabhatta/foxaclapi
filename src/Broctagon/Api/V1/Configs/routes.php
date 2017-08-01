@@ -78,11 +78,28 @@ Route::group(['prefix' => 'api/v1'], function () {
        Route::get('getboalert', 'Users\Http\Controllers\UserController@getBoAlert');
        Route::delete('deleteboalert', 'Users\Http\Controllers\UserController@deleteBoAlert');
        
-       //User Trade
+       //User Trade ALert
        Route::get('usertrade/{id?}', 'Alert\Http\Controllers\AlertController@getTradeAlert');
        Route::post('saveusertrade', 'Alert\Http\Controllers\AlertController@saveUserTrade');
        Route::put('updateusertrade/{id}', 'Alert\Http\Controllers\AlertController@updateUserTrade');
        Route::delete('deleteusertrade/{id}', 'Alert\Http\Controllers\AlertController@deleteUserTrade');
+       
+       //Last Trade
+         //Fox APi
+       Route::get('lasttrade/{id?}', 'Alert\Http\Controllers\LastTradeController@getLastTrade');
+       Route::put('updatelasttrade/{id}', 'Alert\Http\Controllers\LastTradeController@updateLastTrade');
+         //Witelabel create
+       Route::post('createwhitelabel', 'Alert\Http\Controllers\LastTradeController@createWhitelabel');
+       Route::put('updatewhitelabel/{id}', 'Alert\Http\Controllers\LastTradeController@updateWhitelabel');
+       Route::delete('deletewhitelabel/{id}', 'Alert\Http\Controllers\LastTradeController@deleteWhitelabel');
+       
+       
+       //Trade Group
+       Route::post('createtradegroup', 'Alert\Http\Controllers\ReportGroupController@saveGroup');
+       Route::put('updatetradegroup', 'Alert\Http\Controllers\ReportGroupController@updateGroup');
+       Route::get('gettradegrouplist/{id?}', 'Alert\Http\Controllers\ReportGroupController@getTradeGroupList');
+       Route::delete('deletetradegrouplist', 'Alert\Http\Controllers\ReportGroupController@deleteTradeGroupList');
+       
        
     });
 });

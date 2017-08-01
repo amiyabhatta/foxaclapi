@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
 
-class user_trade extends Request
+class createWhiteLabel extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,8 +23,12 @@ class user_trade extends Request
      */
     public function rules()
     {
-        return [            
-            'volume' => 'required',
+        return [
+          'servername'  => 'required',
+          'whitelabels' => 'required|unique:lasttrade_whitelabels',
+          'groups' => 'required',
+          'botime' => 'required',
+          'fxtime' => 'required'          
         ];
     }
 }

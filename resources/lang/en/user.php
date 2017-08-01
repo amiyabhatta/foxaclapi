@@ -77,6 +77,18 @@ return [
     'trade_alert_save' => 'Trade alert saved sucessfully',
     'trade_alert_update' => 'Trade alert updated sucessfully',
     'trade_alert_delete' => 'Trade alert deleted sucessfully',
-    'trade_alert_already_assign' => 'Login already assign to same server and manager id'
+    'trade_alert_already_assign' => 'Login already assign to same server and manager id',
+    
+    //Last Trade
+    'trade_update' => 'Trades updated sucessfully',
+    'wl_created' => 'Whitelabel created sucessfully',
+    'wl_update' => 'Whitelabel updated sucessfully',
+    'wl_delete' => 'Whitelabel deleted sucessfully',
+    
+    //Report Trade
+    'trade_group_created' => 'Group and Login added sucessfully',
+    'trade_group_updated' => 'Group and Login updated sucessfully',
+    'trade_group_deleted' => 'Group and Login deleted sucessfully',
+    
     
 ];

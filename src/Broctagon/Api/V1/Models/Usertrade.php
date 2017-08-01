@@ -28,20 +28,21 @@ class Usertrade extends Model
         $user_trade_data['login_manager_id'] = $login_manager_id;
         $user_trade_data['server'] = $server_name;
         $user_trade_data['volume'] = $request->input('volume');
-        $user_trade_data['isUpdate'] = 0;
+        $user_trade_data['isUpdate'] = 1;
         $user_trade_data['amount'] = $request->input('amount');
 
         if (count($server)) {
-            return true;
+            return $server->id;
         }
 
         try {
-            $this->insert($user_trade_data);
+            $last_insert_id = $this->insertGetId($user_trade_data);
         }
         catch (\Exception $exc) {
             return FALSE;
         }
-        return true;
+        //return true;        
+        return $last_insert_id;
     }
 
     public function updateTradeValue($request, $server_name, $login_manager_id, $id)
@@ -54,28 +55,16 @@ class Usertrade extends Model
         $user_trade = $this->find($id);
 
         if (count($server) && count($user_trade)) {
-
-            //check login is already exist for same server and manager_id
-            $check_login = $this->where('server', '=', $server_name)
-                    ->where('login_manager_id', '=', $login_manager_id)
-                    ->where('login', '=', $request->input('login'))
-                    ->where('id', '!=', $id)
-                    ->first();
-
-            if (count($check_login)) {
-                return 'already_asign';
-            }
+            
 
             try {
                 $user_trade->where('server', $server_name)
                         ->where('login_manager_id', $login_manager_id)
                         ->where('id', $id)
-                        ->update(array(
-                            "login" => $request->input('login'),
+                        ->update(array(                            
                             "volume" => $request->input('volume'),
-                            "isUpdate" => ($request->input('isUpdate') ? $request->input('isUpdate') : 0),
-                            "amount" => $request->input('amount')
-                ));
+                            "isUpdate" => ($request->input('isUpdate') ? $request->input('isUpdate') : 1),                            
+                         ));
             }
             catch (\Exception $exc) {
                 return FALSE;
@@ -90,12 +79,15 @@ class Usertrade extends Model
 
         $server = $this->where('server', '=', $server_name)
                 ->where('login_manager_id', '=', $login_manager_id)
-                ->where('id', '=', $id)
+                ->where('login', '=', $id)
                 ->get();
 
         if (count($server)) {
             try {
-                $this->where('id', '=', $id)->delete();
+                $this->where('server', '=', $server_name)
+                ->where('login_manager_id', '=', $login_manager_id)
+                ->where('login', '=', $id)
+                ->delete();                     
             }
             catch (\Exception $exc) {
                 return FALSE;
