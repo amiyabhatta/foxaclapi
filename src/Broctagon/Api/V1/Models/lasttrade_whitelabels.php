@@ -26,14 +26,14 @@ class lasttrade_whitelabels extends Model
 //return $query->get();
         $result = array_map(function($v) {
             return [
-                'last_trade_id' => $v['Id'],
-                'last_trade_servername' => $v['ServerName'],
-                'last_trade_whitelabels' => $v['WhiteLabels'],
-                'last_trade_groups' => $v['Groups'],
-                'last_trade_botime' => $v['BoTime'],
-                'last_trade_fxtime' => $v['FxTime'],
-                'last_trade_emails' => $v['Emails'],
-                'last_trade_editurl' => 'api/v1/updatelasttrade/' . $v['Id']
+                'id' => $v['Id'],
+                'servername' => $v['ServerName'],
+                'whitelabels' => $v['WhiteLabels'],
+                'groups' => $v['Groups'],
+                'botime' => $v['BoTime'],
+                'fxtime' => $v['FxTime'],
+                'emails' => $v['Emails'],
+                'editurl' => 'api/v1/updatelasttrade/' . $v['Id']
             ];
         }, $query->get()->toArray());
 
