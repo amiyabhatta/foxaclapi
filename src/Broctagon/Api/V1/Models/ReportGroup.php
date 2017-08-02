@@ -138,8 +138,7 @@ class ReportGroup extends Model
                             $reportusergroup->where('report_group_id', $request->input('group_id'))->delete();
                         });
             }
-            catch (\Exception $exc) {
-                dd($exc);
+            catch (\Exception $exc) {                
                 return false;
             }
             return true;

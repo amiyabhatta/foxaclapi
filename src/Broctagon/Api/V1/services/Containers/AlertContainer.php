@@ -20,18 +20,17 @@ class AlertContainer extends Base implements AlertContract
 
     protected $userTransformer;
 
-    public function __construct($usertrade, $lasttrade, $reportgroup, $reportgroupuser)
+    public function __construct($usertrade, $lasttrade, $reportgroup, $reportgroupuser, $auditlog)
     {
         $this->usertrade = $usertrade;
         $this->lasttrade = $lasttrade;
         $this->reportgroup = $reportgroup;
         $this->reportgroupuser = $reportgroupuser;
+        $this->auditlog = $auditlog;
     }
 
     /**
      * Get Users Trades.
-     * Paginator adapter is used for pagination.     * 
-     * @return Collection
      */
     public function saveuserTrades($request)
     {
@@ -284,7 +283,7 @@ class AlertContainer extends Base implements AlertContract
         $servermgrId = common::serverManagerId();
 
         $res = $this->reportgroup->deleteTradeGrpList($servermgrId['server_name'], $servermgrId['login'], $request);
-        
+
         if (!$res) {
             return $this->setStatusCode(500)->respond([
                         'message' => trans('user.some_error_occur'),
@@ -296,6 +295,54 @@ class AlertContainer extends Base implements AlertContract
                     'message' => (trans('user.trade_group_deleted')),
                     'status_code' => 200
         ]);
+    }
+
+    /*
+     * Audit Log
+     */
+
+    public function saveAuditLog($request)
+    {
+        $servermgrId = common::serverManagerId();
+
+        $res = $this->auditlog->saveAuditLog($servermgrId['server_name'], $request);
+
+        if (!$res) {
+            return $this->setStatusCode(500)->respond([
+                        'message' => trans('user.some_error_occur'),
+                        'status_code' => 500
+            ]);
+        }
+
+        return $this->setStatusCode(200)->respond([
+                    'message' => (trans('user.audit_log_created')),
+                    'status_code' => 200
+        ]);
+    }
+
+    public function getAuditLog($request)
+    {
+
+        $servermgrId = common::serverManagerId();
+
+
+
+        if (empty($request->input('start_date') && $request->input('end_date'))) {
+            if (empty($request->input('start_date'))) {
+                return $this->setStatusCode(200)->respond([
+                            'message' => (trans('user.audit_start_date')),
+                ]);
+            }
+            if (empty($request->input('end_date'))) {
+                return $this->setStatusCode(200)->respond([
+                            'message' => (trans('user.audit_end_date')),
+                ]);
+            }
+        }
+        //Compaire date filed
+      
+        $res = $this->auditlog->getAuditLog($servermgrId['server_name'], $request);
+        return $res;
     }
 
 }

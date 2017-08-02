@@ -100,6 +100,9 @@ Route::group(['prefix' => 'api/v1'], function () {
        Route::get('gettradegrouplist/{id?}', 'Alert\Http\Controllers\ReportGroupController@getTradeGroupList');
        Route::delete('deletetradegrouplist', 'Alert\Http\Controllers\ReportGroupController@deleteTradeGroupList');
        
+       //Audit Log
+       Route::post('createauditlog', 'Alert\Http\Controllers\AuditlogController@save');
+       Route::get('getauditlog', 'Alert\Http\Controllers\AuditlogController@get');
        
     });
 });

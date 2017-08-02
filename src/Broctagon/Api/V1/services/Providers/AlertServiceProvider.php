@@ -9,6 +9,7 @@ use Fox\Models\Usertrade;
 use Fox\Models\lasttrade_whitelabels;
 use Fox\Models\ReportGroup;
 use Fox\Models\ReportGroupUser;
+use Fox\Models\auditlog;
 
 class AlertServiceProvider extends ServiceProvider
 {
@@ -32,9 +33,10 @@ class AlertServiceProvider extends ServiceProvider
         $lasttrade = new lasttrade_whitelabels;
         $reportgroup = new ReportGroup;
         $reportgroupuser = new ReportGroupUser;
+        $auditlog = new auditlog;
 
-        App::bind('Fox\Services\Contracts\AlertContract', function() use($usertrade, $lasttrade, $reportgroup, $reportgroupuser) {
-            return new AlertContainer($usertrade, $lasttrade, $reportgroup, $reportgroupuser);
+        App::bind('Fox\Services\Contracts\AlertContract', function() use($usertrade, $lasttrade, $reportgroup, $reportgroupuser, $auditlog) {
+            return new AlertContainer($usertrade, $lasttrade, $reportgroup, $reportgroupuser, $auditlog);
         });
     }
 

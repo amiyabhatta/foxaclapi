@@ -90,5 +90,10 @@ return [
     'trade_group_updated' => 'Group and Login updated sucessfully',
     'trade_group_deleted' => 'Group and Login deleted sucessfully',
     
+    //Audit Log
+    'audit_log_created' => 'AuditLog added sucessfully',
+    'audit_log_date' => 'Start date and End date are required',
+    'audit_start_date' => 'Start date required',
+    'audit_end_date' => 'End date are required',
     
 ];
