@@ -99,121 +99,78 @@ class UserContainer extends Base implements UserContract
 
     public function createUser($request)
     {
+        $res = $this->usermodel->addUser($request);
 
-        //check user permission (only Superadmin having permission)
-        $check_user_role = common::checkRole();
-
-        if ($check_user_role == 'super_administrator') {
-
-            $res = $this->usermodel->addUser($request);
-
-            if (!$res) {
-                return $this->setStatusCode(500)->respond([
-                            'message' => trans('user.some_error_occur'),
-                            'status_code' => 500
-                ]);
-            }
-
-            return $this->setStatusCode(201)->respond([
-                        'message' => trans('user.created_sucess'),
-                        'status_code' => 201
+        if (!$res) {
+            return $this->setStatusCode(500)->respond([
+                        'message' => trans('user.some_error_occur'),
+                        'status_code' => 500
             ]);
         }
 
-        return $this->setStatusCode(403)->respond([
-                    'message' => trans('user.permission_denied'),
-                    'status_code' => 403
+        return $this->setStatusCode(201)->respond([
+                    'message' => trans('user.created_sucess'),
+                    'status_code' => 201
         ]);
     }
 
     public function updateUser($request)
     {
+        $res = $this->usermodel->updateUser($request);
 
-        //check user permission (only Superadmin having permission)
-        $check_user_role = common::checkRole();
-
-        if ($check_user_role == 'super_administrator') {
-
-            $res = $this->usermodel->updateUser($request);
-
-            if (!$res) {
-                return $this->setStatusCode(500)->respond([
-                            'message' => trans('user.some_error_occur'),
-                            'status_code' => 500
-                ]);
-            }
-
-            return $this->setStatusCode(201)->respond([
-                        'message' => trans('user.update_sucess'),
-                        'status_code' => 201
+        if (!$res) {
+            return $this->setStatusCode(500)->respond([
+                        'message' => trans('user.some_error_occur'),
+                        'status_code' => 500
             ]);
         }
 
-        return $this->setStatusCode(403)->respond([
-                    'message' => trans('user.permission_denied'),
-                    'status_code' => 403
+        return $this->setStatusCode(201)->respond([
+                    'message' => trans('user.update_sucess'),
+                    'status_code' => 201
         ]);
     }
 
     public function deleteUser($request)
     {
+        
+        $res = $this->usermodel->deleteUser($request);
 
-        $check_user_role = common::checkRole();
+        if (!$res) {
 
-        if ($check_user_role == 'super_administrator') {
-
-            $res = $this->usermodel->deleteUser($request);
-
-            if (!$res) {
-
-                return $this->setStatusCode(404)->respond([
-                            'message' => trans('user.not_found'),
-                            'status_code' => 404
-                ]);
-            }
-            elseif ($res === 'error') {
-                return $this->setStatusCode(500)->respond([
-                            'message' => trans('user.some_error_occur'),
-                            'status_code' => 500
-                ]);
-            }
-
-            return $this->setStatusCode(201)->respond([
-                        'message' => trans('user.delete_sucess'),
-                        'status_code' => 201
+            return $this->setStatusCode(404)->respond([
+                        'message' => trans('user.not_found'),
+                        'status_code' => 404
+            ]);
+        }
+        elseif ($res === 'error') {
+            return $this->setStatusCode(500)->respond([
+                        'message' => trans('user.some_error_occur'),
+                        'status_code' => 500
             ]);
         }
 
-        return $this->setStatusCode(403)->respond([
-                    'message' => trans('user.permission_denied'),
-                    'status_code' => 403
+        return $this->setStatusCode(201)->respond([
+                    'message' => trans('user.delete_sucess'),
+                    'status_code' => 201
         ]);
     }
 
     public function assignRole($request)
     {
-        $check_user_role = common::checkRole();
 
-        if ($check_user_role == 'super_administrator') {
+        $res = $this->usermodel->assignRoleToUser($request);
 
-            $res = $this->usermodel->assignRoleToUser($request);
-
-            if (!$res) {
-                return $this->setStatusCode(500)->respond([
-                            'message' => trans('user.some_error_occur'),
-                            'status_code' => 500
-                ]);
-            }
-
-            return $this->setStatusCode(200)->respond([
-                        'message' => (($request->input('action')) ? trans('user.role_assign') : trans('user.role_assign_update')),
-                        'status_code' => 200
+        if (!$res) {
+            return $this->setStatusCode(500)->respond([
+                        'message' => trans('user.some_error_occur'),
+                        'status_code' => 500
             ]);
         }
 
-        return $this->setStatusCode(403)->respond([
-                    'message' => trans('user.permission_denied'),
-                    'status_code' => 403
+        return $this->setStatusCode(200)->respond([
+                    'message' => (($request->input('action')) ? trans('user.role_assign') : trans('user.role_assign_update')),
+                    'status_code' => 200
         ]);
     }
 
@@ -287,7 +244,7 @@ class UserContainer extends Base implements UserContract
             $ret[$dt->alert_type]['avg_volume_limit1'] = $dt->avg_volume_limit1;
             $ret[$dt->alert_type]['avg_volume_limit2'] = $dt->avg_volume_limit2;
             $ret[$dt->alert_type]['index_limit'] = $dt->index_limit;
-            $ret[$dt->alert_type]['server'] = $dt->server_name;            
+            $ret[$dt->alert_type]['server'] = $dt->server_name;
             $ret[$dt->alert_type]['login'] = $dt->login;
         }
 
@@ -300,8 +257,8 @@ class UserContainer extends Base implements UserContract
         $server_name = $payload->get('server_name');
         $userinfo = JWTAuth::parseToken()->authenticate();
         $login_id = $userinfo->manager_id;
-        $deleteGloablSettingData = $this->globalSettingOm->deleteSetting($server_name, $login_id,$request);
-        
+        $deleteGloablSettingData = $this->globalSettingOm->deleteSetting($server_name, $login_id, $request);
+
         if (!$deleteGloablSettingData) {
             return $this->setStatusCode(500)->respond([
                         'message' => trans('user.some_error_occur'),
@@ -314,17 +271,16 @@ class UserContainer extends Base implements UserContract
                     'status_code' => 200
         ]);
     }
-    
-    
+
     //Bo alert setting
-    
+
     public function setBoAlert($request)
-    {        
+    {
         //get server name from token
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
         $userinfo = JWTAuth::parseToken()->authenticate();
-        $login_id = $userinfo->manager_id;     
+        $login_id = $userinfo->manager_id;
         $res = $this->bolAlertSetting->saveBoAlertSetting($request, $server_name, $login_id);
 
         if (!$res) {
@@ -342,7 +298,7 @@ class UserContainer extends Base implements UserContract
 
     public function getBoAlert()
     {
-        
+
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
         $userinfo = JWTAuth::parseToken()->authenticate();
@@ -365,14 +321,14 @@ class UserContainer extends Base implements UserContract
         return response()->json($ret);
     }
 
-    public function deleteBoAlert()
+    public function deleteBoAlert($request)
     {
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
         $userinfo = JWTAuth::parseToken()->authenticate();
         $login_id = $userinfo->manager_id;
-        $deleteGloablSettingData = $this->bolAlertSetting->deleteBoAlertSetting($server_name, $login_id);
-        
+        $deleteGloablSettingData = $this->bolAlertSetting->deleteBoAlertSetting($server_name, $login_id, $request);
+
         if (!$deleteGloablSettingData) {
             return $this->setStatusCode(500)->respond([
                         'message' => trans('user.some_error_occur'),

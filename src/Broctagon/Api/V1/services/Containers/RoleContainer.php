@@ -21,9 +21,9 @@ class RoleContainer extends Base implements RoleContract
     //protected $userTransformer;
     //private $usermodel;
     private $roleModel;
-    
+
     public function __construct($role, $roleTransformer)
-    {       
+    {
         $this->roleModel = $role;
         $this->roleTransformer = $roleTransformer;
     }
@@ -33,104 +33,71 @@ class RoleContainer extends Base implements RoleContract
      * Paginator adapter is used for pagination.    
      * @return Collection
      */
-    
-    public function createRole($request){
-        
-       //check user permission (only Superadmin having permission)
-        $check_user_role = common::checkRole();
 
-        if ($check_user_role == 'super_administrator') {
+    public function createRole($request)
+    {
+        $res = $this->roleModel->addRole($request);
 
-            $res = $this->roleModel->addRole($request);
-
-            if (!$res) {
-                return $this->setStatusCode(500)->respond([
-                            'message' => trans('user.some_error_occur'),
-                            'status_code' => 500
-                ]);
-            }
-
-            return $this->setStatusCode(201)->respond([
-                        'message' => trans('user.role_created'),
-                        'status_code' => 201
+        if (!$res) {
+            return $this->setStatusCode(500)->respond([
+                        'message' => trans('user.some_error_occur'),
+                        'status_code' => 500
             ]);
         }
 
-        return $this->setStatusCode(403)->respond([
-                    'message' => trans('user.permission_denied'),
-                    'status_code' => 403
+        return $this->setStatusCode(201)->respond([
+                    'message' => trans('user.role_created'),
+                    'status_code' => 201
         ]);
     }
-    
+
     /*
      * Get Users.
      * Paginator adapter is used for pagination.    
      * @return Collection
      */
-    
-    public function updateRole($request){
-        
-       //check user permission (only Superadmin having permission)
-        $check_user_role = common::checkRole();
 
-        if ($check_user_role == 'super_administrator') {
+    public function updateRole($request)
+    {        
+        $res = $this->roleModel->updateRole($request);
 
-            $res = $this->roleModel->updateRole($request);
-
-            if (!$res) {
-                return $this->setStatusCode(500)->respond([
-                            'message' => trans('user.some_error_occur'),
-                            'status_code' => 500
-                ]);
-            }
-
-            return $this->setStatusCode(201)->respond([
-                        'message' => trans('user.role_update_sucess'),
-                        'status_code' => 201
+        if (!$res) {
+            return $this->setStatusCode(500)->respond([
+                        'message' => trans('user.some_error_occur'),
+                        'status_code' => 500
             ]);
         }
 
-        return $this->setStatusCode(403)->respond([
-                    'message' => trans('user.permission_denied'),
-                    'status_code' => 403
+        return $this->setStatusCode(201)->respond([
+                    'message' => trans('user.role_update_sucess'),
+                    'status_code' => 201
         ]);
     }
-    
-    
-    public function deleteRole($request){
-        
-        $check_user_role = common::checkRole();
 
-        if ($check_user_role == 'super_administrator') {
+    public function deleteRole($request)
+    {
+        $res = $this->roleModel->deleteRole($request);
 
-            $res = $this->roleModel->deleteRole($request);
+        if (!$res) {
 
-            if (!$res) {
-                
-                return $this->setStatusCode(404)->respond([
-                            'message' => trans('user.role_not_found'),
-                            'status_code' => 404
-                ]);
-            }
-            elseif ($res === 'error') {                
-                return $this->setStatusCode(500)->respond([
-                            'message' => trans('user.some_error_occur'),
-                            'status_code' => 500
-                ]);
-            }
-            
-            return $this->setStatusCode(201)->respond([
-                        'message' => trans('user.role_delete_sucess'),
-                        'status_code' => 201
+            return $this->setStatusCode(404)->respond([
+                        'message' => trans('user.role_not_found'),
+                        'status_code' => 404
+            ]);
+        }
+        elseif ($res === 'error') {
+            return $this->setStatusCode(500)->respond([
+                        'message' => trans('user.some_error_occur'),
+                        'status_code' => 500
             ]);
         }
 
-        return $this->setStatusCode(403)->respond([
-                    'message' => trans('user.permission_denied'),
-                    'status_code' => 403
+        return $this->setStatusCode(201)->respond([
+                    'message' => trans('user.role_delete_sucess'),
+                    'status_code' => 201
         ]);
     }
-    
+
     /**
      * Get Roles
      * Paginator adapter is used for pagination.    
@@ -138,10 +105,10 @@ class RoleContainer extends Base implements RoleContract
      */
     public function getRoles($id)
     {
-        
+
         $limit = Input::get('limit', 20);
-       
-        $role = $this->roleModel->getAllRoles($limit,$id);        
+
+        $role = $this->roleModel->getAllRoles($limit, $id);
 
         $queryParams = array_diff_key($_GET, array_flip(['page']));
 
@@ -153,39 +120,27 @@ class RoleContainer extends Base implements RoleContract
 
         return $resource;
     }
-    
-    
+
     /**
      * 
      * Paginator adapter is used for pagination.    
      * @return Collection
      */
-    public function assignPermRole($request){
-       
-      //check user permission (only Superadmin having permission)
-        $check_user_role = common::checkRole();
+    public function assignPermRole($request)
+    {
+        $res = $this->roleModel->assignRoletoPerm($request);
 
-        if ($check_user_role == 'super_administrator') {
-
-            $res = $this->roleModel->assignRoletoPerm($request);
-
-            if (!$res) {
-                return $this->setStatusCode(500)->respond([
-                            'message' => trans('user.some_error_occur'),
-                            'status_code' => 500
-                ]);
-            }
-
-            return $this->setStatusCode(200)->respond([
-                        'message' => (($request->input('action')) ? trans('user.perm_assign_role') : trans('user.perm_remove_role')),
-                        'status_code' => 200
+        if (!$res) {
+            return $this->setStatusCode(500)->respond([
+                        'message' => trans('user.some_error_occur'),
+                        'status_code' => 500
             ]);
         }
 
-        return $this->setStatusCode(403)->respond([
-                    'message' => trans('user.permission_denied'),
-                    'status_code' => 403
+        return $this->setStatusCode(200)->respond([
+                    'message' => (($request->input('action')) ? trans('user.perm_assign_role') : trans('user.perm_remove_role')),
+                    'status_code' => 200
         ]);
     }
-    
+
 }

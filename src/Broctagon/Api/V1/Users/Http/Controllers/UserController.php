@@ -111,8 +111,8 @@ class UserController extends Controller
     }
     
     //Delete bo alert setting
-    public function deleteBoalert(){
-       return $this->userContainer->deleteBoAlert();  
+    public function deleteBoalert(Request $request){        
+       return $this->userContainer->deleteBoAlert($request);  
     }
        
 }

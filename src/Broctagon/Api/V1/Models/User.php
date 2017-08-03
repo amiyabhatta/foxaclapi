@@ -75,7 +75,7 @@ class User extends Authenticatable
                         }
                     });
         }
-        catch (\Exception $exc) {
+        catch (\Exception $exc) {            
             return FALSE;
         }
         return true;
