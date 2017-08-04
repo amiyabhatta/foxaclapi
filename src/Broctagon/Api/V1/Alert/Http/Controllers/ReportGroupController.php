@@ -19,7 +19,7 @@ class ReportGroupController extends Controller
     }
 
     public function saveGroup(reportgroup $request)
-    {
+    {        
         return $this->alertContainer->saveReportGroup($request);
     }
 

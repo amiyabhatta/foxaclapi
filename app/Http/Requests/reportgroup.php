@@ -24,7 +24,7 @@ class reportgroup extends Request
     public function rules()
     {
         return [
-           'group_name' => 'required|unique:report_group',
+           'group_name' => 'required',
            'login' => 'required'
         ];
     }

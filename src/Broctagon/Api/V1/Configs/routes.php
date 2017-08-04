@@ -98,8 +98,8 @@ Route::group(['prefix' => 'api/v1'], function () {
         Route::post('createwhitelabel', 'Alert\Http\Controllers\LastTradeController@createWhitelabel');
         Route::put('updatewhitelabel/{id}', 'Alert\Http\Controllers\LastTradeController@updateWhitelabel');
         Route::delete('deletewhitelabel/{id}', 'Alert\Http\Controllers\LastTradeController@deleteWhitelabel');
-
-
+        Route::get('getwhitelabel/{id?}', 'Alert\Http\Controllers\LastTradeController@getWhitelabel');
+        
         //Trade Group
         Route::post('createtradegroup', 'Alert\Http\Controllers\ReportGroupController@saveGroup');
         Route::put('updatetradegroup', 'Alert\Http\Controllers\ReportGroupController@updateGroup');

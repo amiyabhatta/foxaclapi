@@ -138,4 +138,35 @@ class lasttrade_whitelabels extends Model
         return false;
     }
 
+   /*
+    * Get whitelabels 
+    */ 
+    public function getWhiteLabelList($server_name, $id)
+    {
+        
+        $query = $this->select('*')
+                ->where('ServerName', $server_name);                
+
+        if ($id) {
+            $query->where('id', '=', $id);
+        }
+       
+
+
+        try {
+            $result = array_map(function($v) {
+                return [
+                    'id' =>  $v['Id'],
+                    'server' => $v['ServerName'],
+                    'whitelabels' => $v['WhiteLabels'],                    
+                ];
+            }, $query->get()->toArray());
+        }
+        catch (\Exception $exc) {
+            return false;
+        }
+
+        return array('data' => $result);
+    }
+    
 }

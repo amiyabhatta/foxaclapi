@@ -344,5 +344,16 @@ class AlertContainer extends Base implements AlertContract
         $res = $this->auditlog->getAuditLog($servermgrId['server_name'], $request);
         return $res;
     }
+    
+    /*
+     * Get white label list
+     */
+    
+    public function getWhiteLabel($id){
+        
+        $servermgrId = common::serverManagerId();
+
+        return $res = $this->lasttrade->getWhiteLabelList($servermgrId['server_name'], $id); 
+    }
 
 }

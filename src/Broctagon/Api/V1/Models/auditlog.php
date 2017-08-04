@@ -53,14 +53,12 @@ class auditlog extends Model
         try {
             $result = array_map(function($v) {
                 return [
-                    'auditlog_server' => $v['server'],
-                    'auditlog_logname' => $v['logname'],
-                    'auditlog_date' => $v['date'],
-                    'auditlog_condition' => $v['condition'],                   
+                    'server' => $v['server'],
+                    'logname' => $v['logname'],
+                    'date' => $v['date'],
+                    'condition' => $v['condition'],
                 ];
             }, $query->get()->toArray());
-
-            
         }
         catch (\Exception $exc) {
             dd($exc);
@@ -68,5 +66,7 @@ class auditlog extends Model
 
         return array('data' => $result);
     }
+
+    
 
 }

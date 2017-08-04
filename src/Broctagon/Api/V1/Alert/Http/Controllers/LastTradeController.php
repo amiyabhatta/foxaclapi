@@ -40,7 +40,10 @@ class LastTradeController extends Controller
     }
     
     public function deleteWhitelabel($id){
-        return $this->alertContainer->deleteWhiteLabel($id);
+       return $this->alertContainer->deleteWhiteLabel($id);
     }
 
+    public function getWhitelabel($id = null){
+       return $this->alertContainer->getWhiteLabel($id); 
+    }
 }

@@ -13,7 +13,7 @@ class ReportGroup extends Model
         'login_mgr', 'group_name', 'server'
     ];
     protected $table = 'report_group';
-    public $timestamps = true;
+    public $timestamps = false;
 
     public function saveReportGroup($servername, $logimanagerid, $request)
     {
@@ -82,7 +82,7 @@ class ReportGroup extends Model
                             }
                         });
             }
-            catch (\Exception $exc) {
+            catch (\Exception $exc) {                
                 return false;
             }
             return true;
@@ -95,25 +95,33 @@ class ReportGroup extends Model
     public function getTradeGrpList($servername, $logimanagerid, $id)
     {
 
-        $query = $this->select('report_group.id', 'report_group.login_mgr as manager_id', 'report_group.group_name', 'report_group.server', 'report_gruoptousers.login')
-                ->leftjoin('report_gruoptousers', 'report_gruoptousers.report_group_id', '=', 'report_group.id')
-                ->where('report_group.server', '=', $servername)
-                ->where('report_group.login_mgr', '=', $logimanagerid);
+        if ($id) {           
+            $reportgroupuser = new ReportGroupUser;
+            $query = $reportgroupuser->Select('login')
+                            ->where('report_group_id', '=', $id)->get()->toArray();
 
+            $result = '';
+            foreach ($query as $login) {
+                $result.= $login['login'] . ',';
+            }
+            $result = rtrim($result, ',');
+        }
+        else {
 
-        if ($id) {
-            $query->where('report_group.id', '=', $id);
+            $query = $this->select('*')
+                    ->where('report_group.server', '=', $servername)
+                    ->where('report_group.login_mgr', '=', $logimanagerid);
+
+            $result = array_map(function($v) {
+                return [
+                    'report_group_id' => $v['id'],
+                    'report_group_managerid' => $v['login_mgr'],
+                    'report_group_groupname' => $v['group_name'],
+                    'report_group_servername' => $v['server'],
+                ];
+            }, $query->get()->toArray());
         }
 
-        $result = array_map(function($v) {
-            return [
-                'report_group_id' => $v['id'],
-                'report_group_managerid' => $v['manager_id'],
-                'report_group_groupname' => $v['group_name'],
-                'report_group_servername' => $v['server'],
-                'report_group_login' => $v['login'],
-            ];
-        }, $query->get()->toArray());
 
         return array('data' => $result);
     }
@@ -121,15 +129,14 @@ class ReportGroup extends Model
     public function deleteTradeGrpList($servername, $logimanagerid, $request)
     {
 
-
         if ($request->input('group_id')) {
             try {
                 $data = DB::transaction(function() use ($servername, $logimanagerid, $request) {
 
                             //Delete data from report_group
                             $this->where('id', $request->input('group_id'))
-                                    ->where('server',$servername)
-                                    ->where('login_mgr',$logimanagerid)
+                                    ->where('server', $servername)
+                                    ->where('login_mgr', $logimanagerid)
                                     ->delete();
 
                             //Delete data from report_gruoptousers
@@ -138,7 +145,7 @@ class ReportGroup extends Model
                             $reportusergroup->where('report_group_id', $request->input('group_id'))->delete();
                         });
             }
-            catch (\Exception $exc) {                
+            catch (\Exception $exc) {
                 return false;
             }
             return true;
