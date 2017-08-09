@@ -169,4 +169,6 @@ class lasttrade_whitelabels extends Model
         return array('data' => $result);
     }
     
+    
+    
 }

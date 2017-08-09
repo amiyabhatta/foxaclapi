@@ -109,5 +109,9 @@ Route::group(['prefix' => 'api/v1'], function () {
         //Audit Log
         Route::post('createauditlog', 'Alert\Http\Controllers\AuditlogController@save');
         Route::get('getauditlog', 'Alert\Http\Controllers\AuditlogController@get');
+        
+         //Whitelabel trade alert
+        Route::post('getlasttradealert', 'Alert\Http\Controllers\LastTradeController@getLastTradeEmailAlert');
+        Route::post('savelasttradealert', 'Alert\Http\Controllers\LastTradeController@saveLastTradeEmailAlert');
     });
 });

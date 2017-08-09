@@ -46,4 +46,12 @@ class LastTradeController extends Controller
     public function getWhitelabel($id = null){
        return $this->alertContainer->getWhiteLabel($id); 
     }
+    
+    public function getLastTradeEmailAlert(Request $request){
+       return $this->alertContainer->getLastTradeWlEmailAlert($request); 
+    }
+    
+    public function saveLastTradeEmailAlert(Request $request){
+       return $this->alertContainer->saveLastTradeWlEmailAlert($request); 
+    }
 }

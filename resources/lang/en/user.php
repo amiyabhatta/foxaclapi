@@ -96,4 +96,7 @@ return [
     'audit_start_date' => 'Start date required',
     'audit_end_date' => 'End date are required',
     
+    //Email Alert
+    'email_alert_added' => 'Email alert added sucessfully',
+    
 ];

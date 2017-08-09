@@ -20,13 +20,14 @@ class AlertContainer extends Base implements AlertContract
 
     protected $userTransformer;
 
-    public function __construct($usertrade, $lasttrade, $reportgroup, $reportgroupuser, $auditlog)
+    public function __construct($usertrade, $lasttrade, $reportgroup, $reportgroupuser, $auditlog, $lasttradeemailalert)
     {
         $this->usertrade = $usertrade;
         $this->lasttrade = $lasttrade;
         $this->reportgroup = $reportgroup;
         $this->reportgroupuser = $reportgroupuser;
         $this->auditlog = $auditlog;
+        $this->lasttradeemailalert = $lasttradeemailalert;
     }
 
     /**
@@ -354,6 +355,31 @@ class AlertContainer extends Base implements AlertContract
         $servermgrId = common::serverManagerId();
 
         return $res = $this->lasttrade->getWhiteLabelList($servermgrId['server_name'], $id); 
+    }
+    
+    /*
+     * Get White labellast trade 
+     */
+    
+    public function getLastTradeWlEmailAlert($request){
+        return $res = $this->lasttradeemailalert->getLastTradeWlEmailAlert($request); 
+    }
+    
+    public function saveLastTradeWlEmailAlert($request){
+        
+        $res = $this->lasttradeemailalert->saveLastTradeWlEmailAlert($request);
+        
+        if (!$res) {
+            return $this->setStatusCode(500)->respond([
+                        'message' => trans('user.some_error_occur'),
+                        'status_code' => 500
+            ]);
+        }
+
+        return $this->setStatusCode(200)->respond([
+                    'message' => (trans('user.email_alert_added')),
+                    'status_code' => 200
+        ]);
     }
 
 }
