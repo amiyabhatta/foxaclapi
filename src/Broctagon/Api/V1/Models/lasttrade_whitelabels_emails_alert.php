@@ -16,6 +16,7 @@ class lasttrade_whitelabels_emails_alert extends Model {
 
     public function getLastTradeWlEmailAlert($request) {
 
+        
         if ($request->input('ticket')) {
             $ticket = rtrim($request->input('ticket'), ',');
             $arrId = explode(',', $ticket);

@@ -1,0 +1,36 @@
+<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12"  ng-init="whitelabel.getWhiteLabels();">
+    <div class="card mb-4">
+        <div class="card-block">           
+            <a ui-sref="createWhitelabel()" class="btn btn-primary mb-4">Create White Label </a>
+            <span style="color:green">{{succ_message}}</span>            
+            <span style="color:red">{{err_message}}</span>
+            <div id="no-more-tables" class="table-responsive">        
+                <table  class="table table-striped cf">
+                    <thead class="cf">
+                        <tr>
+                            <th>S. no.</th>
+                            <th>Server Name</th>
+                            <th>White Labels</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>                       
+                        <tr ng-repeat="wl in whitelabel.whitelabels">
+                            <td>{{$index + 1}}</td>
+                            <td>{{wl.server}}</td>
+                            <td>{{wl.whitelabels}}</td>
+                            <td>
+                                <a href="home#!/createWhitelabel?id={{wl.id}}"  class="btn btn-sm btn-primary">
+                                    <i class="fa fa-pencil-square" aria-hidden="true"></i>
+                                </a>
+                                <a ng-click="delete(wl.id)" class="btn btn-sm btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i>
+                                </a>
+                            </td>
+                        </tr>                       
+                    </tbody>
+                </table>
+                <div ng-show="showLoader" ng-include="'views/loader.html'"></div>
+            </div>
+        </div>
+    </div>
+</div>

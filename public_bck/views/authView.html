@@ -1,0 +1,57 @@
+<!--<div class="col-sm-4 col-sm-offset-4">
+    <div class="well">
+        <h3>Login</h3>
+        <form>
+            <div class="form-group">
+                <input type="email" class="form-control" placeholder="Email" ng-model="auth.email">
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" placeholder="Password" ng-model="auth.password">
+            </div>
+            <button class="btn btn-primary" ng-click="auth.login()">Submit</button>
+        </form>
+    </div>
+</div> -->
+
+<div class="row" >
+    <div class="login_back text-center">
+        <a href="index.html"><img  class="mb-4" src="assets/images/white_logo_2.png"></a>
+       
+            <fieldset>
+                <!-- Name input-->
+                <div class="form-group text-left">
+                    <!-- <label class="col-12 control-label no-padding" for="name">Name</label> -->
+
+                    <div class="col-12 no-padding position_rel">
+                        <i class="fa fa-user"></i>
+                        <input type="email" placeholder="Your Email" class="form-control pl-4" ng-model="auth.email">                      
+                    </div>
+                </div>
+
+                <!-- Email input-->
+                <div class="form-group text-left">
+                    <!-- <label class="col-12 control-label no-padding" for="email">Your Password</label> -->
+
+                    <div class="col-12 no-padding position_rel">
+                        <i class="fa fa-lock"></i>
+                        <input id="password" name="password" type="password" placeholder="Your password" ng-model="auth.password" class="form-control pl-4">                         
+                    </div>
+                </div>
+
+
+
+                <!-- Form actions -->
+                <div class="form-group">
+                    <div class="col-12 widget-right float-left no-padding mb-2">
+                        <button type="submit" class="btn btn-danger w-100 float-right" ng-click="auth.login()">Login</button>
+                    </div>
+                </div>
+
+                <div class="form-group text-center forgot_password">
+                    <button type="button" data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap">Forgot Password?</button>
+                </div>
+                
+            </fieldset>
+       
+    </div>
+</div>

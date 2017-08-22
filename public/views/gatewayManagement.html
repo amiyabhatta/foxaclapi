@@ -1,30 +1,41 @@
 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12"  ng-init="gateway.getGateways()">
     <div class="card mb-4">
-        <div class="card-block">           
-            <a ui-sref="createUser()" class="btn btn-primary mb-4">Create Gateway </a>
+        <div class="card-block">
+            <a ui-sref="createGateway()" class="btn btn-primary mb-4">Create Gateway </a>
+            <span style="color:green">{{succ_message}}</span>
+            <span style="color:red">{{err_message}}</span>
             <div id="no-more-tables" class="table-responsive">               
-                <table  class="table table-striped cf">
+                <table  class="table table-striped cf"> 
                     <thead class="cf">
                         <tr>
                             <th>S. no.</th>
-                            <th>Name</th>
+                            <th>Gateway Name</th>
+                            <th>Host Name</th>
+                            <th>Port</th>
+                            <th>Password</th>
+                            <th>Username</th>                            
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>                       
                         <tr ng-repeat="gats in gateway.gateways">
-                            <td>{{gats.id}}</td>
-                            <td>{{gats.servername}}</td>
+                            <td>{{$index + 1}}</td>
+                            <td>{{gats.name}}</td>
+                            <td>{{gats.host}}</td>
+                            <td>{{gats.port}}</td>
+                            <td>{{gats.password}}</td>
+                            <td>{{gats.username}}</td>
                             <td>
-                                <a href="#" class="btn btn-sm btn-primary"><i class="fa fa-pencil-square" aria-hidden="true"></i>
+                                 <a href="home#!/createGateway?gid={{gats.id}}"  class="btn btn-sm btn-primary"><i class="fa fa-pencil-square" aria-hidden="true"></i>
                                 </a>
-                                <a href="#" class="btn btn-sm btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i>
+                                <a class="btn btn-sm btn-danger"  ng-click="delete(gats.id)"><i class="fa fa-trash-o" aria-hidden="true"></i>
                                 </a>
                             </td>
                         </tr>                       
                     </tbody>
-                </table>
+                </table>                
             </div>
+             <div ng-show="showLoader" ng-include="'views/loader.html'"></div>
         </div>
     </div>
 </div>

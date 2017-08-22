@@ -1,0 +1,50 @@
+<section class="row" ng-init="gateway.getGateway();">
+    <div class="col-sm-12 col-md-6">
+        <span style="color:red; white-space: pre-line;">{{err_message}}</span>
+        <div class="card mb-4">
+            <div class="card-block">               
+                <form class="form-horizontal" action="" method="post" name="createRole" >
+                    <fieldset>
+                        <div class="form-group">                            
+                            <div class="col-12 no-padding">
+                                <input id="rolename" name="gatewayname" ng-model="gatewayname" type="text" placeholder="Gateway Name" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">                            
+                            <div class="col-12 no-padding">
+                                <input id="rolename" name="hostname" ng-model="hostname" type="text" placeholder="Host Name" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">                            
+                            <div class="col-12 no-padding">
+                                <input id="rolename" name="portname" ng-model="portname" type="text" placeholder="Port Name" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">                            
+                            <div class="col-12 no-padding">
+                                <input id="rolename" name="password" ng-model="password" type="text" placeholder="Password" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">                            
+                            <div class="col-12 no-padding">
+                                <input id="rolename" name="username" ng-model="username" type="text" placeholder="Username" class="form-control">
+                            </div>
+                        </div>
+                        
+                        
+                        <!-- Form actions -->
+                        <div class="form-group">
+                            <div class="col-12 widget-right no-padding">
+
+                                <button type="reset" class="btn btn-info btn-md float-right">Reset</button>
+                                <button type="button" class="btn mr-2 btn-primary btn-md float-right" ng-click="saveGateway()">Submit</button>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+</section>

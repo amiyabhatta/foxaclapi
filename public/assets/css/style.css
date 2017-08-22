@@ -559,7 +559,7 @@ p {
   color: #444444; }
 
 input[type=checkbox]:checked + label {
-  text-decoration: line-through;
+  /*text-decoration: line-through;*/  
   color: #a0a0a0; }
 
 .todo-list-item:hover, a.todo-list-item:focus {
@@ -656,8 +656,8 @@ input[type=checkbox]:checked + label {
   background: linear-gradient(135deg, #d6a2a4 0%, #835455 47%, #46292a 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d6a2a4', endColorstr='#46292a',GradientType=1 ); }
 
-label {
-  color: #fff; }
+/*label {
+  color: #fff; }*/
 
 .forgot_password {
   font-size: 12px;

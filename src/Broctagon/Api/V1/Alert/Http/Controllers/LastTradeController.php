@@ -10,6 +10,7 @@ use App\Http\Requests\user_trade;
 use App\Http\Requests\createWhiteLabel;
 use App\Http\Requests\updateWhiteLabel;
 
+
 class LastTradeController extends Controller
 {
 

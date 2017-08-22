@@ -6,7 +6,7 @@
         .module('authApp')
         .controller('ServerController', ServerController);  
 
-    function ServerController($http, $scope, $state, $window) {
+    function ServerController($http, $scope, $state, $window, $location, $timeout) {
         var vm = this;
         vm.users;
         vm.error;
@@ -15,88 +15,161 @@
         $scope.email = '';
         $scope.password = '';
         $scope.confirmpassword = '';
-            
+        $scope.module = 'server';    
        
         var token = sessionStorage.AuthUser;
         vm.getServers = function () {
+            $scope.showLoader       = true;
             $http.get('api/v1/server', {
                 headers: {
                     "Authorization": 'Bearer ' + token
                 }
-            }).then(function (response) {
-                vm.servers = response.data.data;
+            }).then(function (response) {                
+                vm.servers = response.data.data;  
+                $scope.succ_message = sessionStorage.succ_message ;
+                sessionStorage.succ_message = '';
+                $scope.showLoader       = false;
             }, function (error) {
 
             });
         }
         
-        //saving new user
-        $scope.createUsers = function () {
-            
-            $scope.fullname = $scope.fullname;
-            $scope.username = $scope.username;
-            $scope.email = $scope.email;
-            $scope.password = $scope.password;
-            $scope.confirmpassword = $scope.confirmpassword;
-            
-            var token = sessionStorage.AuthUser;
-        
-            $scope.createUsers = function () {
-               // use $.param jQuery function to serialize data from JSON 
-                var data = $.param({
-                    user_manager_id : $scope.manager_id,
-                    user_name       : $scope.username,
-                    user_email      : $scope.email,
-                    user_password   : $scope.password,
-                    confirmpassword : $scope.confirmpassword,
-                    server_id       : 3
-                });
-
-                var config = {
-                    headers : {
+        vm.getServer = function () {
+             var url = $location.search();            
+             if(url.serverid != undefined) {
+                $http.get('api/v1/server/'+url.serverid, {
+                    headers: {
                         "Authorization": 'Bearer ' + token
                     }
-                }
+                }).then(function (response) {
+                    $scope.servers = response.data.data[0];
+                    $scope.servername = $scope.servers.servername;
+                    $scope.ipaddress = $scope.servers.ipaddress;
+                    $scope.username = $scope.servers.username;
+                    $scope.password = $scope.servers.password;
+                    $scope.databasename = $scope.servers.databasename;
+                    $scope.masterid = $scope.servers.master_id;
+                    $scope.GatewayID = $scope.servers.gateway_id;
+                    
+                }, function (error) {
 
-                $http.post('api/v1/register', 
-                { user_manager_id: $scope.manager_id,
-                  user_name: $scope.manager_id,
-                  user_email: $scope.manager_id, 
-                  user_password: $scope.manager_id,
-                  server_id: $scope.manager_id
+                });
+             }
+        }
+        
+        vm.getGateways = function () {
+            $http.get('api/v1/gateway', {
+                headers: {
+                    "Authorization": 'Bearer ' + token
+                }
+            }).then(function (response) {
+                vm.gateways = response.data.data;
+                
+                
+            }, function (error) {
+
+            });
+        }
+        
+        
+       //saving new permission
+        $scope.saveServer = function () {                
+            
+            var config = {
+                headers : {
+                    "Authorization": 'Bearer ' + token
+                }
+            }
+           var url = $location.search();
+           if(url.serverid ===  undefined ) {
+            $http.post('api/v1/server', 
+                {
+                  servername      : $scope.servername,
+                  ipaddress       : $scope.ipaddress,
+                  username        : $scope.username,
+                  password        : $scope.password,
+                  databasename    : $scope.databasename,
+                  masterid        : $scope.masterid,
+                  GatewayID       : $scope.GatewayID,
                 }, config)
                 .then(function (data, status, headers, config) {
-                    $scope.fullname = '';
-                    $scope.username = '';
-                    $scope.email = '';
-                    $scope.password = '';
-                    $scope.confirmpassword = '';
-                    $state.go('home');
-                    
+                    sessionStorage.succ_message = "Server detail has been created successfully.";
+                    $state.go('servers');
+
                 })
-                .error(function (data, status, header, config) {
-                    $scope.ResponseDetails = "Data: " + data +
-                        "<hr />status: " + status +
-                        "<hr />headers: " + header +
-                        "<hr />config: " + config;
-                });
-            };
-         
-         /*
-            $scope.getUsers.$save(function (data) {
-                if (data.statusCode === 200) {
-                    toastr.success(data.message);
-                    $state.go('whitelabel.users');
-                } else {
-                    toastr.error(data.message);
-                }
-            });
-          */  
+                .catch(function (response, status, header, config) {
+                            $scope.err_message = '';
+                            angular.forEach(response.data, function (errmessage, key) {                                
+                                angular.forEach(errmessage, function (mesg, key) {                                    
+                                    $scope.err_message +=  mesg + "\n";
+                                 })                                 
+                            })  
+                            $timeout(function() {
+                                $scope.err_message = '';
+                             }, 4000); // 4 seconds                            
+                        });
+            } else {
+                
+                $http.put('api/v1/server/'+url.serverid, 
+                {
+                  servername      : $scope.servername,
+                  ipaddress       : $scope.ipaddress,
+                  username        : $scope.username,
+                  password        : $scope.password,
+                  databasename    : $scope.databasename,
+                  masterid        : $scope.masterid,
+                  GatewayID       : $scope.GatewayID,
+                }, config)
+                .then(function (data, status, headers, config) {
+                    $scope.gatewayname = '';
+                    sessionStorage.succ_message = "Serveer detail has been updated successfully.";
+                    $state.go('servers');
+
+                })
+                .catch(function (response, status, header, config) {
+                            $scope.err_message = '';
+                            angular.forEach(response.data, function (errmessage, key) {                                
+                                angular.forEach(errmessage, function (mesg, key) {                                    
+                                    $scope.err_message +=  mesg + "\n";
+                                 })                                 
+                            })  
+                            $timeout(function() {
+                                $scope.err_message = '';
+                             }, 4000); // 4 seconds                            
+                 });
+                
+            }
             
             
         };
         
         
+        
+        $scope.delete = function (id) {
+            var deleterecord = $window.confirm('Are you absolutely sure you want to delete?');
+            if (deleterecord) {
+                $http.delete('api/v1/server/' + id, {
+                    headers: {
+                        "Authorization": 'Bearer ' + token
+                    }
+                }).then(function (response) {
+                    $scope.resp = response;
+                    $scope.err_message = '';    
+                    $scope.succ_message = "Record has been deleted successfully.";
+                    sessionStorage.succ_message = "Record has been deleted successfully..";
+                   // $state.go('gateways');
+                    //
+                    $state.go($state.current, {}, {reload: true});
+                    
+                }, function (error) {
+                    console.log(error.data.message);
+                    $scope.err_message = "Unable to delete the record.";
+                    //$state.go('gateways');                    
+                });
+            }
+        }
+        
+        $(".page-header h1").text("Servers");
     }
 
 })();

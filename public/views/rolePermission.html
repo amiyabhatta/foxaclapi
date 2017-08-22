@@ -1,0 +1,28 @@
+<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12"  ng-init="role.getPermissions();role.getRole();">
+     <span style="color:green">{{succ_message}}</span>             
+     <span style="color:red">{{err_message}}</span>
+    <div class="card mb-4">
+       
+        <div class="card-block">     
+            
+            <div id="no-more-tables" class="table-responsive">               
+                <table  class="table table-striped cf">
+                    <thead class="cf">
+                        <tr>
+                            <th>S. no.</th>
+                            <th>Permission Name</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>                       
+                        <tr ng-repeat="per in permissions">
+                            <td>{{$index + 1}}</td>
+                            <td>{{per.name}}</td>
+                            <td><input  ng-checked="per.checked" type="checkbox" name="permissions[]" ng-checked="role_id === per.id" ng-change="assignRolePermission(per.id)" value="{{per.id}}" ng-model="per.checked"> </td>
+                        </tr>                       
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

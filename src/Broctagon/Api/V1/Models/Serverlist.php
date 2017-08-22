@@ -27,6 +27,7 @@ class Serverlist extends Model
             $this->username = $request->input('username');
             $this->password = $request->input('password');
             $this->databasename = $request->input('databasename');
+            $this->masterid = $request->input('masterid');
             $this->GatewayID = $request->input('GatewayID');
             $this->save();
         }
@@ -51,6 +52,7 @@ class Serverlist extends Model
         $server->username = $request->input('username');
         $server->password = $request->input('password');
         $server->databasename = $request->input('databasename');
+        $this->masterid = $request->input('masterid');
         $server->GatewayID = $request->input('GatewayID');
         try {
             $server->save();
@@ -82,7 +84,7 @@ class Serverlist extends Model
     public function getAllServerList($limit, $id)
     {
 
-        $query = $this->select('serverlist.id','serverlist.servername','serverlist.ipaddress','serverlist.username','serverlist.password','serverlist.databasename','mt4gateway.gateway_name')
+        $query = $this->select('serverlist.id','serverlist.servername','serverlist.ipaddress','serverlist.username','serverlist.password','serverlist.databasename','serverlist.masterid','serverlist.GatewayID','mt4gateway.gateway_name')
                       ->join('mt4gateway', 'mt4gateway.id', '=', 'serverlist.GatewayID');
 
         if ($id) {

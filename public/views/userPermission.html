@@ -1,0 +1,27 @@
+<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12"  ng-init="permission.getRoles();permission.getUser()">
+    <div class="card mb-4">
+        <div class="card-block">     {{$scope.role_id}}      
+            
+            <span style="color:green">{{succ_message}}</span>            
+            <span style="color:red">{{err_message}}</span>
+            <div id="no-more-tables" class="table-responsive">               
+                <table  class="table table-striped cf">
+                    <thead class="cf">
+                        <tr>
+                            <th>S. no.</th>
+                            <th>Role Name</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>                       
+                        <tr ng-repeat="per in permission.roles">
+                            <td>{{$index + 1}}</td>
+                            <td>{{per.role}}</td>
+                            <td><input  type="radio" name="role" ng-checked="role_id === per.id" ng-change="assignPermission(per.id)" value="{{per.id}}" ng-model="per.selected"> </td>
+                        </tr>                       
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

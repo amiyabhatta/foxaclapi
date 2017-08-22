@@ -1,8 +1,10 @@
 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12"  ng-init="server.getServers();">
     <div class="card mb-4">
         <div class="card-block">           
-            <a ui-sref="createUser()" class="btn btn-primary mb-4">Create Server </a>
-            <div id="no-more-tables" class="table-responsive">               
+            <a ui-sref="createServer()" class="btn btn-primary mb-4">Create Server </a>
+            <span style="color:green">{{succ_message}}</span>            
+            <span style="color:red">{{err_message}}</span>
+            <div id="no-more-tables" class="table-responsive">        
                 <table  class="table table-striped cf">
                     <thead class="cf">
                         <tr>
@@ -17,21 +19,23 @@
                     </thead>
                     <tbody>                       
                         <tr ng-repeat="ser in server.servers">
-                            <td>{{ser.id}}</td>
+                            <td>{{$index + 1}}</td>
                             <td>{{ser.servername}}</td>
                             <td>{{ser.ipaddress}}</td>
                             <td>{{ser.username}}</td>
                             <td>{{ser.password}}</td>
                             <td>{{ser.databasename}}</td>
                             <td>
-                                <a href="#" class="btn btn-sm btn-primary"><i class="fa fa-pencil-square" aria-hidden="true"></i>
+                                <a href="home#!/createServer?serverid={{ser.id}}"  class="btn btn-sm btn-primary">
+                                    <i class="fa fa-pencil-square" aria-hidden="true"></i>
                                 </a>
-                                <a href="#" class="btn btn-sm btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i>
+                                <a ng-click="delete(ser.id)" class="btn btn-sm btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i>
                                 </a>
                             </td>
                         </tr>                       
                     </tbody>
                 </table>
+                <div ng-show="showLoader" ng-include="'views/loader.html'"></div>
             </div>
         </div>
     </div>

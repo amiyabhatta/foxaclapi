@@ -35,7 +35,7 @@ class GatewayContainer extends Base implements GatewayContract
      */
     public function gatewaytList($id)
     {
-        $limit = Input::get('limit', 2);
+        $limit = Input::get('limit', 20);
 
         $gw = $this->gatewaymodel->getAllGwList($limit, $id);
 

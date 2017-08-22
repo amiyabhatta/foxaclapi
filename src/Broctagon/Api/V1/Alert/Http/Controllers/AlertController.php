@@ -26,15 +26,21 @@ class AlertController extends Controller
        return $this->alertContainer->saveuserTrades($request);
     }
     
-    public function updateUserTrade(user_trade $request,$id){
-       return $this->alertContainer->updateuserTrades($request,$id);
+    public function updateUserTrade(user_trade $request, $login ){
+       return $this->alertContainer->updateuserTrades($request, $login);
     }
     
-    public function deleteUserTrade($id){       
+    public function deleteUserTrade($id = NULL){       
        return $this->alertContainer->deleteuserTrades($id);
     }
     
     public function getTradeAlert($id = NULL){
        return $this->alertContainer->getuserTrades($id);
+    }
+    
+    //get login by comman separeted
+    public function getLogin(){
+       
+       return $this->alertContainer->getLogin(); 
     }
 }

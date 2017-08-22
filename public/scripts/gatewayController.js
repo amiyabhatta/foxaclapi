@@ -1,103 +1,159 @@
-(function() {
+(function () {
 
     'use strict';
 
     angular
-        .module('authApp')
-        .controller('GatewayController', GatewayController);  
+            .module('authApp')
+            .controller('GatewayController', GatewayController);
 
-    function GatewayController($http, $scope, $state, $window) {
+    function GatewayController($http, $scope, $state, $window, $location, $timeout) {
         var vm = this;
         vm.users;
         vm.error;
-        
-        $scope.fullname = '';
-        $scope.username = '';
-        $scope.email = '';
-        $scope.password = '';
-        $scope.confirmpassword = '';
-            
-       
+        $scope.showLoader       = true;
+        $scope.fullname         = '';
+        $scope.username         = '';
+        $scope.email            = '';
+        $scope.password         = '';
+        $scope.confirmpassword  = '';        
+
         var token = sessionStorage.AuthUser;
+        var url = $location.search();
+        $scope.module = 'gateway';
         vm.getGateways = function () {
-            $http.get('api/v1/serverlist', {
+            $scope.showLoader       = true;
+            $http.get('api/v1/gateway', {
                 headers: {
                     "Authorization": 'Bearer ' + token
                 }
             }).then(function (response) {
-                vm.gateways = response.data;
+                vm.gateways = response.data.data;
+                $scope.succ_message = sessionStorage.succ_message;
+                sessionStorage.succ_message = '';
+                $scope.showLoader       = false;
             }, function (error) {
 
             });
         }
-        
-        //saving new user
-        $scope.createUsers = function () {
+        vm.getGateway = function () {
             
-            $scope.fullname = $scope.fullname;
-            $scope.username = $scope.username;
-            $scope.email = $scope.email;
-            $scope.password = $scope.password;
-            $scope.confirmpassword = $scope.confirmpassword;
-            
-            var token = sessionStorage.AuthUser;
-        
-            $scope.createUsers = function () {
-               // use $.param jQuery function to serialize data from JSON 
-                var data = $.param({
-                    user_manager_id : $scope.manager_id,
-                    user_name       : $scope.username,
-                    user_email      : $scope.email,
-                    user_password   : $scope.password,
-                    confirmpassword : $scope.confirmpassword,
-                    server_id       : 3
-                });
+            $http.get('api/v1/gateway/' + url.gid, {
+                headers: {
+                    "Authorization": 'Bearer ' + token
+                }
+            }).then(function (response) {
+                $scope.gateway = response.data.data[0];
+                $scope.gatewayname = $scope.gateway.name;
+                $scope.hostname = $scope.gateway.host;
+                $scope.portname = $scope.gateway.port;
+                $scope.password = $scope.gateway.password;
+                $scope.username = $scope.gateway.username;
+            }, function (error) {
 
-                var config = {
-                    headers : {
+            });
+        }
+
+
+        //saving new permission
+        $scope.saveGateway = function () {
+            // use $.param jQuery function to serialize data from JSON 
+            $scope.gatewayname = $scope.gatewayname;
+            var config = {
+                headers: {
+                    "Authorization": 'Bearer ' + token
+                }
+            }
+            if (url.gid === undefined) {
+                $http.post('api/v1/gateway',
+                        {
+                            gatewayname: $scope.gatewayname,
+                            host: $scope.hostname,
+                            port: $scope.portname,
+                            password: $scope.password,
+                            username: $scope.username,
+                        }, config)
+                        .then(function (data, status, headers, config) {
+                            $scope.gatewayname = '';
+                            $scope.rolename = '';
+                            sessionStorage.succ_message = "Gateway has been created successfully.";
+                            $state.go('gateways');
+
+                        })
+                        .catch(function (response, status, header, config) {
+                            $scope.err_message = '';
+                            angular.forEach(response.data, function (errmessage, key) {                                
+                                angular.forEach(errmessage, function (mesg, key) {                                    
+                                    $scope.err_message +=  mesg + "\n";
+                                 })                                 
+                            })  
+                            $timeout(function() {
+                                $scope.err_message = '';
+                             }, 4000); // 4 seconds                            
+                         });
+            } else {
+                $http.put('api/v1/gateway/' + url.gid,
+                        {
+                            gatewayname: $scope.gatewayname,
+                            host: $scope.hostname,
+                            port: $scope.portname,
+                            password: $scope.password,
+                            username: $scope.username,
+                        }, config)
+                        .then(function (data, status, headers, config) {
+                            $scope.gatewayname = '';
+                            $scope.rolename = '';
+                            sessionStorage.succ_message = "Gateway has been updated successfully.";
+                            $state.go('gateways');
+
+                        })
+                        .catch(function (response, status, header, config) {
+                            $scope.err_message = '';
+                            angular.forEach(response.data, function (errmessage, key) {                                
+                                angular.forEach(errmessage, function (mesg, key) {                                    
+                                    $scope.err_message +=  mesg + "\n";
+                                 })                                 
+                            })  
+                            $timeout(function() {
+                                $scope.err_message = '';
+                             }, 4000); // 4 seconds                            
+                        });
+
+            }
+
+        };
+
+
+
+        $scope.delete = function (id) {
+            var deleterecord = $window.confirm('Are you absolutely sure you want to delete?');
+            if (deleterecord) {
+                $http.delete('api/v1/gateway/' + id, {
+                    headers: {
                         "Authorization": 'Bearer ' + token
                     }
-                }
-
-                $http.post('api/v1/register', 
-                { user_manager_id: $scope.manager_id,
-                  user_name: $scope.manager_id,
-                  user_email: $scope.manager_id, 
-                  user_password: $scope.manager_id,
-                  server_id: $scope.manager_id
-                }, config)
-                .then(function (data, status, headers, config) {
-                    $scope.fullname = '';
-                    $scope.username = '';
-                    $scope.email = '';
-                    $scope.password = '';
-                    $scope.confirmpassword = '';
-                    $state.go('home');
+                }).then(function (response) {
+                    $scope.resp = response;
+                    $scope.err_message = '';    
+                    $scope.succ_message = "Record has been deleted successfully.";
+                    sessionStorage.succ_message = "Record has been deleted successfully..";
+                   // $state.go('gateways');
+                    //
+                    $state.go($state.current, {}, {reload: true});
                     
-                })
-                .error(function (data, status, header, config) {
-                    $scope.ResponseDetails = "Data: " + data +
-                        "<hr />status: " + status +
-                        "<hr />headers: " + header +
-                        "<hr />config: " + config;
+                }, function (error) {
+                    console.log(error.data.message);
+                    $scope.err_message = "Unable to delete the record.";
+                    //$state.go('gateways');
+                    
                 });
-            };
-         
-         /*
-            $scope.getUsers.$save(function (data) {
-                if (data.statusCode === 200) {
-                    toastr.success(data.message);
-                    $state.go('whitelabel.users');
-                } else {
-                    toastr.error(data.message);
-                }
-            });
-          */  
-            
-            
-        };
+
+            }
+        }
         
-        
+        $(".page-header h1").text("Gateways");
+
     }
 
 })();
+
+

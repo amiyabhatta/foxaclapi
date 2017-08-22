@@ -11,9 +11,11 @@
         </div>
     </a>
 
-    <div class="dropdown-menu dropdown-menu-right" style="margin-right: 1.5rem;" aria-labelledby="dropdownMenuLink"><a class="dropdown-item" href="#"><em class="fa fa-user-circle mr-1"></em> View Profile</a>
-        <a class="dropdown-item" href="#"><em class="fa fa-sliders mr-1"></em> Preferences</a>
-        <a class="dropdown-item" href="#"><em class="fa fa-power-off mr-1"></em> Logout</a></div>
-</div>
+        <div class="dropdown-menu dropdown-menu-right" style="margin-right: 1.5rem;" aria-labelledby="dropdownMenuLink">
+        <!--
+        <a class="dropdown-item" href="#"><em class="fa fa-user-circle mr-1"></em> View Profile</a>
+        <a class="dropdown-item" href="#"><em class="fa fa-sliders mr-1"></em> Preferences</a>-->
+        <a class="dropdown-item" href="login#!/auth" ng-click="logout($event)" href="#"><em class="fa fa-power-off mr-1"></em> Logout</a></div>
+</div> 
 
 <div class="clear"></div>

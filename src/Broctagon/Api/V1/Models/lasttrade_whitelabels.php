@@ -3,9 +3,9 @@
 namespace Fox\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Fox\Common\Common;
 
-class lasttrade_whitelabels extends Model
-{
+class lasttrade_whitelabels extends Model {
 
     protected $fillable = [
         'ServerName', 'WhiteLabels', 'Groups', 'BoTime', 'FxTime', 'Emails'
@@ -13,8 +13,7 @@ class lasttrade_whitelabels extends Model
     protected $table = 'lasttrade_whitelabels';
     public $timestamps = false;
 
-    public function getlatsTradeList($server_name, $login_id, $id)
-    {
+    public function getlatsTradeList($server_name, $login_id, $id) {
 
         $query = $this->select('*')
                 ->where('ServerName', '=', $server_name);
@@ -44,8 +43,7 @@ class lasttrade_whitelabels extends Model
      * Update Last trade
      */
 
-    public function updatelatsTrade($server_name, $login_id, $id, $request)
-    {
+    public function updatelatsTrade($server_name, $login_id, $id, $request) {
 
         $check_id = $this->find($id);
 
@@ -55,8 +53,7 @@ class lasttrade_whitelabels extends Model
                         ->where('ServerName', $server_name)
                         ->update(['BoTime' => $request->input('botime'), 'FxTime' => $request->input('fxtime')]);
                 return true;
-            }
-            catch (\Exception $exc) {
+            } catch (\Exception $exc) {
                 return false;
             }
         }
@@ -68,8 +65,7 @@ class lasttrade_whitelabels extends Model
      * Create WhiteLabel
      */
 
-    public function createWl($request)
-    {
+    public function createWl($request) {
 
         $this->ServerName = $request->input('servername');
         $this->WhiteLabels = $request->input('whitelabels');
@@ -81,8 +77,7 @@ class lasttrade_whitelabels extends Model
         try {
             $this->save();
             return true;
-        }
-        catch (\Exception $exc) {
+        } catch (\Exception $exc) {
             return false;
         }
     }
@@ -92,8 +87,7 @@ class lasttrade_whitelabels extends Model
      * @param array
      */
 
-    public function updateWl($request, $id)
-    {
+    public function updateWl($request, $id) {
 
         $check_id = $this->find($id);
 
@@ -108,8 +102,7 @@ class lasttrade_whitelabels extends Model
                             'Emails' => $request->input('email'),
                 ]);
                 return true;
-            }
-            catch (\Exception $exc) {
+            } catch (\Exception $exc) {
                 return false;
             }
         }
@@ -121,16 +114,14 @@ class lasttrade_whitelabels extends Model
      * Delete whitelabel
      */
 
-    public function deleteWl($id)
-    {
+    public function deleteWl($id) {
         $check_id = $this->find($id);
 
         if (count($check_id)) {
             try {
-                $this->where('Id', $id)->delete();                        
+                $this->where('Id', $id)->delete();
                 return true;
-            }
-            catch (\Exception $exc) {
+            } catch (\Exception $exc) {
                 return false;
             }
         }
@@ -138,37 +129,63 @@ class lasttrade_whitelabels extends Model
         return false;
     }
 
-   /*
-    * Get whitelabels 
-    */ 
-    public function getWhiteLabelList($server_name, $id)
-    {
+    /*
+     * Get whitelabels 
+     */
+
+    public function getWhiteLabelList($server_name, $id) {
+        $check_user_role = common::checkRole();
         
+        if ($check_user_role == 'super_administrator') {
+            $query = $this->select('*');
+
+            if ($id) {
+                $query->where('id', '=', $id);
+            }
+
+
+
+            try {
+                $result = array_map(function($v) {
+                    return [
+                        'id' => $v['Id'],
+                        'server' => $v['ServerName'],
+                        'whitelabels' => $v['WhiteLabels'],
+                        'groups' => $v['Groups'],
+                        'botime' => $v['BoTime'],
+                        'fxtime' => $v['FxTime'],
+                        'emails' => $v['Emails']
+                    ];
+                }, $query->get()->toArray());
+            } catch (\Exception $exc) {
+                return false;
+            }
+
+            return array('data' => $result);
+        }
+        //if not superadmin
         $query = $this->select('*')
-                ->where('ServerName', $server_name);                
+                ->where('ServerName', $server_name);
 
         if ($id) {
             $query->where('id', '=', $id);
         }
-       
+
 
 
         try {
             $result = array_map(function($v) {
                 return [
-                    'id' =>  $v['Id'],
+                    'id' => $v['Id'],
                     'server' => $v['ServerName'],
-                    'whitelabels' => $v['WhiteLabels'],                    
+                    'whitelabels' => $v['WhiteLabels'],
                 ];
             }, $query->get()->toArray());
-        }
-        catch (\Exception $exc) {
+        } catch (\Exception $exc) {
             return false;
         }
 
         return array('data' => $result);
     }
-    
-    
-    
+
 }

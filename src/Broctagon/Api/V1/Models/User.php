@@ -8,9 +8,10 @@ use Illuminate\Support\Facades\DB;
 use Fox\Models\UserHasRole;
 use Fox\Models\user_server_access;
 use Fox\Models\Mt4gateway;
+use Fox\Common\Common;
+use Fox\Models\Mailsetting;
 
-class User extends Authenticatable
-{
+class User extends Authenticatable {
 
     /**
      * The attributes that are mass assignable.
@@ -30,17 +31,16 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function getAllUsers($limit,$id)
-    {
+    public function getAllUsers($limit, $id) {
         $query = $this->select('*')
-                        ->where('email', '!=', 'james@gmail.com');
-                        //->paginate($limit);
-        
-        if($id){
-            $query->where('id','=',$id);
+                ->where('email', '!=', 'james@gmail.com');
+        //->paginate($limit);
+
+        if ($id) {
+            $query->where('id', '=', $id);
         }
-        $result = $query->paginate($limit);        
-        return $result; 
+        $result = $query->paginate($limit);
+        return $result;
     }
 
     /**
@@ -48,8 +48,7 @@ class User extends Authenticatable
      * @param type $request
      * @return boolean
      */
-    public function addUser($request)
-    {
+    public function addUser($request) {
 
         try {
             $data = DB::transaction(function() use ($request) {
@@ -74,15 +73,13 @@ class User extends Authenticatable
                             $userserver->save();
                         }
                     });
-        }
-        catch (\Exception $exc) {            
+        } catch (\Exception $exc) {
             return FALSE;
         }
         return true;
     }
 
-    public function getRoleId()
-    {
+    public function getRoleId() {
 
         $role_id = Role::select('id')
                         ->where('role_slug', '=', 'user')->first();
@@ -97,8 +94,7 @@ class User extends Authenticatable
      * @param type $request
      * @return boolean
      */
-    public function updateUser($request)
-    {
+    public function updateUser($request) {
         $user = $this->find($request->segment(4));
 
         if (!$user) {
@@ -153,8 +149,7 @@ class User extends Authenticatable
                             ->delete();
                 }
             }
-        }
-        else {
+        } else {
             $userserver = new user_server_access();
             $userserver->where('user_id', '=', $request->segment(4))->delete();
         }
@@ -171,28 +166,24 @@ class User extends Authenticatable
      * @param type $request
      * @return boolean
      */
-    public function deleteUser($request)
-    {
+    public function deleteUser($request) {
 
         $user = $this->find($request->segment(4));
 
         if (!$user) {
             return false;
-        }
-        else {
+        } else {
             $user->activate_status = 0;
             try {
                 $user->save();
-            }
-            catch (\Exception $exc) {
+            } catch (\Exception $exc) {
                 return 'error';
             }
             return true;
         }
     }
 
-    public function assignRoleToUser($request)
-    {
+    public function assignRoleToUser($request) {
 
         $user_has_role = new UserHasRole;
 
@@ -209,8 +200,7 @@ class User extends Authenticatable
                         ->update(['action' => $request->input('action'), 'roles_id' => $request->input('role_id')]);
 
                 return true;
-            }
-            catch (\Exception $e) {
+            } catch (\Exception $e) {
                 return false;
             }
         }
@@ -229,8 +219,7 @@ class User extends Authenticatable
             try {
                 $user_has_role->save();
                 return true;
-            }
-            catch (\Exception $e) {
+            } catch (\Exception $e) {
                 dd($e);
                 return false;
             }
@@ -239,8 +228,7 @@ class User extends Authenticatable
         return false;
     }
 
-    public function getUserServerDetails($user_id, $server_name = null)
-    {
+    public function getUserServerDetails($user_id, $server_name = null) {
 
         $user_server_access = new user_server_access;
         $result = $user_server_access->select('serverlist.servername', 'serverlist.ipaddress', 'serverlist.username', 'serverlist.password', 'serverlist.databasename', 'serverlist.GatewayID')
@@ -263,8 +251,7 @@ class User extends Authenticatable
         return $server_array;
     }
 
-    public function getUserPermissionDetails($user_id)
-    {
+    public function getUserPermissionDetails($user_id) {
 
         $result = $this->select('permissions.name')
                 ->leftjoin('users_has_roles', 'users.id', '=', 'users_has_roles.user_id')
@@ -276,35 +263,33 @@ class User extends Authenticatable
         $permission_array = [];
         $i = 0;
         foreach ($result as $permissiondetails) {
-            $permission_array[$i]['tab_name'] = $permissiondetails['name'];
+            //$permission_array[$i]['tab_name'] = $permissiondetails['name'];
+            $permission_array[$i][$permissiondetails['name']] = 1;
             $i++;
         }
         return $permission_array;
     }
 
-    public function getUserGatewayDetails($server_name)
-    {
+    public function getUserGatewayDetails($server_name) {
         $gw_model = new Mt4gateway();
         $gw_result = $gw_model->select('gateway_name', 'host', 'port', 'master_password', 'mt4gateway.username')
                         ->join('serverlist', 'serverlist.GatewayID', '=', 'mt4gateway.id')
                         ->where('serverlist.servername', '=', $server_name)->first();
         $gw_details = [];
-        if ($gw_result) {            
+        if ($gw_result) {
             $gw_details[0]['gateway_name'] = $gw_result->gateway_name;
             $gw_details[0]['host'] = $gw_result->host;
             $gw_details[0]['port'] = $gw_result->port;
             $gw_details[0]['master_password'] = $gw_result->master_password;
             $gw_details[0]['username'] = $gw_result->username;
-        }
-        else {
+        } else {
             $gw_details = [];
         }
 
         return $gw_details;
     }
 
-    public function getDbDetails()
-    {
+    public function getDbDetails() {
 
         $db_detials = [];
         $db_detials[0]['host'] = env('DB_HOST', false);
@@ -313,6 +298,52 @@ class User extends Authenticatable
         $db_detials[0]['db_password'] = env('DB_PASSWORD', false);
 
         return $db_detials;
+    }
+
+    //update password
+
+    public function passwordUpdate($request, $servername, $loginmgr) {
+
+        $newpassword = bcrypt($request->input('new_password'));
+
+        try {
+            $this->where('manager_id', $loginmgr)
+                    ->update(['password' => $newpassword]);
+        } catch (\Exception $e) {
+            return false;
+        }
+        return true;
+    }
+    
+    //Mail Setting for login user
+    
+    public function getMailSetting($loginid, $server){
+        //get manager id
+        $loginmgr = $this->select('manager_id')
+                         ->where('id',$loginid)->first();
+        
+        
+        $mailsetting = new Mailsetting();
+        $getmailsetting = $mailsetting->select('login','server','smtpserver','mailfrom','mailto','password','port','ssl','enabled')
+                               ->where('login','=',$loginmgr->manager_id)
+                               ->where('server','=',$server)->get()->toArray();
+        
+        $mailsetting = [];
+        if ($getmailsetting) {
+            $mailsetting[0]['login'] = $getmailsetting[0]['login'];
+            $mailsetting[0]['server'] = $getmailsetting[0]['server'];
+            $mailsetting[0]['smtpserver'] = $getmailsetting[0]['smtpserver'];
+            $mailsetting[0]['mailfrom'] = $getmailsetting[0]['mailfrom'];
+            $mailsetting[0]['mailto'] = $getmailsetting[0]['mailto'];
+            $mailsetting[0]['password'] = $getmailsetting[0]['password'];
+            $mailsetting[0]['port'] = $getmailsetting[0]['port'];
+            $mailsetting[0]['ssl'] = $getmailsetting[0]['ssl'];
+            $mailsetting[0]['enabled'] = $getmailsetting[0]['enabled'];
+        } else {
+            $mailsetting = [];
+        }
+
+        return $mailsetting;
     }
 
 }

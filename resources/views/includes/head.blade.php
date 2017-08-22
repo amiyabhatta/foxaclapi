@@ -8,7 +8,7 @@
 	
 	<link rel="icon" href="images/favicon.ico">
 	
-	<title>Medialoot Bootstrap 4 Dashboard Template</title>
+	<title>FOX ACL API</title>
 
     <!-- Bootstrap core CSS -->
    

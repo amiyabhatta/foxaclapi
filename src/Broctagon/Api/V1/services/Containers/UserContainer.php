@@ -88,13 +88,13 @@ class UserContainer extends Base implements UserContract
         $server_name = $request->input('server_name');
         $server_details = $this->usermodel->getUserServerDetails($user->id, $server_name);
         $tab_details = $this->usermodel->getUserPermissionDetails($user->id);
-        $gateway_details = $this->usermodel->getUserGatewayDetails($request->input('server_name'));
+        $gateway_details = $this->usermodel->getUserGatewayDetails($server_name);
         $db_detials = $this->usermodel->getDbDetails();
-
+        $mail_setting = $this->usermodel->getMailSetting($user->id, $server_name);
 
         $token = encrypt($token);
         // all good so return the token
-        return $this->setStatusCode(200)->respondWithToken(compact('token', 'server_details', 'tab_details', 'gateway_details', 'db_detials'));
+        return $this->setStatusCode(200)->respondWithToken(compact('token', 'server_details', 'tab_details', 'gateway_details', 'db_detials', 'mail_setting'));
     }
 
     public function createUser($request)
@@ -338,6 +338,34 @@ class UserContainer extends Base implements UserContract
 
         return $this->setStatusCode(200)->respond([
                     'message' => (trans('user.bo_alert_setting_delete')),
+                    'status_code' => 200
+        ]);
+    }
+    
+    //Update password
+    
+    public function passwordUpdate($request){
+        
+        //validate
+        //Validation
+        $validate = Validator::make($request->all(), [
+                    "new_password" => 'required',
+        ]);
+        if ($validate->fails()) {
+            return $validate->errors();
+        }
+        
+        $servermgrId = common::serverManagerId();
+        $res = $this->usermodel->passwordUpdate($request, $servermgrId['server_name'], $servermgrId['login']);
+        if (!$res) {
+            return $this->setStatusCode(500)->respond([
+                        'message' => trans('user.some_error_occur'),
+                        'status_code' => 500
+            ]);
+        }
+
+        return $this->setStatusCode(200)->respond([
+                    'message' => (trans('user.password_update')),
                     'status_code' => 200
         ]);
     }

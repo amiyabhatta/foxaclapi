@@ -1,7 +1,7 @@
 (function() {
 
     'use strict';
-
+    
     angular
         .module('authApp', ['ui.router', 'satellizer'])
         .config(function($stateProvider, $urlRouterProvider, $authProvider) {
@@ -9,7 +9,7 @@
             // Satellizer configuration that specifies which API
             // route the JWT should be retrieved from
             $authProvider.loginUrl = '/api/v1/uilogin';
-
+            
             // Redirect to the auth state if any other states
             // are requested other than users
             $urlRouterProvider.otherwise('/auth');
@@ -25,6 +25,7 @@
                     templateUrl: '../views/dashboard.html',
                     controller: 'DashboardController as dashboard'
                 })
+               
                 .state('createUser', {
                     url: '/createUser',
                     templateUrl: '../views/createUser.html',
@@ -46,9 +47,24 @@
                     templateUrl: '../views/createRole.html',
                     controller: 'RoleController as role'
                 })
+                 .state('rolePermission', {
+                    url: '/rolePermission',
+                    templateUrl: '../views/rolePermission.html',
+                    controller: 'RoleController as role'
+                })
                 .state('permissions', {
                     url: '/permissions',
                     templateUrl: '../views/permissionManagement.html',
+                    controller: 'PermissionController as permission'
+                })
+                .state('createPermission', {
+                    url: '/createPermission',
+                    templateUrl: '../views/createPermission.html',
+                    controller: 'PermissionController as permission'
+                })
+                 .state('userPermission', {
+                    url: '/userPermission',
+                    templateUrl: '../views/userPermission.html',
                     controller: 'PermissionController as permission'
                 })
                 .state('servers', {
@@ -56,10 +72,30 @@
                     templateUrl: '../views/serverManagement.html',
                     controller: 'ServerController as server'
                 })
+                .state('createServer', {
+                    url: '/createServer',
+                    templateUrl: '../views/createServer.html',
+                    controller: 'ServerController as server'
+                })
                 .state('gateways', {
                     url: '/gateways',
                     templateUrl: '../views/gatewayManagement.html',
                     controller: 'GatewayController as gateway'
+                })
+                .state('createGateway', {
+                    url: '/createGateway',
+                    templateUrl: '../views/createGateway.html',
+                    controller: 'GatewayController as gateway'
+                })
+                .state('whitelabels', {
+                    url: '/whitelabels',
+                    templateUrl: '../views/whitelabelsManagement.html',
+                    controller: 'WhiteLabelsController as whitelabel'
+                })
+                .state('createWhitelabel', {
+                    url: '/createWhitelabel',
+                    templateUrl: '../views/createWhitelabel.html',
+                    controller: 'WhiteLabelsController as whitelabel'
                 });
         });
 })();

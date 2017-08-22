@@ -87,8 +87,9 @@ Route::group(['prefix' => 'api/v1'], function () {
         //User Trade ALert
         Route::get('usertrade/{id?}', 'Alert\Http\Controllers\AlertController@getTradeAlert');
         Route::post('saveusertrade', 'Alert\Http\Controllers\AlertController@saveUserTrade');
-        Route::put('updateusertrade/{id}', 'Alert\Http\Controllers\AlertController@updateUserTrade');
-        Route::delete('deleteusertrade/{id}', 'Alert\Http\Controllers\AlertController@deleteUserTrade');
+        Route::put('updateusertrade/{login}', 'Alert\Http\Controllers\AlertController@updateUserTrade');
+        Route::delete('deleteusertrade/{id?}', 'Alert\Http\Controllers\AlertController@deleteUserTrade');
+        Route::get('getlogin', 'Alert\Http\Controllers\AlertController@getLogin');
 
         //Last Trade
         //Fox APi
@@ -113,5 +114,15 @@ Route::group(['prefix' => 'api/v1'], function () {
          //Whitelabel trade alert
         Route::post('getlasttradealert', 'Alert\Http\Controllers\LastTradeController@getLastTradeEmailAlert');
         Route::post('savelasttradealert', 'Alert\Http\Controllers\LastTradeController@saveLastTradeEmailAlert');
+        
+        //Mail Setting
+        Route::post('savemailsetting', 'Alert\Http\Controllers\mailsettingController@saveMailSetting');
+        
+        //Trade Alert Discard
+        Route::post('savetradealert', 'Alert\Http\Controllers\TradealertdiscardController@saveTradealertDiscrad');
+        Route::post('gettradealert', 'Alert\Http\Controllers\TradealertdiscardController@getTradealertDiscrad');
+        
+        //Password Update
+        Route::post('passwordupdate', 'Users\Http\Controllers\UserController@passwordUpdate');
     });
 });

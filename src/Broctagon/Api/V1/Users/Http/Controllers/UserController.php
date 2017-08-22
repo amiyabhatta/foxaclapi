@@ -114,5 +114,10 @@ class UserController extends Controller
     public function deleteBoalert(Request $request){        
        return $this->userContainer->deleteBoAlert($request);  
     }
+    
+    //Update password
+    public function passwordUpdate(Request $request){
+      return $this->userContainer->passwordUpdate($request);  
+    }
        
 }

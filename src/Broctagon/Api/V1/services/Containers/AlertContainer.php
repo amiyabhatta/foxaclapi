@@ -15,26 +15,25 @@ use Validator;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use Fox\Common\Common;
 
-class AlertContainer extends Base implements AlertContract
-{
+class AlertContainer extends Base implements AlertContract {
 
     protected $userTransformer;
 
-    public function __construct($usertrade, $lasttrade, $reportgroup, $reportgroupuser, $auditlog, $lasttradeemailalert)
-    {
+    public function __construct($usertrade, $lasttrade, $reportgroup, $reportgroupuser, $auditlog, $lasttradeemailalert, $mailsetting, $tradealertdiscard) {
         $this->usertrade = $usertrade;
         $this->lasttrade = $lasttrade;
         $this->reportgroup = $reportgroup;
         $this->reportgroupuser = $reportgroupuser;
         $this->auditlog = $auditlog;
         $this->lasttradeemailalert = $lasttradeemailalert;
+        $this->mailsetting = $mailsetting;
+        $this->tradealert = $tradealertdiscard;
     }
 
     /**
      * Get Users Trades.
      */
-    public function saveuserTrades($request)
-    {
+    public function saveuserTrades($request) {
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
         $userinfo = JWTAuth::parseToken()->authenticate();
@@ -49,26 +48,24 @@ class AlertContainer extends Base implements AlertContract
         }
         return $this->setStatusCode(200)->respond([
                     'message' => (trans('user.trade_alert_save')),
-                    'status_code' => 200,
-                    'last_insert_id' => $res,
+                    'status_code' => 200
+                    //'last_insert_id' => $res,
         ]);
     }
 
-    public function updateuserTrades($request, $id)
-    {
+    public function updateuserTrades($request, $login) {
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
         $userinfo = JWTAuth::parseToken()->authenticate();
         $login_id = $userinfo->manager_id;
-        $res = $this->usertrade->updateTradeValue($request, $server_name, $login_id, $id);
+        $res = $this->usertrade->updateTradeValue($request, $server_name, $login_id, $login);
 
         if (!$res) {
             return $this->setStatusCode(500)->respond([
                         'message' => trans('user.some_error_occur'),
                         'status_code' => 500
             ]);
-        }
-        else if ($res === 'already_asign') {
+        } else if ($res === 'already_asign') {
             return $this->setStatusCode(500)->respond([
                         'message' => trans('user.trade_alert_already_assign'),
                         'status_code' => 500
@@ -80,8 +77,7 @@ class AlertContainer extends Base implements AlertContract
         ]);
     }
 
-    public function deleteuserTrades($id)
-    {
+    public function deleteuserTrades($id) {
 
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
@@ -103,8 +99,7 @@ class AlertContainer extends Base implements AlertContract
         ]);
     }
 
-    public function getuserTrades($id)
-    {
+    public function getuserTrades($id) {
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
         $userinfo = JWTAuth::parseToken()->authenticate();
@@ -120,8 +115,7 @@ class AlertContainer extends Base implements AlertContract
      * Paginator adapter is used for pagination.     * 
      * @return Collection
      */
-    public function getLastTradeList($id)
-    {
+    public function getLastTradeList($id) {
         $servermgrId = common::serverManagerId();
 
         $res = $this->lasttrade->getlatsTradeList($servermgrId['server_name'], $servermgrId['login'], $id);
@@ -129,8 +123,7 @@ class AlertContainer extends Base implements AlertContract
         return response()->json($res);
     }
 
-    public function updateLastTradeList($id, $request)
-    {
+    public function updateLastTradeList($id, $request) {
         $servermgrId = common::serverManagerId();
 
         $res = $this->lasttrade->updatelatsTrade($servermgrId['server_name'], $servermgrId['login'], $id, $request);
@@ -148,8 +141,7 @@ class AlertContainer extends Base implements AlertContract
         ]);
     }
 
-    public function createWhiteLabel($request)
-    {
+    public function createWhiteLabel($request) {
         $check_user_role = common::checkRole();
 
         if ($check_user_role == 'super_administrator') {
@@ -174,8 +166,7 @@ class AlertContainer extends Base implements AlertContract
         ]);
     }
 
-    public function updateWhiteLabel($request, $id)
-    {
+    public function updateWhiteLabel($request, $id) {
         $check_user_role = common::checkRole();
 
         if ($check_user_role == 'super_administrator') {
@@ -200,8 +191,7 @@ class AlertContainer extends Base implements AlertContract
         ]);
     }
 
-    public function deleteWhiteLabel($id)
-    {
+    public function deleteWhiteLabel($id) {
         $check_user_role = common::checkRole();
 
         if ($check_user_role == 'super_administrator') {
@@ -230,8 +220,7 @@ class AlertContainer extends Base implements AlertContract
      * Save Report and group
      */
 
-    public function saveReportGroup($request)
-    {
+    public function saveReportGroup($request) {
         $servermgrId = common::serverManagerId();
 
         $res = $this->reportgroup->saveReportGroup($servermgrId['server_name'], $servermgrId['login'], $request);
@@ -249,8 +238,7 @@ class AlertContainer extends Base implements AlertContract
         ]);
     }
 
-    public function updateReportGroup($request)
-    {
+    public function updateReportGroup($request) {
 
         $servermgrId = common::serverManagerId();
 
@@ -269,8 +257,7 @@ class AlertContainer extends Base implements AlertContract
         ]);
     }
 
-    public function getTradeList($id)
-    {
+    public function getTradeList($id) {
 
         $servermgrId = common::serverManagerId();
 
@@ -279,8 +266,7 @@ class AlertContainer extends Base implements AlertContract
         return $res;
     }
 
-    public function deleteTradeList($request)
-    {
+    public function deleteTradeList($request) {
         $servermgrId = common::serverManagerId();
 
         $res = $this->reportgroup->deleteTradeGrpList($servermgrId['server_name'], $servermgrId['login'], $request);
@@ -302,8 +288,7 @@ class AlertContainer extends Base implements AlertContract
      * Audit Log
      */
 
-    public function saveAuditLog($request)
-    {
+    public function saveAuditLog($request) {
         $servermgrId = common::serverManagerId();
 
         $res = $this->auditlog->saveAuditLog($servermgrId['server_name'], $request);
@@ -321,8 +306,7 @@ class AlertContainer extends Base implements AlertContract
         ]);
     }
 
-    public function getAuditLog($request)
-    {
+    public function getAuditLog($request) {
 
         $servermgrId = common::serverManagerId();
 
@@ -341,34 +325,42 @@ class AlertContainer extends Base implements AlertContract
             }
         }
         //Compaire date filed
-      
+
         $res = $this->auditlog->getAuditLog($servermgrId['server_name'], $request);
         return $res;
     }
-    
+
     /*
      * Get white label list
      */
-    
-    public function getWhiteLabel($id){
-        
+
+    public function getWhiteLabel($id) {
+
         $servermgrId = common::serverManagerId();
 
-        return $res = $this->lasttrade->getWhiteLabelList($servermgrId['server_name'], $id); 
+        return $res = $this->lasttrade->getWhiteLabelList($servermgrId['server_name'], $id);
     }
-    
+
     /*
      * Get White labellast trade 
      */
-    
-    public function getLastTradeWlEmailAlert($request){
-        return $res = $this->lasttradeemailalert->getLastTradeWlEmailAlert($request); 
+
+    public function getLastTradeWlEmailAlert($request) {
+        return $res = $this->lasttradeemailalert->getLastTradeWlEmailAlert($request);
     }
-    
-    public function saveLastTradeWlEmailAlert($request){
-        
+
+    public function saveLastTradeWlEmailAlert($request) {
+
+        //Validation
+        $validate = Validator::make($request->all(), [
+                    "ticket" => 'required|unique:lasttrade_whitelabels_emails_alert',
+                    "whitelabel" => 'required'
+        ]);
+        if ($validate->fails()) {
+            return $validate->errors();
+        }
         $res = $this->lasttradeemailalert->saveLastTradeWlEmailAlert($request);
-        
+
         if (!$res) {
             return $this->setStatusCode(500)->respond([
                         'message' => trans('user.some_error_occur'),
@@ -380,6 +372,84 @@ class AlertContainer extends Base implements AlertContract
                     'message' => (trans('user.email_alert_added')),
                     'status_code' => 200
         ]);
+    }
+
+    /*
+     * Save mail setting
+     */
+
+    public function saveMailSetting($request) {
+
+        //validation
+        $servermgrId = common::serverManagerId();
+        $res = $this->mailsetting->saveMailSetting($request, $servermgrId['server_name'], $servermgrId['login']);
+        if (!$res) {
+            return $this->setStatusCode(500)->respond([
+                        'message' => trans('user.some_error_occur'),
+                        'status_code' => 500
+            ]);
+        }
+
+        return $this->setStatusCode(200)->respond([
+                    'message' => (trans('user.mail_setting_added')),
+                    'status_code' => 200
+        ]);
+    }
+
+    /*
+     * Save Tarde Alert Discrad
+     */
+
+    public function saveTradeAlertDiscrad($request) {
+
+        //validation
+        //Validation
+        $validate = Validator::make($request->all(), [
+                    "ticket" => 'required|unique:trade_alert_discard',
+        ]);
+        if ($validate->fails()) {
+            return $validate->errors();
+        }
+
+        $servermgrId = common::serverManagerId();
+        $res = $this->tradealert->saveTardeAlertDiscrd($request, $servermgrId['login']);
+        if (!$res) {
+            return $this->setStatusCode(500)->respond([
+                        'message' => trans('user.some_error_occur'),
+                        'status_code' => 500
+            ]);
+        }
+
+        return $this->setStatusCode(200)->respond([
+                    'message' => (trans('user.trade_alert_added')),
+                    'status_code' => 200
+        ]);
+    }
+
+    public function getTradeAlertDiscrad($request) {
+
+        //validation
+        //Validation
+        $validate = Validator::make($request->all(), [
+                    "addedon" => 'required',
+        ]);
+
+        if ($validate->fails()) {
+            return $validate->errors();
+        }
+
+        $servermgrId = common::serverManagerId();
+        $res = $this->tradealert->getTardeAlertDiscrd($request, $servermgrId['login']);
+        return $res;
+    }
+    
+    /*
+     * get login for logim
+     */
+    public function getLogin(){
+       $servermgrId = common::serverManagerId();
+       $res = $this->usertrade->getLogin($servermgrId['server_name'], $servermgrId['login']);
+       return $res; 
     }
 
 }
