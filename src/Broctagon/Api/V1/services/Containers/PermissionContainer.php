@@ -112,7 +112,7 @@ class PermissionContainer extends Base implements PermissionContract
     public function getPermission($id = NULL)
     {
 
-        $limit = Input::get('limit', 20);
+        $limit = Input::get('limit', 20000);
 
         $permission = $this->permissionModel->getAllPermission($limit, $id);
 

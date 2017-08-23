@@ -49,7 +49,7 @@
                     $scope.password = $scope.servers.password;
                     $scope.databasename = $scope.servers.databasename;
                     $scope.masterid = $scope.servers.master_id;
-                    $scope.GatewayID = $scope.servers.gateway_id;
+                    $scope.gateway_id = $scope.servers.gateway_id;   
                     
                 }, function (error) {
 
@@ -90,7 +90,7 @@
                   password        : $scope.password,
                   databasename    : $scope.databasename,
                   masterid        : $scope.masterid,
-                  GatewayID       : $scope.GatewayID,
+                  GatewayID       : $scope.gateway_id,
                 }, config)
                 .then(function (data, status, headers, config) {
                     sessionStorage.succ_message = "Server detail has been created successfully.";
@@ -118,7 +118,7 @@
                   password        : $scope.password,
                   databasename    : $scope.databasename,
                   masterid        : $scope.masterid,
-                  GatewayID       : $scope.GatewayID,
+                  GatewayID       : $scope.gateway_id,
                 }, config)
                 .then(function (data, status, headers, config) {
                     $scope.gatewayname = '';

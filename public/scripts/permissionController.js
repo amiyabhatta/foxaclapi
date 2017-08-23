@@ -134,7 +134,7 @@
         
         
         vm.getUser = function () {
-
+            $(".page-header h1").text("USER ROLE MANAGEMENT");
             // Using $location service
             var url = $location.search();
             if (url.userid != undefined) {
@@ -222,6 +222,15 @@
                 });
             }
         }
+        
+        vm.checkLogin = function() {            
+            var token = sessionStorage.AuthUser;        
+            if(token === '') {
+               $window.location.href = '/login';
+           }
+        }
+        vm.checkLogin();
+        
         $(".page-header h1").text("Permissions");
     }
 

@@ -12,9 +12,9 @@
  */
 
 Route::get('/', function () {
-    //return view('welcome');
-    return View::make('pages.home');
+    return redirect('/login');
 });
+
 Route::get('/home', function () {
     //return view('welcome');
     return View::make('pages.home');

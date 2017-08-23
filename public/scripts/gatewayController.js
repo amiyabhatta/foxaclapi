@@ -150,6 +150,15 @@
             }
         }
         
+        vm.checkLogin = function() {            
+            var token = sessionStorage.AuthUser;        
+            if(token === '') {
+               $window.location.href = '/login';
+           }
+        }
+        vm.checkLogin();
+        
+        
         $(".page-header h1").text("Gateways");
 
     }

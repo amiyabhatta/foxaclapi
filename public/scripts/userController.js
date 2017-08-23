@@ -21,6 +21,7 @@
         $scope.server_id = '';
         $scope.module = 'user';
         $scope.servers = '';
+        var token = sessionStorage.AuthUser;
 
         vm.getUsers = function () {
             $http.get('api/authenticate').success(function (users) {
@@ -29,10 +30,6 @@
                 vm.error = error;
             });
         }
-
-        var token = sessionStorage.AuthUser;
-
-
         vm.getUser = function () {
 
             // Using $location service
@@ -43,8 +40,8 @@
                         "Authorization": 'Bearer ' + token
                     }
                 }).then(function (response) {
-                            $scope.user_data = response.data.data[0];
-                            $scope.manager_id = $scope.user_data.manager_id,
+                    $scope.user_data = response.data.data[0];
+                    $scope.manager_id = $scope.user_data.manager_id,
                             $scope.username = $scope.user_data.name,
                             $scope.email = $scope.user_data.email,
                             $scope.server_id = $scope.user_data.server_id
@@ -52,7 +49,7 @@
                     angular.forEach($scope.servers, function (value, key) {
                         value.checked = false;
                         angular.forEach($scope.server_id, function (val, key2) {
-                            if (value.id === val.server_id)
+                            if (value.id == val.server_id)
                                 value.checked = true;
                         })
                     });
@@ -64,19 +61,21 @@
 
 
         vm.getServers = function () {
+            $scope.showLoader = true;
             $http.get('api/v1/serverlist', {
                 headers: {
                     "Authorization": 'Bearer ' + token
                 }
             }).then(function (response) {
                 $scope.servers = response.data;
+                $scope.showLoader = false;
             }, function (error) {
 
             });
         }
 
         $scope.change = function (list, obj) {
-            
+
             if (obj) {
                 $scope.lst[list.id] = list;
             } else {
@@ -90,7 +89,7 @@
 
         $scope.createUsers = function () {
             $scope.server_id = '';
-            angular.forEach($scope.servers, function (ser) {                
+            angular.forEach($scope.servers, function (ser) {
                 if (ser.checked) {
                     $scope.server_id += ser.id + ',';
                 }
@@ -127,7 +126,7 @@
                     "Authorization": 'Bearer ' + token
                 }
             }
-            
+
             if (url.userid === undefined) {
                 $http.post(uri,
                         {user_manager_id: $scope.manager_id,
@@ -145,16 +144,16 @@
                             sessionStorage.succ_message = "User has been created successfully.";
                             $state.go('home');
                         })
-                        .catch(function (response, status, header, config) {                           
+                        .catch(function (response, status, header, config) {
                             $scope.err_message = '';
-                            angular.forEach(response.data, function (errmessage, key) {                                
-                                angular.forEach(errmessage, function (mesg, key) {                                    
-                                    $scope.err_message +=  mesg + "\n";
-                                 })                                 
+                            angular.forEach(response.data, function (errmessage, key) {
+                                angular.forEach(errmessage, function (mesg, key) {
+                                    $scope.err_message += mesg + "\n";
+                                })
                             })
-                             $timeout(function() {
+                            $timeout(function () {
                                 $scope.err_message = '';
-                             }, 4000); // 4 seconds
+                            }, 4000); // 4 seconds
                         });
 
             } else {
@@ -177,14 +176,14 @@
                         })
                         .catch(function (response, status, header, config) {
                             $scope.err_message = '';
-                            angular.forEach(response.data, function (errmessage, key) {                                
-                                angular.forEach(errmessage, function (mesg, key) {                                    
-                                    $scope.err_message +=  mesg + "\n";
-                                 })                                 
-                            })  
-                            $timeout(function() {
+                            angular.forEach(response.data, function (errmessage, key) {
+                                angular.forEach(errmessage, function (mesg, key) {
+                                    $scope.err_message += mesg + "\n";
+                                })
+                            })
+                            $timeout(function () {
                                 $scope.err_message = '';
-                             }, 4000); // 4 seconds                            
+                            }, 4000); // 4 seconds                            
                         });
             }
         };
@@ -207,12 +206,19 @@
                     $state.go($state.current, {}, {reload: true});
 
                 }, function (error) {
-                    console.log(error.data.message);
                     $scope.err_message = "Unable to delete the record.";
                     //$state.go('gateways');                    
                 });
             }
         }
+
+        vm.checkLogin = function () {
+            var token = sessionStorage.AuthUser;
+            if (token === '') {
+                $window.location.href = '/login';
+            }
+        }
+        vm.checkLogin();
 
 
     }

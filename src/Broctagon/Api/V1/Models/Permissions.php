@@ -101,7 +101,7 @@ class Permissions extends Model
      */
     public function getAllPermission($limit, $id = NULL)
     {
-        $query = $this->select('id', 'name');
+        $query = $this->select('id', 'name', 'user_type');
         if ($id) {
             $query->where('id', '=', $id);
         }

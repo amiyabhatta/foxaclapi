@@ -37,12 +37,10 @@
                         </div>
                         <div class="form-group">
                             <div class="col-12 no-padding"> 
-                                <select class="form-control" ng-model="GatewayID">
-                                    <option value = "" label = "Gateway ID"></option>
-                                    <option ng-repeat="usr in server.gateways" ng-value="usr.id"  ng-selected="GatewayID == usr.id">
-                                        {{usr.name}} 
-                                    </option>
-                                </select>
+                                <select class="form-control pageList" name="gatwayid" required="" ng-model="gateway_id">
+                                    <option ng-value = "" label = "Gateway ID"></option>
+                                    <option ng-repeat="usr in server.gateways" ng-selected ="usr.id == gateway_id" value="{{usr.id}}">{{usr.name}}</option>
+                                </select>                                
                             </div>
                         </div>
                         

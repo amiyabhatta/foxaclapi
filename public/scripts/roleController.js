@@ -137,18 +137,20 @@
         }
         
         vm.getPermissions = function () {
+            $(".page-header h1").text("ROLE PERMISSSION MANAGEMENT");
+            $scope.showLoader       = true
             $http.get('api/v1/permission', {
                 headers: {
                     "Authorization": 'Bearer ' + token
                 }
             }).then(function (response) {
-                $scope.permissions = response.data.data;
-                
+                $scope.permissions1 = response.data.data;
                 vm.getRolePermissions();
                 
                 
                 $scope.succ_message = sessionStorage.succ_message;
                 sessionStorage.succ_message = '';
+                $scope.showLoader       = false
             }, function (error) {
 
             });
@@ -166,17 +168,20 @@
                 }).then(function (response) {
                     $scope.roles_data   = response.data.data[0];
                     $scope.role_permissions     = $scope.roles_data.role_permissions;
-                    angular.forEach($scope.permissions, function (per, key) {
+                    angular.forEach($scope.permissions1, function (per, key) {
                         
                         angular.forEach($scope.role_permissions, function (val, key2) {
-                            if (val.permissions_id === per.id) {
-                                if(val.action === 1)
+                            if (val.permissions_id == per.id) {
+                                if(val.action == 1)
                                  per.checked = true;
                                 else
                                  per.checked = false;
                             }
                         })
                     });
+                    
+                    $scope.permissions = $scope.permissions1;
+                    
                 }, function (error) {
 
                 });
@@ -223,6 +228,17 @@
              
             }
         }
+        
+        
+        vm.checkLogin = function() {            
+            var token = sessionStorage.AuthUser;        
+            if(token === '') {
+               $window.location.href = '/login';
+           }
+        }
+        vm.checkLogin();
+        
+        
         
         $(".page-header h1").text("Roles");
     }
