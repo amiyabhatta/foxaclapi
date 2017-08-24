@@ -52,7 +52,7 @@ class Serverlist extends Model
         $server->username = $request->input('username');
         $server->password = $request->input('password');
         $server->databasename = $request->input('databasename');
-        $this->masterid = $request->input('masterid');
+        $server->masterid = $request->input('masterid');
         $server->GatewayID = $request->input('GatewayID');
         try {
             $server->save();
@@ -85,7 +85,7 @@ class Serverlist extends Model
     {
 
         $query = $this->select('serverlist.id','serverlist.servername','serverlist.ipaddress','serverlist.username','serverlist.password','serverlist.databasename','serverlist.masterid','serverlist.GatewayID','mt4gateway.gateway_name')
-                      ->join('mt4gateway', 'mt4gateway.id', '=', 'serverlist.GatewayID');
+                      ->leftjoin('mt4gateway', 'mt4gateway.id', '=', 'serverlist.GatewayID');
 
         if ($id) {
             $query->where('serverlist.id', '=', $id);
