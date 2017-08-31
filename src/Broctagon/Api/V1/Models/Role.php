@@ -29,6 +29,7 @@ class Role extends Model
         }
 
         $query->where('role_slug', '!=', 'super_administrator');
+        $query->orderBy('id', 'desc');
         $result = $query->paginate($limit);
         return $result;
     }

@@ -16,19 +16,18 @@ use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use Fox\Common\Common;
 use Fox\Models\Role;
 
-class UserContainer extends Base implements UserContract
-{
+class UserContainer extends Base implements UserContract {
 
     protected $userTransformer;
     private $usermodel;
     private $roleModel;
 
-    public function __construct($userTransformer, $user, $global_setting, $bo_alert)
-    {
+    public function __construct($userTransformer, $user, $global_setting, $bo_alert, $tabselect) {
         $this->userTransformer = $userTransformer;
         $this->usermodel = $user;
         $this->globalSettingOm = $global_setting;
         $this->bolAlertSetting = $bo_alert;
+        $this->tabselectmodel = $tabselect;
     }
 
     /**
@@ -37,8 +36,7 @@ class UserContainer extends Base implements UserContract
      * @author Dibya lochan Nayak <dibyalochan.nayak@broctagon.com>
      * @return Collection
      */
-    public function getUsers($id)
-    {
+    public function getUsers($id) {
         $limit = Input::get('limit', 20);
 
         $user = $this->usermodel->getAllUsers($limit, $id);
@@ -60,8 +58,7 @@ class UserContainer extends Base implements UserContract
      * @param type $request
      * @return type
      */
-    public function login($request)
-    {
+    public function login($request) {
 
         //$credentials = $request->only('email', 'password');
         $credentials = $request->only('manager_id', 'password');
@@ -76,8 +73,7 @@ class UserContainer extends Base implements UserContract
                 return $this->setStatusCode(200)->respond(['message' => trans('user.invalid_creds'),
                             'status_code' => 404]);
             }
-        }
-        catch (JWTException $e) {
+        } catch (JWTException $e) {
             // something went wrong whilst attempting to encode the token
 
             return $this->setStatusCode(200)->respond(['message' => trans('user.not_create_token'),
@@ -97,8 +93,7 @@ class UserContainer extends Base implements UserContract
         return $this->setStatusCode(200)->respondWithToken(compact('token', 'server_details', 'tab_details', 'gateway_details', 'db_detials', 'mail_setting'));
     }
 
-    public function createUser($request)
-    {
+    public function createUser($request) {
         $res = $this->usermodel->addUser($request);
 
         if (!$res) {
@@ -114,8 +109,7 @@ class UserContainer extends Base implements UserContract
         ]);
     }
 
-    public function updateUser($request)
-    {
+    public function updateUser($request) {
         $res = $this->usermodel->updateUser($request);
 
         if (!$res) {
@@ -131,9 +125,8 @@ class UserContainer extends Base implements UserContract
         ]);
     }
 
-    public function deleteUser($request)
-    {
-        
+    public function deleteUser($request) {
+
         $res = $this->usermodel->deleteUser($request);
 
         if (!$res) {
@@ -142,8 +135,7 @@ class UserContainer extends Base implements UserContract
                         'message' => trans('user.not_found'),
                         'status_code' => 404
             ]);
-        }
-        elseif ($res === 'error') {
+        } elseif ($res === 'error') {
             return $this->setStatusCode(500)->respond([
                         'message' => trans('user.some_error_occur'),
                         'status_code' => 500
@@ -156,8 +148,7 @@ class UserContainer extends Base implements UserContract
         ]);
     }
 
-    public function assignRole($request)
-    {
+    public function assignRole($request) {
 
         $res = $this->usermodel->assignRoleToUser($request);
 
@@ -174,14 +165,12 @@ class UserContainer extends Base implements UserContract
         ]);
     }
 
-    public function logout()
-    {
+    public function logout() {
         JWTAuth::invalidate(JWTAuth::getToken());
         return $this->respond(['status_code' => 401, 'message' => trans('user.logout')]);
     }
 
-    public function Uilogin($request)
-    {
+    public function Uilogin($request) {
 
         $credentials = $request->only('email', 'password');
 
@@ -193,8 +182,7 @@ class UserContainer extends Base implements UserContract
                 return $this->setStatusCode(200)->respond(['message' => trans('user.invalid_creds'),
                             'status_code' => 404]);
             }
-        }
-        catch (JWTException $e) {
+        } catch (JWTException $e) {
             // something went wrong whilst attempting to encode the token
 
             return $this->setStatusCode(200)->respond(['message' => trans('user.not_create_token'),
@@ -206,8 +194,7 @@ class UserContainer extends Base implements UserContract
         return $this->setStatusCode(200)->respondWithToken(compact('token'));
     }
 
-    public function setGlobalAlertOm($request)
-    {
+    public function setGlobalAlertOm($request) {
         //get server name from token
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
@@ -228,8 +215,7 @@ class UserContainer extends Base implements UserContract
         ]);
     }
 
-    public function getGlobalAlertOm()
-    {
+    public function getGlobalAlertOm() {
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
         $userinfo = JWTAuth::parseToken()->authenticate();
@@ -251,8 +237,7 @@ class UserContainer extends Base implements UserContract
         return response()->json($ret);
     }
 
-    public function deleteGlobalAlertOm($request)
-    {
+    public function deleteGlobalAlertOm($request) {
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
         $userinfo = JWTAuth::parseToken()->authenticate();
@@ -274,8 +259,7 @@ class UserContainer extends Base implements UserContract
 
     //Bo alert setting
 
-    public function setBoAlert($request)
-    {
+    public function setBoAlert($request) {
         //get server name from token
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
@@ -296,8 +280,7 @@ class UserContainer extends Base implements UserContract
         ]);
     }
 
-    public function getBoAlert()
-    {
+    public function getBoAlert() {
 
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
@@ -321,8 +304,7 @@ class UserContainer extends Base implements UserContract
         return response()->json($ret);
     }
 
-    public function deleteBoAlert($request)
-    {
+    public function deleteBoAlert($request) {
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
         $userinfo = JWTAuth::parseToken()->authenticate();
@@ -341,11 +323,11 @@ class UserContainer extends Base implements UserContract
                     'status_code' => 200
         ]);
     }
-    
+
     //Update password
-    
-    public function passwordUpdate($request){
-        
+
+    public function passwordUpdate($request) {
+
         //validate
         //Validation
         $validate = Validator::make($request->all(), [
@@ -354,7 +336,7 @@ class UserContainer extends Base implements UserContract
         if ($validate->fails()) {
             return $validate->errors();
         }
-        
+
         $servermgrId = common::serverManagerId();
         $res = $this->usermodel->passwordUpdate($request, $servermgrId['server_name'], $servermgrId['login']);
         if (!$res) {
@@ -368,6 +350,38 @@ class UserContainer extends Base implements UserContract
                     'message' => (trans('user.password_update')),
                     'status_code' => 200
         ]);
+    }
+
+    /*
+     * Save Permisison tab 
+     */
+
+    public function saveTab($request) {
+        
+        $servermgrId = common::serverManagerId();
+        $res = $this->tabselectmodel->saveTab($request, $servermgrId['server_name'], $servermgrId['login']);
+
+        if (!$res) {
+            return $this->setStatusCode(500)->respond([
+                        'message' => trans('user.some_error_occur'),
+                        'status_code' => 500
+            ]);
+        }
+
+        return $this->setStatusCode(200)->respond([
+                    'message' => (trans('user.save_tab')),
+                    'status_code' => 200
+        ]);
+    }
+
+    /*
+     * get Tabe selected tab setting
+     */
+
+    public function getTabSetting() {
+        
+        $servermgrId = common::serverManagerId();
+        return $res = $this->tabselectmodel->getTab($servermgrId['server_name'], $servermgrId['login']);
     }
 
 }

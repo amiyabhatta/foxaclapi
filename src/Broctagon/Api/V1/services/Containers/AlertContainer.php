@@ -451,5 +451,7 @@ class AlertContainer extends Base implements AlertContract {
        $res = $this->usertrade->getLogin($servermgrId['server_name'], $servermgrId['login']);
        return $res; 
     }
+    
+   
 
 }

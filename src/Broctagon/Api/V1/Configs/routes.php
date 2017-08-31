@@ -124,5 +124,9 @@ Route::group(['prefix' => 'api/v1'], function () {
         
         //Password Update
         Route::post('passwordupdate', 'Users\Http\Controllers\UserController@passwordUpdate');
+        
+        //Tab showing selection by user
+        Route::post('tabeselectsave', 'Users\Http\Controllers\TabselectController@savetab');
+        Route::get('tabeselect', 'Users\Http\Controllers\TabselectController@show');    
     });
 });

@@ -79,7 +79,8 @@ class Mt4gateway extends Model
 
     public function getAllGwList($limit, $id)
     {
-        $query = $this->select('*');
+        $query = $this->select('*')
+                      ->orderBy('id', 'desc');
 
         if ($id) {
             $query->where('id', "=", $id);

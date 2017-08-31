@@ -33,7 +33,9 @@ class User extends Authenticatable {
 
     public function getAllUsers($limit, $id) {
         $query = $this->select('*')
-                ->where('email', '!=', 'james@gmail.com');
+                ->where('email', '!=', 'james@gmail.com')
+                ->where('activate_status','=',1)
+                ->orderBy('id', 'desc');
         //->paginate($limit);
 
         if ($id) {
@@ -258,6 +260,7 @@ class User extends Authenticatable {
                 ->leftjoin('roles_has_permissions', 'users_has_roles.roles_id', '=', 'roles_has_permissions.role_id')
                 ->leftjoin('permissions', 'roles_has_permissions.permissions_id', '=', 'permissions.id')
                 ->where('users.id', '=', $user_id)
+                ->where('roles_has_permissions.action','=',1)
                 ->get();
 
         $permission_array = [];

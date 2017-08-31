@@ -137,7 +137,8 @@ class lasttrade_whitelabels extends Model {
         $check_user_role = common::checkRole();
         
         if ($check_user_role == 'super_administrator') {
-            $query = $this->select('*');
+            $query = $this->select('*')
+                          ->orderBy('id', 'desc');
 
             if ($id) {
                 $query->where('id', '=', $id);

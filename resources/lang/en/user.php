@@ -108,4 +108,7 @@ return [
     //Password
     "password_update" => "password updated sucessfully",
     
+    
+    //Tab setting
+    "save_tab" => "tab setting updated sucessfully",
 ];

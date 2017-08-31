@@ -85,7 +85,8 @@ class Serverlist extends Model
     {
 
         $query = $this->select('serverlist.id','serverlist.servername','serverlist.ipaddress','serverlist.username','serverlist.password','serverlist.databasename','serverlist.masterid','serverlist.GatewayID','mt4gateway.gateway_name')
-                      ->leftjoin('mt4gateway', 'mt4gateway.id', '=', 'serverlist.GatewayID');
+                      ->leftjoin('mt4gateway', 'mt4gateway.id', '=', 'serverlist.GatewayID')
+                     ->orderBy('id', 'desc'); 
 
         if ($id) {
             $query->where('serverlist.id', '=', $id);

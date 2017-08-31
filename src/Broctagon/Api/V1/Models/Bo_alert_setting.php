@@ -56,7 +56,7 @@ class Bo_alert_setting extends Model
 
           foreach ($server as $input_update) {
                  
-                //Check alert type is available is there or not
+                //Check alert type is available or not
                 $check_type =  $this->where('server_name', '=', $servername)
                                     ->where('login', '=', $login)
                                     ->where('alert_type','=',$input_update->alert_type)

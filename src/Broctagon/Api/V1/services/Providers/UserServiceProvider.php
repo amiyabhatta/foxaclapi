@@ -9,6 +9,7 @@ use Fox\Transformers\UserTransformer;
 use Fox\Models\User;
 use Fox\Models\glb_alert_setting_OM;
 use Fox\Models\Bo_alert_setting;
+use Fox\Models\TabSelected;
 
 class UserServiceProvider extends ServiceProvider {
 
@@ -29,8 +30,10 @@ class UserServiceProvider extends ServiceProvider {
         $user = new User;
         $global_setting = new glb_alert_setting_OM;
         $bo_alert = new Bo_alert_setting;
-        App::bind('Fox\Services\Contracts\UserContract', function() use($userTransformer, $user, $global_setting, $bo_alert) {
-            return new UserContainer($userTransformer, $user, $global_setting, $bo_alert);
+        $tabselect = new TabSelected;
+        
+        App::bind('Fox\Services\Contracts\UserContract', function() use($userTransformer, $user, $global_setting, $bo_alert, $tabselect) {
+            return new UserContainer($userTransformer, $user, $global_setting, $bo_alert, $tabselect);
         });
     }
 
