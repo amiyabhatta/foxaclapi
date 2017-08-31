@@ -34,7 +34,7 @@ class User extends Authenticatable {
     public function getAllUsers($limit, $id) {
         $query = $this->select('*')
                 ->where('email', '!=', 'james@gmail.com')
-                ->where('activate_status','=',1)
+                ->where('activate_status', '=', 1)
                 ->orderBy('id', 'desc');
         //->paginate($limit);
 
@@ -260,7 +260,7 @@ class User extends Authenticatable {
                 ->leftjoin('roles_has_permissions', 'users_has_roles.roles_id', '=', 'roles_has_permissions.role_id')
                 ->leftjoin('permissions', 'roles_has_permissions.permissions_id', '=', 'permissions.id')
                 ->where('users.id', '=', $user_id)
-                ->where('roles_has_permissions.action','=',1)
+                ->where('roles_has_permissions.action', '=', 1)
                 ->get();
 
         $permission_array = [];
@@ -317,20 +317,20 @@ class User extends Authenticatable {
         }
         return true;
     }
-    
+
     //Mail Setting for login user
-    
-    public function getMailSetting($loginid, $server){
+
+    public function getMailSetting($loginid, $server) {
         //get manager id
         $loginmgr = $this->select('manager_id')
-                         ->where('id',$loginid)->first();
-        
-        
+                        ->where('id', $loginid)->first();
+
+
         $mailsetting = new Mailsetting();
-        $getmailsetting = $mailsetting->select('login','server','smtpserver','mailfrom','mailto','password','port','ssl','enabled')
-                               ->where('login','=',$loginmgr->manager_id)
-                               ->where('server','=',$server)->get()->toArray();
-        
+        $getmailsetting = $mailsetting->select('login', 'server', 'smtpserver', 'mailfrom', 'mailto', 'password', 'port', 'ssl', 'enabled')
+                        ->where('login', '=', $loginmgr->manager_id)
+                        ->where('server', '=', $server)->get()->toArray();
+
         $mailsetting = [];
         if ($getmailsetting) {
             $mailsetting[0]['login'] = $getmailsetting[0]['login'];
@@ -347,6 +347,20 @@ class User extends Authenticatable {
         }
 
         return $mailsetting;
+    }
+
+    public function checkServerAssign($userId, $serverName) {
+        $user_server_access = new user_server_access;
+        $result = $user_server_access->select('serverlist.servername')
+                ->leftjoin('users', 'user_server_access.user_id', '=', 'users.id')
+                ->leftjoin('serverlist', 'serverlist.id', '=', 'user_server_access.server_id')
+                ->where('user_server_access.user_id', '=', $userId)
+                ->where('serverlist.servername', '=', $serverName)
+                ->get();
+        if (count($result)) {
+            return true;
+        }
+        return false;
     }
 
 }

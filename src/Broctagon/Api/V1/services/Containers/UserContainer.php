@@ -80,8 +80,16 @@ class UserContainer extends Base implements UserContract {
                         'status_code' => 500]);
         }
 
+        
         $user = JWTAuth::authenticate($token);
         $server_name = $request->input('server_name');
+        //check server is assign to user
+        $checkserver = $this->serverAssigntoUser($user->id,$server_name);
+        if(!$checkserver){
+          return $this->setStatusCode(200)->respond(['message' => trans('user.user_not_registered'),
+                            'status_code' => 404]);  
+        }
+        
         $server_details = $this->usermodel->getUserServerDetails($user->id, $server_name);
         $tab_details = $this->usermodel->getUserPermissionDetails($user->id);
         $gateway_details = $this->usermodel->getUserGatewayDetails($server_name);
@@ -383,5 +391,14 @@ class UserContainer extends Base implements UserContract {
         $servermgrId = common::serverManagerId();
         return $res = $this->tabselectmodel->getTab($servermgrId['server_name'], $servermgrId['login']);
     }
+    
+    /*
+     * Check servere is assing to user
+     */
+    
+    public function serverAssigntoUser($userId, $serverName){
+        return $this->usermodel->checkServerAssign($userId, $serverName);
+    }
+    
 
 }

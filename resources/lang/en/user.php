@@ -111,4 +111,7 @@ return [
     
     //Tab setting
     "save_tab" => "tab setting updated sucessfully",
+    
+    //Authentication
+    "user_not_registered" => "User is not register on this server",
 ];
