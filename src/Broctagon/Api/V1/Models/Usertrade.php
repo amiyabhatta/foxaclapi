@@ -78,7 +78,6 @@ class Usertrade extends Model {
 
     public function deleteTradeValue($server_name, $login_manager_id, $id) {
 
-
         if ($id) {
             $server = $this->where('server', '=', $server_name)
                     ->where('login_manager_id', '=', $login_manager_id)
