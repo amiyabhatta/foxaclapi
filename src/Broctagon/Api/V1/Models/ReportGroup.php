@@ -151,5 +151,16 @@ class ReportGroup extends Model
             return true;
         }
     }
+    
+    //Check Report group id
+    public function checkGroupid($serverName, $logimanagerid, $request){
+        
+        $check_id = $this->select('id')
+                         ->where('server', $serverName)
+                         ->where('login_mgr', $logimanagerid)
+                         ->where('id', $request->input('group_id'))->get();
+        
+        return count($check_id);
+    }
 
 }

@@ -114,4 +114,6 @@ return [
     
     //Authentication
     "user_not_registered" => "User is not register on this server",
+    
+    "id_not_found" => "Id not found",
 ];

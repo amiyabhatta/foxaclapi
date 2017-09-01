@@ -14,8 +14,11 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use Validator;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use Fox\Common\Common;
+use Fox\Common\Foxvalidation;
 
 class AlertContainer extends Base implements AlertContract {
+
+    use Foxvalidation;
 
     protected $userTransformer;
 
@@ -49,7 +52,7 @@ class AlertContainer extends Base implements AlertContract {
         return $this->setStatusCode(200)->respond([
                     'message' => (trans('user.trade_alert_save')),
                     'status_code' => 200
-                    //'last_insert_id' => $res,
+                        //'last_insert_id' => $res,
         ]);
     }
 
@@ -267,7 +270,24 @@ class AlertContainer extends Base implements AlertContract {
     }
 
     public function deleteTradeList($request) {
+
+        //Calling trait for validation
+        $validate = $this->deleteReportGroupValidation($request);
+        
+        if ($validate->fails()) {
+            return $validate->errors();
+        }
+        
         $servermgrId = common::serverManagerId();
+        //check id is availbe or not
+        $checkgroupId = $this->reportgroup->checkGroupid($servermgrId['server_name'], $servermgrId['login'], $request);
+        
+        if(!$checkgroupId){
+           return $this->setStatusCode(404)->respond([
+                        'message' => trans('user.id_not_found'),
+                        'status_code' => 404
+            ]); 
+        }
 
         $res = $this->reportgroup->deleteTradeGrpList($servermgrId['server_name'], $servermgrId['login'], $request);
 
@@ -442,16 +462,15 @@ class AlertContainer extends Base implements AlertContract {
         $res = $this->tradealert->getTardeAlertDiscrd($request, $servermgrId['login']);
         return $res;
     }
-    
+
     /*
      * get login for logim
      */
-    public function getLogin(){
-       $servermgrId = common::serverManagerId();
-       $res = $this->usertrade->getLogin($servermgrId['server_name'], $servermgrId['login']);
-       return $res; 
+
+    public function getLogin() {
+        $servermgrId = common::serverManagerId();
+        $res = $this->usertrade->getLogin($servermgrId['server_name'], $servermgrId['login']);
+        return $res;
     }
-    
-   
 
 }

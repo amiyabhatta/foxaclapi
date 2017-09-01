@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\reportgroup;
 use App\Http\Requests\reportgroup_update;
 
+
 class ReportGroupController extends Controller
 {
 
@@ -33,6 +34,7 @@ class ReportGroupController extends Controller
     }
     
     public function deleteTradeGroupList(Request $request){
+      
       return $this->alertContainer->deleteTradeList($request);  
     }
     
