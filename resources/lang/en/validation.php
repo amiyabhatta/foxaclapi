@@ -109,5 +109,6 @@ return [
     */
 
     'attributes' => [],
-
+    'only_numeric' => "The :attribute must be numeric",
+	
 ];
