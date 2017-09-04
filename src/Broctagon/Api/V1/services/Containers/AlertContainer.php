@@ -61,7 +61,20 @@ class AlertContainer extends Base implements AlertContract {
         $server_name = $payload->get('server_name');
         $userinfo = JWTAuth::parseToken()->authenticate();
         $login_id = $userinfo->manager_id;
+        
+        //Check login is valid or not
+        $checkLogin = $this->usertrade->checkTradelogin($login);
+        
+        if(!$checkLogin){
+           return $this->setStatusCode(404)->respond([
+                        'message' => trans('user.login_not_found'),
+                        'status_code' => 404
+            ]); 
+        }
+        
         $res = $this->usertrade->updateTradeValue($request, $server_name, $login_id, $login);
+        
+        
 
         if (!$res) {
             return $this->setStatusCode(500)->respond([

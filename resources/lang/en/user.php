@@ -116,4 +116,5 @@ return [
     "user_not_registered" => "User is not register on this server",
     
     "id_not_found" => "Id not found",
+    "login_not_found" => "Login Id not found",
 ];

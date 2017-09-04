@@ -7,6 +7,7 @@ use Fox\Services\Contracts\AlertContract;
 use League\Fractal\Manager;
 use Illuminate\Http\Request;
 use App\Http\Requests\user_trade;
+use App\Http\Requests\user_trade_update;
 
 
 
@@ -26,7 +27,7 @@ class AlertController extends Controller
        return $this->alertContainer->saveuserTrades($request);
     }
     
-    public function updateUserTrade(user_trade $request, $login ){
+    public function updateUserTrade(user_trade_update $request, $login ){
        return $this->alertContainer->updateuserTrades($request, $login);
     }
     

@@ -130,4 +130,10 @@ class Usertrade extends Model {
         return array('login' => $query[0]->login);
     }
 
+    public function checkTradelogin($login){
+        $checkLogin = $this->select('*')
+                           ->where('login','=',$login)->get();
+        
+        return count($checkLogin);
+    }
 }
