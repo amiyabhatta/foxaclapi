@@ -61,20 +61,20 @@ class AlertContainer extends Base implements AlertContract {
         $server_name = $payload->get('server_name');
         $userinfo = JWTAuth::parseToken()->authenticate();
         $login_id = $userinfo->manager_id;
-        
+
         //Check login is valid or not
         $checkLogin = $this->usertrade->checkTradelogin($login);
-        
-        if(!$checkLogin){
-           return $this->setStatusCode(404)->respond([
+
+        if (!$checkLogin) {
+            return $this->setStatusCode(404)->respond([
                         'message' => trans('user.login_not_found'),
                         'status_code' => 404
-            ]); 
+            ]);
         }
-        
+
         $res = $this->usertrade->updateTradeValue($request, $server_name, $login_id, $login);
-        
-        
+
+
 
         if (!$res) {
             return $this->setStatusCode(500)->respond([
@@ -102,14 +102,14 @@ class AlertContainer extends Base implements AlertContract {
 
         //Check login is valid or not
         $checkLogin = $this->usertrade->checkTradelogin($login);
-        
-        if(!$checkLogin){
-           return $this->setStatusCode(404)->respond([
+
+        if (!$checkLogin) {
+            return $this->setStatusCode(404)->respond([
                         'message' => trans('user.login_not_found'),
                         'status_code' => 404
-            ]); 
+            ]);
         }
-        
+
         $res = $this->usertrade->deleteTradeValue($server_name, $login_id, $login);
 
         if (!$res) {
@@ -150,6 +150,13 @@ class AlertContainer extends Base implements AlertContract {
     }
 
     public function updateLastTradeList($id, $request) {
+        $validate = Validator::make($request->all(), [
+                    "botime" => 'required|numeric',
+                    "fxtime" => 'required|numeric'
+        ]);
+        if ($validate->fails()) {
+            return $validate->errors();
+        }
         $servermgrId = common::serverManagerId();
 
         $res = $this->lasttrade->updatelatsTrade($servermgrId['server_name'], $servermgrId['login'], $id, $request);
@@ -296,20 +303,20 @@ class AlertContainer extends Base implements AlertContract {
 
         //Calling trait for validation
         $validate = $this->deleteReportGroupValidation($request);
-        
+
         if ($validate->fails()) {
             return $validate->errors();
         }
-        
+
         $servermgrId = common::serverManagerId();
         //check id is availbe or not
         $checkgroupId = $this->reportgroup->checkGroupid($servermgrId['server_name'], $servermgrId['login'], $request);
-       
-        if(!$checkgroupId){
-           return $this->setStatusCode(404)->respond([
+
+        if (!$checkgroupId) {
+            return $this->setStatusCode(404)->respond([
                         'message' => trans('user.id_not_found'),
                         'status_code' => 404
-            ]); 
+            ]);
         }
 
         $res = $this->reportgroup->deleteTradeGrpList($servermgrId['server_name'], $servermgrId['login'], $request);
@@ -396,7 +403,7 @@ class AlertContainer extends Base implements AlertContract {
 
         //Validation
         $validate = Validator::make($request->all(), [
-                    "ticket" => 'required|unique:lasttrade_whitelabels_emails_alert',
+                    "ticket" => 'required|check_valid_ticket|unique:lasttrade_whitelabels_emails_alert',
                     "whitelabel" => 'required'
         ]);
         if ($validate->fails()) {

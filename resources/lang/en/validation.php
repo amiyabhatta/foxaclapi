@@ -114,7 +114,8 @@ return [
     'check_id' => 'The :attribute is not available',
     'login_unique' => 'The :attribute must be numeric and unique',
     'check_validtab' => 'The :attribute must be valid',
-    'valid_ticket' => 'The :attribute must be valid'
+    'valid_ticket' => 'The :attribute must be valid',
+    'check_valid_ticket' => 'The :attribute must be valid',
     
 	
 ];

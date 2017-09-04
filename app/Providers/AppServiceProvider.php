@@ -71,6 +71,15 @@ class AppServiceProvider extends ServiceProvider {
             }
             return true;
         });
+        
+        //Check valid ticket in Last trade whitelabel email alert
+        $this->app['validator']->extend('check_valid_ticket', function ($attribute, $value, $parameters, $validator) {
+            
+            if (!is_numeric($value) || $value <= 0 ) {
+                return false;
+            }
+            return true;
+        });
     }
 
     /**
