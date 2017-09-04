@@ -366,6 +366,14 @@ class UserContainer extends Base implements UserContract {
 
     public function saveTab($request) {
         
+        
+        $validate = Validator::make($request->all(), [
+                    "tab_setting" => 'required|check_validtab',
+        ]);
+        if ($validate->fails()) {
+            return $validate->errors();
+        }
+        
         $servermgrId = common::serverManagerId();
         $res = $this->tabselectmodel->saveTab($request, $servermgrId['server_name'], $servermgrId['login']);
 

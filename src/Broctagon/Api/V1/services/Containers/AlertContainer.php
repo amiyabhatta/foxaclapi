@@ -448,7 +448,7 @@ class AlertContainer extends Base implements AlertContract {
         //validation
         //Validation
         $validate = Validator::make($request->all(), [
-                    "ticket" => 'required|unique:trade_alert_discard',
+                    "ticket" => 'required|valid_ticket|unique:trade_alert_discard',
         ]);
         if ($validate->fails()) {
             return $validate->errors();

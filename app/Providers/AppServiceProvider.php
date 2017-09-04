@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Validator;
 use DB;
 use Fox\Models\ReportGroup;
 
-
 class AppServiceProvider extends ServiceProvider {
 
     /**
@@ -41,11 +40,34 @@ class AppServiceProvider extends ServiceProvider {
             $login = explode(',', rtrim($value, ','));
             foreach ($login as $chkNumericLogin) {
                 //check login is already saved or not
-                $chckLogin =  DB::table('trade_alertusers')->where('login','=',$chkNumericLogin)->get();
-                
+                $chckLogin = DB::table('trade_alertusers')->where('login', '=', $chkNumericLogin)->get();
+
                 if (!is_numeric($chkNumericLogin) || $chkNumericLogin <= 0 || count($chckLogin) > 0) {
                     return false;
                 }
+            }
+            return true;
+        });
+
+        //Check valid Tab/permission 
+        $this->app['validator']->extend('check_validtab', function ($attribute, $value, $parameters, $validator) {
+            $permission = explode(',', rtrim($value, ','));
+            foreach ($permission as $pemrissionName) {
+                //check login is already saved or not
+                $getPermId = DB::table('permissions')->where('name', '=', $pemrissionName)->get();
+
+                if (count($getPermId) == 0) {
+                    return false;
+                }
+            }
+            return true;
+        });
+
+        //Valid ticket in trade alert discard   valid_ticket and should be unique
+        $this->app['validator']->extend('valid_ticket', function ($attribute, $value, $parameters, $validator) {
+            
+            if (!is_numeric($value) || $value <= 0 ) {
+                return false;
             }
             return true;
         });
