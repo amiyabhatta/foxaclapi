@@ -203,6 +203,18 @@ class UserContainer extends Base implements UserContract {
     }
 
     public function setGlobalAlertOm($request) {
+        
+        //All value should be numeric
+        foreach($request->all() as $boFileds=>$value){
+           if (!is_numeric($value) && $value != NULL) {
+                return $this->setStatusCode(400)->respond([
+                        'message' => trans($boFileds.' '.'value should be numeric'),
+                        'status_code' => 400
+            ]);
+            }
+        }
+        
+        
         //get server name from token
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
