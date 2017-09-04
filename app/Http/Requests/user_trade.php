@@ -25,6 +25,7 @@ class user_trade extends Request
     {
         return [            
             'volume' => 'required',
+            'login'  => 'required|login_unique'
         ];
     }
 }

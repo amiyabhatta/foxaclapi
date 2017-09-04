@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use DB;
 use Fox\Models\ReportGroup;
 
+
 class AppServiceProvider extends ServiceProvider {
 
     /**
@@ -15,7 +16,7 @@ class AppServiceProvider extends ServiceProvider {
      * @return void
      */
     public function boot() {
-        
+
         $this->app['validator']->extend('only_numeric', function ($attribute, $value, $parameters, $validator) {
             $login = explode(',', rtrim($value, ','));
             foreach ($login as $chkNumericLogin) {
@@ -26,15 +27,28 @@ class AppServiceProvider extends ServiceProvider {
             return true;
         });
 
-        //Check 
+        //Check login
         $this->app['validator']->extend('check_id', function ($attribute, $value, $parameters, $validator) {
             $wl = ReportGroup::find($value);
-            if(count($wl)){
-               return true; 
+            if (count($wl)) {
+                return true;
             }
             return false;
         });
-        
+
+        //Login should be unique
+        $this->app['validator']->extend('login_unique', function ($attribute, $value, $parameters, $validator) {
+            $login = explode(',', rtrim($value, ','));
+            foreach ($login as $chkNumericLogin) {
+                //check login is already saved or not
+                $chckLogin =  DB::table('trade_alertusers')->where('login','=',$chkNumericLogin)->get();
+                
+                if (!is_numeric($chkNumericLogin) || $chkNumericLogin <= 0 || count($chckLogin) > 0) {
+                    return false;
+                }
+            }
+            return true;
+        });
     }
 
     /**
