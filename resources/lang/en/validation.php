@@ -110,6 +110,8 @@ return [
 
     'attributes' => [],
     'only_numeric' => "The :attribute must be numeric",
-    'delete_group' => "The :attribute must be greater than zero"
+    //'delete_group' => "The :attribute must be greater than zero",
+    'check_id' => "The :attribute is not available"
+    
 	
 ];

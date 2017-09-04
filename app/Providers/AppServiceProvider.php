@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
 use DB;
+use Fox\Models\ReportGroup;
 
 class AppServiceProvider extends ServiceProvider {
 
@@ -25,6 +26,14 @@ class AppServiceProvider extends ServiceProvider {
             return true;
         });
 
+        //Check 
+        $this->app['validator']->extend('check_id', function ($attribute, $value, $parameters, $validator) {
+            $wl = ReportGroup::find($value);
+            if(count($wl)){
+               return true; 
+            }
+            return false;
+        });
         
     }
 

@@ -32,7 +32,7 @@ class reportgroup_update extends Request
         return [
             //"group_name" => 'required|unique:report_group'.$id, 
             "group_name" => 'required|alpha', 
-            "group_id" => 'required',
+            "group_id" => 'required|check_id',
         ];
     }
 }

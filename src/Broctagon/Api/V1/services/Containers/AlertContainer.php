@@ -281,7 +281,7 @@ class AlertContainer extends Base implements AlertContract {
         $servermgrId = common::serverManagerId();
         //check id is availbe or not
         $checkgroupId = $this->reportgroup->checkGroupid($servermgrId['server_name'], $servermgrId['login'], $request);
-        
+       
         if(!$checkgroupId){
            return $this->setStatusCode(404)->respond([
                         'message' => trans('user.id_not_found'),
