@@ -45,7 +45,7 @@ class trade_alert_discard extends Model {
             return false;
         }
 
-        return array('data' => $result);
+        return array('data' => ($result ? $result : 'No record found'));
     }
 
 }
