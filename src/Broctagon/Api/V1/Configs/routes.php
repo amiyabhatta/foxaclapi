@@ -88,7 +88,7 @@ Route::group(['prefix' => 'api/v1'], function () {
         Route::get('usertrade/{id?}', 'Alert\Http\Controllers\AlertController@getTradeAlert');
         Route::post('saveusertrade', 'Alert\Http\Controllers\AlertController@saveUserTrade');
         Route::put('updateusertrade/{login}', 'Alert\Http\Controllers\AlertController@updateUserTrade');
-        Route::delete('deleteusertrade/{id?}', 'Alert\Http\Controllers\AlertController@deleteUserTrade');
+        Route::delete('deleteusertrade/{login?}', 'Alert\Http\Controllers\AlertController@deleteUserTrade');
         Route::get('getlogin', 'Alert\Http\Controllers\AlertController@getLogin');
 
         //Last Trade

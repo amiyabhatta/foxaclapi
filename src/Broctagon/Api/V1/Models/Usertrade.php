@@ -65,7 +65,7 @@ class Usertrade extends Model {
                         ->where('login', $login)
                         ->update(array(
                             "volume" => $request->input('volume'),
-                            "isUpdate" => ($request->input('isUpdate') ? $request->input('isUpdate') : 1)
+                            "isUpdate" => $request->input('isUpdate')
                 ));
                 
             } catch (\Exception $exc) {
@@ -76,19 +76,19 @@ class Usertrade extends Model {
         return FALSE;
     }
 
-    public function deleteTradeValue($server_name, $login_manager_id, $id) {
+    public function deleteTradeValue($server_name, $login_manager_id, $login) {
 
-        if ($id) {
+        if ($login) {
             $server = $this->where('server', '=', $server_name)
                     ->where('login_manager_id', '=', $login_manager_id)
-                    ->where('login', '=', $id)
+                    ->where('login', '=', $login)
                     ->get();
 
             if (count($server)) {
                 try {
                     $this->where('server', '=', $server_name)
                             ->where('login_manager_id', '=', $login_manager_id)
-                            ->where('login', '=', $id)
+                            ->where('login', '=', $login)
                             ->delete();
                 } catch (\Exception $exc) {
                     return FALSE;

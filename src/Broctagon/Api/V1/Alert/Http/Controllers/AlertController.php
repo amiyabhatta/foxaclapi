@@ -31,8 +31,8 @@ class AlertController extends Controller
        return $this->alertContainer->updateuserTrades($request, $login);
     }
     
-    public function deleteUserTrade($id = NULL){       
-       return $this->alertContainer->deleteuserTrades($id);
+    public function deleteUserTrade($login = NULL){       
+       return $this->alertContainer->deleteuserTrades($login);
     }
     
     public function getTradeAlert($id = NULL){
