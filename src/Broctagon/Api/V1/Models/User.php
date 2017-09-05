@@ -58,7 +58,7 @@ class User extends Authenticatable {
                         $this->name = $request->input('user_name');
                         $this->manager_id = $request->input('user_manager_id');
                         $this->email = $request->input('user_email');
-                        $this->password = bcrypt($request->input('user_password'));
+                        $this->password = bcrypt($request->input('password'));
                         $this->activate_status = 1;
                         $this->save();
                         //Inserting into relationships(pivot table user_server_access)                        
@@ -107,8 +107,8 @@ class User extends Authenticatable {
             $user->name = $request->input('user_name');
         }
         $user->email = $request->input('user_email');
-        if ($request->input('user_password')) {
-            $user->password = bcrypt($request->input('user_password'));
+        if ($request->input('password')) {
+            $user->password = bcrypt($request->input('password'));
         }
         $user->manager_id = $request->input('user_manager_id');
 

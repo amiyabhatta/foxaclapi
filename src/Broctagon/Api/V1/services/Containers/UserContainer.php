@@ -80,22 +80,22 @@ class UserContainer extends Base implements UserContract {
                         'status_code' => 500]);
         }
 
-        
+
         $user = JWTAuth::authenticate($token);
         //if user status is zero then should not login
-        if(!$user->activate_status){
-          return $this->setStatusCode(404)->respond(['message' => trans('user.user_not_exist'),
-                            'status_code' => 404]);  
+        if (!$user->activate_status) {
+            return $this->setStatusCode(404)->respond(['message' => trans('user.user_not_exist'),
+                        'status_code' => 404]);
         }
-        
+
         $server_name = $request->input('server_name');
         //check server is assign to user
-        $checkserver = $this->serverAssigntoUser($user->id,$server_name);
-        if(!$checkserver){
-          return $this->setStatusCode(200)->respond(['message' => trans('user.user_not_registered'),
-                            'status_code' => 404]);  
+        $checkserver = $this->serverAssigntoUser($user->id, $server_name);
+        if (!$checkserver) {
+            return $this->setStatusCode(200)->respond(['message' => trans('user.user_not_registered'),
+                        'status_code' => 404]);
         }
-        
+
         $server_details = $this->usermodel->getUserServerDetails($user->id, $server_name);
         $tab_details = $this->usermodel->getUserPermissionDetails($user->id);
         $gateway_details = $this->usermodel->getUserGatewayDetails($server_name);
@@ -124,6 +124,17 @@ class UserContainer extends Base implements UserContract {
     }
 
     public function updateUser($request) {
+
+        
+        if ($request->input('password')) {
+            $validate = Validator::make($request->all(), [
+                        "confirm_password" => 'required|same:password',
+            ]);
+            if ($validate->fails()) {
+                return response()->json($validate->errors(), 422);
+            }
+        }
+
         $res = $this->usermodel->updateUser($request);
 
         if (!$res) {
@@ -209,18 +220,18 @@ class UserContainer extends Base implements UserContract {
     }
 
     public function setGlobalAlertOm($request) {
-        
+
         //All value should be numeric
-        foreach($request->all() as $boFileds=>$value){
-           if (!is_numeric($value) && $value != NULL) {
+        foreach ($request->all() as $boFileds => $value) {
+            if (!is_numeric($value) && $value != NULL) {
                 return $this->setStatusCode(400)->respond([
-                        'message' => trans($boFileds.' '.'value should be numeric'),
-                        'status_code' => 400
-            ]);
+                            'message' => trans($boFileds . ' ' . 'value should be numeric'),
+                            'status_code' => 400
+                ]);
             }
         }
-        
-        
+
+
         //get server name from token
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
@@ -383,15 +394,15 @@ class UserContainer extends Base implements UserContract {
      */
 
     public function saveTab($request) {
-        
-        
+
+
         $validate = Validator::make($request->all(), [
                     "tab_setting" => 'required|check_validtab',
         ]);
         if ($validate->fails()) {
             return $validate->errors();
         }
-        
+
         $servermgrId = common::serverManagerId();
         $res = $this->tabselectmodel->saveTab($request, $servermgrId['server_name'], $servermgrId['login']);
 
@@ -413,18 +424,17 @@ class UserContainer extends Base implements UserContract {
      */
 
     public function getTabSetting() {
-        
+
         $servermgrId = common::serverManagerId();
         return $res = $this->tabselectmodel->getTab($servermgrId['server_name'], $servermgrId['login']);
     }
-    
+
     /*
      * Check servere is assing to user
      */
-    
-    public function serverAssigntoUser($userId, $serverName){
+
+    public function serverAssigntoUser($userId, $serverName) {
         return $this->usermodel->checkServerAssign($userId, $serverName);
     }
-    
 
 }

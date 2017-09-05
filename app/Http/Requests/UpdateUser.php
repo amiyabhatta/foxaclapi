@@ -32,7 +32,7 @@ class UpdateUser extends Request
         $id = $request->segment(4);        
         $user = User::find($id);          
         return [          
-            'user_email' => 'required|email|unique:users,email,'.$user->id,
+            'user_email' => 'email|unique:users,email,'.$user->id,
             'user_manager_id' => 'required|unique:users,manager_id,'.$user->id
         ];
     }

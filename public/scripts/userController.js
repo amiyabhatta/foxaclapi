@@ -116,8 +116,8 @@
                 user_manager_id: $scope.manager_id,
                 user_name: $scope.username,
                 user_email: $scope.email,
-                user_password: $scope.password,
-                confirmpassword: $scope.confirmpassword,
+                password: $scope.password,
+                conifrm_password: $scope.confirmpassword,
                 server_id: $scope.server_id
             });
 
@@ -132,7 +132,8 @@
                         {user_manager_id: $scope.manager_id,
                             user_name: $scope.username,
                             user_email: $scope.email,
-                            user_password: $scope.password,
+                            password: $scope.password,
+                            conifrm_password: $scope.confirmpassword,
                             server_id: $scope.server_id
                         }, config)
                         .then(function (data, status, headers, config) {
@@ -159,10 +160,11 @@
             } else {
 
                 $http.put(uri,
-                        {user_manager_id: $scope.manager_id,
+                        {   user_manager_id: $scope.manager_id,
                             user_name: $scope.username,
                             user_email: $scope.email,
-                            user_password: $scope.password,
+                            password: $scope.password,
+                            confirm_password: $scope.confirmpassword,
                             server_id: $scope.server_id
                         }, config)
                         .then(function (data, status, headers, config) {
