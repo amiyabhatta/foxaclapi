@@ -27,10 +27,13 @@ class updateWhiteLabel extends Request
     public function rules(Rq $request)
     {
         $id = $request->segment(4);            
-        $wl = lw::find($id);        
+//        $wl = lw::find($id);   
+        
         return [
           'servername'  => 'required',
-          'whitelabels' => 'required|unique:lasttrade_whitelabels'.$wl->id,                 
+          'whitelabels' => 'required|unique_whitelabel:'.$id,
+          'botime' => 'numeric',
+          'fxtime' => 'numeric', 
         ];
     }
 }

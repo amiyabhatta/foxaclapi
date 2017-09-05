@@ -116,6 +116,7 @@ return [
     'check_validtab' => 'The :attribute must be valid',
     'valid_ticket' => 'The :attribute must be valid',
     'check_valid_ticket' => 'The :attribute must be valid',
+    'unique_whitelabel' => 'Whitelabel name already taken',
     
 	
 ];

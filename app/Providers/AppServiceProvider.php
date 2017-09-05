@@ -65,17 +65,33 @@ class AppServiceProvider extends ServiceProvider {
 
         //Valid ticket in trade alert discard   valid_ticket and should be unique
         $this->app['validator']->extend('valid_ticket', function ($attribute, $value, $parameters, $validator) {
-            
-            if (!is_numeric($value) || $value <= 0 ) {
+
+            if (!is_numeric($value) || $value <= 0) {
                 return false;
             }
             return true;
         });
-        
+
         //Check valid ticket in Last trade whitelabel email alert
         $this->app['validator']->extend('check_valid_ticket', function ($attribute, $value, $parameters, $validator) {
-            
-            if (!is_numeric($value) || $value <= 0 ) {
+
+            if (!is_numeric($value) || $value <= 0) {
+                return false;
+            }
+            return true;
+        });
+
+        //Whitelable name should be unique 
+
+        $this->app['validator']->extend('unique_whitelabel', function ($attribute, $value, $parameters, $validator) {
+            list($id) = $parameters;
+
+            //check wl should not add except this id
+            $getPermId = DB::table('lasttrade_whitelabels')->where('WhiteLabels', '=', $value)
+                    ->where('id', '<>', $parameters[0])
+                    ->get();
+
+            if (count($getPermId)) {
                 return false;
             }
             return true;
