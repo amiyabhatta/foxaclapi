@@ -29,6 +29,7 @@ class serverlist extends Request
             'username' => 'required',
             'password' => 'required',
             'databasename' => 'required',
+            'masterid' => 'numeric',
             'GatewayID' => 'required|exists:mt4gateway,id'
         ];
     }
