@@ -26,7 +26,7 @@ class StoreUser extends Request
         return [
             'user_name' => 'required',
             'user_manager_id' =>  'required|numeric|unique:users,manager_id',
-            //'user_email' => 'required|email|unique:users,email',
+            'user_email' => 'email|unique:users,email',
             'password' => 'required',
             'conifrm_password' => 'required|same:password',
             'server_id' => 'required'
