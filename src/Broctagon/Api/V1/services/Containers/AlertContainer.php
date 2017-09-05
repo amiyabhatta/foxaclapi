@@ -396,6 +396,14 @@ class AlertContainer extends Base implements AlertContract {
      */
 
     public function getLastTradeWlEmailAlert($request) {
+        
+        //Validation
+        $validate = Validator::make($request->all(), [
+                    "ticket" => 'required|numeric',
+        ]);
+        if ($validate->fails()) {
+            return $validate->errors();
+        }
         return $res = $this->lasttradeemailalert->getLastTradeWlEmailAlert($request);
     }
 

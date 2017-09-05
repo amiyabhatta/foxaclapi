@@ -32,7 +32,7 @@ class lasttrade_whitelabels_emails_alert extends Model {
             } catch (\Exception $exc) {
                 return false;
             }
-            return array('data' => $result);
+            return array('data' => ($result ? $result : 'No record found'));
         }
     }
 
