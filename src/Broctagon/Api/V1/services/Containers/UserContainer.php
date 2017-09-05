@@ -82,6 +82,12 @@ class UserContainer extends Base implements UserContract {
 
         
         $user = JWTAuth::authenticate($token);
+        //if user status is zero then should not login
+        if(!$user->activate_status){
+          return $this->setStatusCode(404)->respond(['message' => trans('user.user_not_exist'),
+                            'status_code' => 404]);  
+        }
+        
         $server_name = $request->input('server_name');
         //check server is assign to user
         $checkserver = $this->serverAssigntoUser($user->id,$server_name);

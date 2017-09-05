@@ -117,4 +117,5 @@ return [
     
     "id_not_found" => "Id not found",
     "login_not_found" => "Login Id not found",
+    "user_not_exist" => "User does not exist",
 ];
