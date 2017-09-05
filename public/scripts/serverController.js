@@ -122,7 +122,7 @@
                 }, config)
                 .then(function (data, status, headers, config) {
                     $scope.gatewayname = '';
-                    sessionStorage.succ_message = "Serveer detail has been updated successfully.";
+                    sessionStorage.succ_message = "Server detail has been updated successfully.";
                     $state.go('servers');
 
                 })
