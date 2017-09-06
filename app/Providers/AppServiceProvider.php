@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
 use DB;
 use Fox\Models\ReportGroup;
+use Fox\Common\Common;
 
 class AppServiceProvider extends ServiceProvider {
 
@@ -28,7 +29,13 @@ class AppServiceProvider extends ServiceProvider {
 
         //Check login
         $this->app['validator']->extend('check_id', function ($attribute, $value, $parameters, $validator) {
-            $wl = ReportGroup::find($value);
+            
+            $servermgrId = common::serverManagerId();
+            $wl = DB::table('report_group')->where('id', '=', $value)
+                                          ->where('login_mgr','=',$servermgrId['server_name'])
+                                          ->where('server','=',$servermgrId['login'])
+                                          ->get();
+            
             if (count($wl)) {
                 return true;
             }

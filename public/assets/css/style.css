@@ -704,5 +704,5 @@ input[type=checkbox]:checked + label {
     width:60px;
 }
 #no-more-tables th:last-child{
-    width:120px;
+    width:300px;
 }

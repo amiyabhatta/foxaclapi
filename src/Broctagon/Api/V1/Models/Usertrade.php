@@ -78,6 +78,7 @@ class Usertrade extends Model {
 
     public function deleteTradeValue($server_name, $login_manager_id, $login) {
 
+        
         if ($login) {
             $server = $this->where('server', '=', $server_name)
                     ->where('login_manager_id', '=', $login_manager_id)
@@ -130,8 +131,11 @@ class Usertrade extends Model {
         return array('login' => $query[0]->login);
     }
 
-    public function checkTradelogin($login){
+    public function checkTradelogin($login, $servername, $login_mgr){
+        
         $checkLogin = $this->select('*')
+                           ->where('server', '=', $servername)
+                           ->where('login_manager_id', '=', $login_mgr)
                            ->where('login','=',$login)->get();
         
         return count($checkLogin);

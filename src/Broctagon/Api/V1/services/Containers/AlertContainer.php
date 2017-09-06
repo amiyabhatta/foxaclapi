@@ -63,7 +63,7 @@ class AlertContainer extends Base implements AlertContract {
         $login_id = $userinfo->manager_id;
 
         //Check login is valid or not
-        $checkLogin = $this->usertrade->checkTradelogin($login);
+        $checkLogin = $this->usertrade->checkTradelogin($login, $server_name, $login_id);
 
         if (!$checkLogin) {
             return $this->setStatusCode(404)->respond([
@@ -101,7 +101,7 @@ class AlertContainer extends Base implements AlertContract {
         $login_id = $userinfo->manager_id;
 
         //Check login is valid or not
-        $checkLogin = $this->usertrade->checkTradelogin($login);
+        $checkLogin = $this->usertrade->checkTradelogin($login, $server_name, $login_id);
 
         if (!$checkLogin) {
             return $this->setStatusCode(404)->respond([
