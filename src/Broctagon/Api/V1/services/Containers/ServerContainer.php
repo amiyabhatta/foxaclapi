@@ -63,6 +63,34 @@ class ServerContainer extends Base implements ServerContract
     public function createServer($request)
     {
 
+        $messsages = array(
+            'servername.required' => 'The server name field is required.',
+            'servername.unique' => 'Server name already taken',
+            'ipaddress.required' => 'The ip address field is required.',
+            'username.required' => 'The username field is required.',
+            'password.required' => 'The password field is required.',
+            'databasename.required' => 'The database name field is required.',
+            'masterid.numeric' => 'The masterid must be a number.',
+            'GatewayID.required' => 'The gateway id field is required.',
+            'GatewayID.exists' => 'The selected gateway id is invalid.'
+        );
+
+        $rules = array(
+            'servername' => 'required|unique:serverlist,servername',
+            'ipaddress' => 'required',
+            'username' => 'required',
+            'password' => 'required',
+            'databasename' => 'required',
+            'masterid' => 'numeric',
+            'GatewayID' => 'required|exists:mt4gateway,id'
+        );
+
+        $validate = Validator::make($request->all(), $rules, $messsages);
+
+        if ($validate->fails()) {
+            //return $validate->errors();
+            return response()->json($validate->errors(), 422);
+        }
 
 
         $res = $this->servermodel->addServer($request);

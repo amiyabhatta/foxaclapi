@@ -698,3 +698,11 @@ input[type=checkbox]:checked + label {
   border-radius: .25rem;
   width: 100%;
   padding-left: 50px; }
+
+#no-more-tables th:first-child
+{
+    width:60px;
+}
+#no-more-tables th:last-child{
+    width:120px;
+}

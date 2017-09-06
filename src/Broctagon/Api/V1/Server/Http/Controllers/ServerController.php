@@ -8,24 +8,22 @@ use Illuminate\Http\Request;
 use Fox\Services\Contracts\ServerContract;
 use App\Http\Requests\serverlist;
 use App\Http\Requests\serverlistUpdate;
+use Validator;
 
+class ServerController extends Controller {
 
-class ServerController extends Controller
-{
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function __construct(ServerContract $serverContainer, Manager $manager)
-    {
+    public function __construct(ServerContract $serverContainer, Manager $manager) {
         $this->serverContainer = $serverContainer;
-        $this->fractal = $manager;        
-    } 
-    
-    public function index($id = NULL)
-    {
-       return $this->fractal->createData($this->serverContainer->getServerList($id))->toJson();
+        $this->fractal = $manager;
+    }
+
+    public function index($id = NULL) {
+        return $this->fractal->createData($this->serverContainer->getServerList($id))->toJson();
     }
 
     /**
@@ -33,8 +31,7 @@ class ServerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create() {
         //
     }
 
@@ -44,9 +41,8 @@ class ServerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(serverlist $request)
-    {
-       return $this->serverContainer->createServer($request);
+    public function store(Request $request) {
+        return $this->serverContainer->createServer($request);
     }
 
     /**
@@ -55,8 +51,7 @@ class ServerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id) {
         //
     }
 
@@ -66,8 +61,7 @@ class ServerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id) {
         //
     }
 
@@ -78,8 +72,7 @@ class ServerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(serverlistUpdate $request)
-    {
+    public function update(serverlistUpdate $request) {
         return $this->serverContainer->updateServer($request);
     }
 
@@ -89,18 +82,18 @@ class ServerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-      return $this->serverContainer->deleteServer($id); 
+    public function destroy($id) {
+        return $this->serverContainer->deleteServer($id);
     }
-     /**
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    
-    public function serverlist(){
-       return $this->serverContainer->getServerListForUserCreate();  
+    public function serverlist() {
+        return $this->serverContainer->getServerListForUserCreate();
     }
+
 }

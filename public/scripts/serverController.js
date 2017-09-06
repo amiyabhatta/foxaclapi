@@ -93,7 +93,7 @@
                   GatewayID       : $scope.gateway_id,
                 }, config)
                 .then(function (data, status, headers, config) {
-                    sessionStorage.succ_message = "Server detail has been created successfully.";
+                    sessionStorage.succ_message = "Server added successfully.";
                     $state.go('servers');
 
                 })
@@ -155,8 +155,8 @@
                 }).then(function (response) {
                     $scope.resp = response;
                     $scope.err_message = '';    
-                    $scope.succ_message = "Record has been deleted successfully.";
-                    sessionStorage.succ_message = "Record has been deleted successfully..";
+                    $scope.succ_message = "Record deleted successfully.";
+                    sessionStorage.succ_message = "Record deleted successfully.";
                    // $state.go('gateways');
                     //
                     $state.go($state.current, {}, {reload: true});
