@@ -701,7 +701,7 @@ input[type=checkbox]:checked + label {
 
 #no-more-tables th:first-child
 {
-    width:60px;
+    width:90px;
 }
 #no-more-tables th:last-child{
     width:300px;

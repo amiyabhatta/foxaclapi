@@ -66,7 +66,7 @@ class ServerContainer extends Base implements ServerContract
         $messsages = array(
             'servername.required' => 'The server name field is required.',
             'servername.unique' => 'Server name already taken',
-            'ipaddress.required' => 'The ip address field is required.',
+            'ipaddress.required' => 'The IP address field is required.',
             'username.required' => 'The username field is required.',
             'password.required' => 'The password field is required.',
             'databasename.required' => 'The database name field is required.',

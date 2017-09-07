@@ -31,10 +31,12 @@ class AppServiceProvider extends ServiceProvider {
         $this->app['validator']->extend('check_id', function ($attribute, $value, $parameters, $validator) {
             
             $servermgrId = common::serverManagerId();
+            
             $wl = DB::table('report_group')->where('id', '=', $value)
-                                          ->where('login_mgr','=',$servermgrId['server_name'])
-                                          ->where('server','=',$servermgrId['login'])
+                                          ->where('login_mgr','=',$servermgrId['login'])
+                                          ->where('server','=',$servermgrId['server_name'])
                                           ->get();
+           
             
             if (count($wl)) {
                 return true;
@@ -45,10 +47,15 @@ class AppServiceProvider extends ServiceProvider {
         //Login should be unique
         $this->app['validator']->extend('login_unique', function ($attribute, $value, $parameters, $validator) {
             $login = explode(',', rtrim($value, ','));
+            $servermgrId = common::serverManagerId();
             foreach ($login as $chkNumericLogin) {
                 //check login is already saved or not
-                $chckLogin = DB::table('trade_alertusers')->where('login', '=', $chkNumericLogin)->get();
-
+                
+                $chckLogin = DB::table('trade_alertusers')->where('login', '=', $chkNumericLogin)
+                                          ->where('login_manager_id','=',$servermgrId['login'])
+                                          ->where('server','=',$servermgrId['server_name'])
+                                          ->get();
+                
                 if (!is_numeric($chkNumericLogin) || $chkNumericLogin <= 0 || count($chckLogin) > 0) {
                     return false;
                 }
