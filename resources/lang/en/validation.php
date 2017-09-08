@@ -95,9 +95,29 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+        'gatewayname' => [
+            'required' => 'The gateway name field is required',
+        ],
+        'servername' => [
+           'required' => 'The server name field is required', 
+        ],
+        'conifrm_password' => [
+            'required' => 'The confirm password field is required.',
+        ],
+        'server_id' => [
+           'required' => 'The server ID field is required.',
+        ],
+        'host' => [
+           'required' => 'The host name field is required.',
+        ],
+        'port' => [
+           'required' => 'The port name field is required.',
+        ]
+        
     ],
 
     /*
+     * 
     |--------------------------------------------------------------------------
     | Custom Validation Attributes
     |--------------------------------------------------------------------------
@@ -116,7 +136,6 @@ return [
     'check_validtab' => 'The :attribute must be valid',
     'valid_ticket' => 'The :attribute must be valid',
     'check_valid_ticket' => 'The :attribute must be valid',
-    'unique_whitelabel' => 'Whitelabel name already taken',
+    'unique_whitelabel' => 'Whitelabel name already taken'
     
-	
 ];
