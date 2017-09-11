@@ -412,7 +412,7 @@ class AlertContainer extends Base implements AlertContract {
         //Validation
         $validate = Validator::make($request->all(), [
                     "ticket" => 'required|check_valid_ticket|unique:lasttrade_whitelabels_emails_alert',
-                    "whitelabel" => 'required'
+                    "whitelabel" => 'required|check_valid_whitelabel'
         ]);
         if ($validate->fails()) {
             return $validate->errors();

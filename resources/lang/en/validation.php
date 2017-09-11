@@ -108,10 +108,10 @@ return [
            'required' => 'The server ID field is required.',
         ],
         'host' => [
-           'required' => 'The host name field is required.',
+           'required' => 'The host field is required.',
         ],
         'port' => [
-           'required' => 'The port name field is required.',
+           'required' => 'The port field is required.',
         ]
         
     ],
@@ -136,6 +136,7 @@ return [
     'check_validtab' => 'The :attribute must be valid',
     'valid_ticket' => 'The :attribute must be valid',
     'check_valid_ticket' => 'The :attribute must be valid',
-    'unique_whitelabel' => 'Whitelabel name already taken'
+    'unique_whitelabel' => 'Whitelabel name already taken',
+    'check_valid_whitelabel' => 'The :attribute must be valid',
     
 ];

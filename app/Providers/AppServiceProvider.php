@@ -110,6 +110,18 @@ class AppServiceProvider extends ServiceProvider {
             }
             return true;
         });
+        
+        //check whitelabel name is vaialble or not 
+        $this->app['validator']->extend('check_valid_whitelabel', function ($attribute, $value, $parameters, $validator) {
+            
+            $getWlName = DB::table('lasttrade_whitelabels')->where('WhiteLabels', '=', $value)
+                    ->get();
+
+            if (count($getWlName)) {
+                return true;
+            }
+            return false;
+        });
     }
 
     /**

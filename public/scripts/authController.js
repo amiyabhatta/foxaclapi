@@ -44,6 +44,12 @@
         $scope.logout = function($event) {
             sessionStorage.AuthUser = '';     
         }
+        
+        $scope.onKeyPress = function($event) {
+            if ($event.keyCode == 13) {                
+                vm.login()
+            }
+        }; 
 
     }
 
