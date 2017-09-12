@@ -154,6 +154,19 @@
                $window.location.href = '/login';
            }
         }
+        
+        vm.clearData = function() {            
+            $scope.servername = '';
+            $scope.whitelabels = '';
+            $scope.groups = '';
+            $scope.botime = '';
+            $scope.fxtime = '';
+            $scope.emails = '';       
+        }
+        $scope.resetData = function() {
+            vm.clearData();
+        }
+        
         vm.checkLogin();
         
         

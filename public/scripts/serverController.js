@@ -169,6 +169,20 @@
             }
         }
         
+        vm.clearData = function() {            
+            $scope.servers = '';
+            $scope.servername = '';
+            $scope.ipaddress = '';
+            $scope.username = '';
+            $scope.password = '';
+            $scope.databasename = '';
+            $scope.masterid = '';
+            $scope.gateway_id = '';         
+        }
+        $scope.resetData = function() {  
+            vm.clearData();
+        }
+        
         $(".page-header h1").text("Servers");
     }
 

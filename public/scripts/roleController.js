@@ -1,72 +1,72 @@
-(function() {
+(function () {
 
     'use strict';
 
     angular
-        .module('authApp')
-        .controller('RoleController', RoleController);  
+            .module('authApp')
+            .controller('RoleController', RoleController);
 
     function RoleController($http, $scope, $state, $window, $stateParams, $location, $timeout) {
-            var vm = this;
-            vm.users;
-            vm.error;        
-            $scope.rolename = ''; 
-            $scope.rpermissions = '';           
-            // Using $location service
-            var url = $location.search();            
-            var token = sessionStorage.AuthUser;
-            $scope.module = 'role';
-            $scope.showLoader       = true;
-            vm.getRole = function () {
-                var url = $location.search();  
-                if(url.roleid != undefined) {
-                $http.get('api/v1/roles/'+url.roleid, {
+        var vm = this;
+        vm.users;
+        vm.error;
+        $scope.rolename = '';
+        $scope.rpermissions = '';
+        // Using $location service
+        var url = $location.search();
+        var token = sessionStorage.AuthUser;
+        $scope.module = 'role';
+        $scope.showLoader = true;
+        vm.getRole = function () {
+            var url = $location.search();
+            if (url.roleid != undefined) {
+                $http.get('api/v1/roles/' + url.roleid, {
                     headers: {
                         "Authorization": 'Bearer ' + token
                     }
                 }).then(function (response) {
-                    $scope.roles_data   = response.data.data[0];
-                    $scope.rolename     = $scope.roles_data.role;
-                    $scope.roleid       = $scope.roles_data.id;
-                }, function (error) {
-
-                });
-              }
-            } 
-            
-            vm.getRoles = function () {
-                $scope.showLoader       = true;
-                $http.get('api/v1/roles', {
-                    headers: {
-                        "Authorization": 'Bearer ' + token
-                    }
-                }).then(function (response) {
-                    vm.roles = response.data.data;
-                    $scope.succ_message = sessionStorage.succ_message ;
-                    sessionStorage.succ_message = '';
-                    $scope.showLoader       = false;
-                    
+                    $scope.roles_data = response.data.data[0];
+                    $scope.rolename = $scope.roles_data.role;
+                    $scope.roleid = $scope.roles_data.id;
                 }, function (error) {
 
                 });
             }
-            
-            var token = sessionStorage.AuthUser;
-            //saving new role
-            $scope.saveRole = function () {
-                
-                // use $.param jQuery function to serialize data from JSON 
-                $scope.rolename = $scope.rolename;
-                var config = {
-                    headers : {
-                        "Authorization": 'Bearer ' + token
-                    }
+        }
+
+        vm.getRoles = function () {
+            $scope.showLoader = true;
+            $http.get('api/v1/roles', {
+                headers: {
+                    "Authorization": 'Bearer ' + token
                 }
-                
-                if(url.roleid === undefined) {
-                    $http.post('api/v1/roles', 
+            }).then(function (response) {
+                vm.roles = response.data.data;
+                $scope.succ_message = sessionStorage.succ_message;
+                sessionStorage.succ_message = '';
+                $scope.showLoader = false;
+
+            }, function (error) {
+
+            });
+        }
+
+        var token = sessionStorage.AuthUser;
+        //saving new role
+        $scope.saveRole = function () {
+
+            // use $.param jQuery function to serialize data from JSON 
+            $scope.rolename = $scope.rolename;
+            var config = {
+                headers: {
+                    "Authorization": 'Bearer ' + token
+                }
+            }
+
+            if (url.roleid === undefined) {
+                $http.post('api/v1/roles',
                         {
-                          role: $scope.rolename,
+                            role: $scope.rolename,
                         }, config)
                         .then(function (data, status, headers, config) {
                             $scope.rolename = '';
@@ -74,21 +74,21 @@
                             $state.go('roles');
 
                         })
-                    .catch(function (response, status, header, config) {
+                        .catch(function (response, status, header, config) {
                             $scope.err_message = '';
-                            angular.forEach(response.data, function (errmessage, key) {                                
-                                angular.forEach(errmessage, function (mesg, key) {                                    
-                                    $scope.err_message +=  mesg + "\n";
-                                 })                                 
-                            })  
-                            $timeout(function() {
+                            angular.forEach(response.data, function (errmessage, key) {
+                                angular.forEach(errmessage, function (mesg, key) {
+                                    $scope.err_message += mesg + "\n";
+                                })
+                            })
+                            $timeout(function () {
                                 $scope.err_message = '';
-                             }, 4000); // 4 seconds                            
+                            }, 4000); // 4 seconds                            
                         });
-                } else {
-                    $http.put('api/v1/roles/'+url.roleid, 
+            } else {
+                $http.put('api/v1/roles/' + url.roleid,
                         {
-                          role: $scope.rolename,
+                            role: $scope.rolename,
                         }, config)
                         .then(function (data, status, headers, config) {
                             $scope.rolename = '';
@@ -96,23 +96,23 @@
                             $state.go('roles');
 
                         })
-                    .catch(function (response, status, header, config) {
+                        .catch(function (response, status, header, config) {
                             $scope.err_message = '';
-                            angular.forEach(response.data, function (errmessage, key) {                                
-                                angular.forEach(errmessage, function (mesg, key) {                                    
-                                    $scope.err_message +=  mesg + "\n";
-                                 })                                 
-                            })  
-                            $timeout(function() {
+                            angular.forEach(response.data, function (errmessage, key) {
+                                angular.forEach(errmessage, function (mesg, key) {
+                                    $scope.err_message += mesg + "\n";
+                                })
+                            })
+                            $timeout(function () {
                                 $scope.err_message = '';
-                             }, 4000); // 4 seconds                            
+                            }, 4000); // 4 seconds                            
                         });
-                    
-                }
-                     
-         
-            };
-         
+
+            }
+
+
+        };
+
         $scope.delete = function (id) {
             var deleterecord = $window.confirm('Are you absolutely sure you want to delete?');
             if (deleterecord) {
@@ -122,23 +122,24 @@
                     }
                 }).then(function (response) {
                     $scope.resp = response;
-                    $scope.err_message = '';    
+                    $scope.err_message = '';
                     $scope.succ_message = "Record has been deleted successfully.";
                     sessionStorage.succ_message = "Record has been deleted successfully..";
-                   // $state.go('gateways');
+                    // $state.go('gateways');
                     //
                     $state.go($state.current, {}, {reload: true});
-                    
-                }, function (error) {;
+
+                }, function (error) {
+                    ;
                     $scope.err_message = "Unable to delete the record.";
                     //$state.go('gateways');                    
                 });
             }
         }
-        
+
         vm.getPermissions = function () {
             $(".page-header h1").text("ROLE PERMISSSION MANAGEMENT");
-            $scope.showLoader       = true
+            $scope.showLoader = true
             $http.get('api/v1/permission', {
                 headers: {
                     "Authorization": 'Bearer ' + token
@@ -146,60 +147,60 @@
             }).then(function (response) {
                 $scope.permissions1 = response.data.data;
                 vm.getRolePermissions();
-                
-                
+
+
                 $scope.succ_message = sessionStorage.succ_message;
                 sessionStorage.succ_message = '';
-                $scope.showLoader       = false
+                $scope.showLoader = false
             }, function (error) {
 
             });
         }
-        
-        
+
+
         vm.getRolePermissions = function () {
-               
-                var url = $location.search();  
-                if(url.roleid != undefined) {
-                $http.get('api/v1/roles/'+url.roleid, {
+
+            var url = $location.search();
+            if (url.roleid != undefined) {
+                $http.get('api/v1/roles/' + url.roleid, {
                     headers: {
                         "Authorization": 'Bearer ' + token
                     }
                 }).then(function (response) {
-                    $scope.roles_data   = response.data.data[0];
-                    $scope.role_permissions     = $scope.roles_data.role_permissions;
+                    $scope.roles_data = response.data.data[0];
+                    $scope.role_permissions = $scope.roles_data.role_permissions;
                     angular.forEach($scope.permissions1, function (per, key) {
-                        
+
                         angular.forEach($scope.role_permissions, function (val, key2) {
                             if (val.permissions_id == per.id) {
-                                if(val.action == 1)
-                                 per.checked = true;
+                                if (val.action == 1)
+                                    per.checked = true;
                                 else
-                                 per.checked = false;
+                                    per.checked = false;
                             }
                         })
                     });
-                    
+
                     $scope.permissions = $scope.permissions1;
-                    
+
                 }, function (error) {
 
                 });
-              }
-            } 
-        
-        
+            }
+        }
+
+
         $scope.assignRolePermission = function (perid) {
             var checked = false;
             angular.forEach($scope.permissions, function (value, key) {
-                        if(value.id === perid) {
-                           if(value.checked === true)
-                            checked = 1;
-                           else
-                            checked = 0;
-                        }
+                if (value.id === perid) {
+                    if (value.checked === true)
+                        checked = 1;
+                    else
+                        checked = 0;
+                }
             });
-            
+
             var config = {
                 headers: {
                     "Authorization": 'Bearer ' + token
@@ -209,37 +210,45 @@
             var url = $location.search();
             var roleid = url.roleid;
             if (roleid != undefined) {
-                
+
                 $http.post('api/v1/assignpermission/' + roleid,
                         {
-                            permission_id : perid,
-                            action        : checked,
-                        }, config)  
+                            permission_id: perid,
+                            action: checked,
+                        }, config)
                         .then(function (data, status, headers, config) {
                             $scope.permission = '';
                             $scope.succ_message = "Permission has been updated successfully.";
-                            $timeout(function() {
+                            $timeout(function () {
                                 $scope.succ_message = '';
-                             }, 2000); // 2 seconds
+                            }, 2000); // 2 seconds
                         })
                         .catch(function (data, status, header, config) {
                             $scope.ResponseDetails = "";
                         });
-             
+
             }
         }
-        
-        
-        vm.checkLogin = function() {            
-            var token = sessionStorage.AuthUser;        
-            if(token === '') {
-               $window.location.href = '/login';
-           }
+
+
+        vm.checkLogin = function () {
+            var token = sessionStorage.AuthUser;
+            if (token === '') {
+                $window.location.href = '/login';
+            }
+        }
+
+        vm.clearData = function () {
+            $scope.rolename = '';
+
+        }
+        $scope.resetData = function () {
+            vm.clearData();
         }
         vm.checkLogin();
-        
-        
-        
+
+
+
         $(".page-header h1").text("Roles");
     }
 

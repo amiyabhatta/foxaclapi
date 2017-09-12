@@ -160,7 +160,7 @@
             } else {
 
                 $http.put(uri,
-                        {   user_manager_id: $scope.manager_id,
+                        {user_manager_id: $scope.manager_id,
                             user_name: $scope.username,
                             user_email: $scope.email,
                             password: $scope.password,
@@ -214,6 +214,27 @@
             }
         }
 
+        vm.clearData = function () {
+            $scope.fullname = '';
+            $scope.username = '';
+            $scope.password = '';
+            $scope.confirmpassword = '';
+            $scope.user_data = '';
+            $scope.manager_id = '';
+            $scope.email = '';
+            $scope.server_id = '';
+            $scope.ser = '';
+            angular.forEach($scope.servers, function (value, key) {
+                        value.checked = false;
+                        angular.forEach($scope.server_id, function (val, key2) {
+                            
+                                value.checked = false;
+                        })
+                    });
+        }
+        $scope.resetData = function () {
+            vm.clearData();
+        }
         vm.checkLogin = function () {
             var token = sessionStorage.AuthUser;
             if (token === '') {

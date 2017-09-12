@@ -229,6 +229,14 @@
                $window.location.href = '/login';
            }
         }
+        vm.clearData = function() {            
+            $scope.permissionname = '';
+            $scope.user_type= '';             
+        }
+        $scope.resetData = function() {  
+            vm.clearData();
+        }
+        
         vm.checkLogin();
         
         $(".page-header h1").text("Permissions");

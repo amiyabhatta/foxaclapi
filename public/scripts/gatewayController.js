@@ -156,6 +156,18 @@
                $window.location.href = '/login';
            }
         }
+        
+        vm.clearData = function() {            
+            $scope.gatewayname = '';
+            $scope.hostname = '';
+            $scope.portname = '';
+            $scope.password = '';
+            $scope.username = '';        
+        }
+        $scope.resetData = function() {  
+            vm.clearData();
+        }
+        
         vm.checkLogin();
         
         
