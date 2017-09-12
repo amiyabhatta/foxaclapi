@@ -32,8 +32,9 @@ class updateWhiteLabel extends Request
         return [
           'servername'  => 'required',
           'whitelabels' => 'required|unique_whitelabel:'.$id,
-          'botime' => 'numeric',
-          'fxtime' => 'numeric', 
+          'groups' => 'required',  
+          'botime' => 'required|numeric',
+          'fxtime' => 'required|numeric', 
         ];
     }
 }

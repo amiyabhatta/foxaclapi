@@ -27,8 +27,8 @@ class createWhiteLabel extends Request
           'servername'  => 'required',
           'whitelabels' => 'required|unique:lasttrade_whitelabels',
           'groups' => 'required',
-          'botime' => 'required',
-          'fxtime' => 'required'          
+          'botime' => 'required|numeric',
+          'fxtime' => 'required|numeric'          
         ];
     }
 }

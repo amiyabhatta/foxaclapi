@@ -24,7 +24,7 @@ class serverlistUpdate extends Request
     public function rules()
     {
         return [
-             'servername' => 'required',
+            'servername' => 'required',
             'ipaddress' => 'required',
             'username' => 'required',
             'password' => 'required',

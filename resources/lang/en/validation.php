@@ -105,15 +105,20 @@ return [
             'required' => 'The confirm password field is required.',
         ],
         'server_id' => [
-           'required' => 'The server ID field is required.',
+           'required' => 'The server field is required.',
         ],
         'host' => [
            'required' => 'The host field is required.',
         ],
         'port' => [
            'required' => 'The port field is required.',
+        ],
+        'GatewayID' => [
+           'required' => 'The gateway id field is required.', 
+        ],
+        'databasename' => [
+           'required' => 'The database name field is required.',   
         ]
-        
     ],
 
     /*
