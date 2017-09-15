@@ -103,6 +103,7 @@ return [
         ],
         'conifrm_password' => [
             'required' => 'The confirm password field is required.',
+            'same' => 'The confirm password and password must match.'
         ],
         'server_id' => [
            'required' => 'The server field is required.',
