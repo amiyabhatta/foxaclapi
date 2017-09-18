@@ -214,8 +214,7 @@ class UserContainer extends Base implements UserContract
             if (!$token = JWTAuth::attempt($credentials)) {
 
                 // return $this->setStatusCode(401)->respondWithError('Invalid Credentials');
-                return $this->setStatusCode(200)->respond(['message' => trans('user.invalid_creds'),
-                            'status_code' => 404]);
+                return $this->setStatusCode(404)->respond(['message' => trans('user.invalid_creds')]);
             }
         } catch (JWTException $e) {
             // something went wrong whilst attempting to encode the token

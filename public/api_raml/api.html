@@ -1,0 +1,974 @@
+<!DOCTYPE HTML><html><head><title>FOXAPI API documentation</title><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="generator" content="https://github.com/raml2html/raml2html 6.4.1"><link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/styles/default.min.css"><script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script><script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/highlight.min.js"></script><script type="text/javascript">
+      $(document).ready(function() {
+        $('.page-header pre code, .top-resource-description pre code, .modal-body pre code').each(function(i, block) {
+          hljs.highlightBlock(block);
+        });
+
+        $('[data-toggle]').click(function() {
+          var selector = $(this).data('target') + ' pre code';
+          $(selector).each(function(i, block) {
+            hljs.highlightBlock(block);
+          });
+        });
+
+        // open modal on hashes like #_action_get
+        $(window).bind('hashchange', function(e) {
+          var anchor_id = document.location.hash.substr(1); //strip #
+          var element = $('#' + anchor_id);
+
+          // do we have such element + is it a modal?  --> show it
+          if (element.length && element.hasClass('modal')) {
+            element.modal('show');
+          }
+        });
+
+        // execute hashchange on first page load
+        $(window).trigger('hashchange');
+
+        // remove url fragment on modal hide
+        $('.modal').on('hidden.bs.modal', function() {
+          try {
+            if (history && history.replaceState) {
+                history.replaceState({}, '', '#');
+            }
+          } catch(e) {}
+        });
+      });
+    </script><style>
+      .hljs {
+        background: transparent;
+      }
+      .parent {
+        color: #999;
+      }
+      .list-group-item > .badge {
+        float: none;
+        margin-right: 6px;
+      }
+      .panel-title > .methods {
+        float: right;
+      }
+      .badge {
+        border-radius: 0;
+        text-transform: uppercase;
+        width: 70px;
+        font-weight: normal;
+        color: #f3f3f6;
+        line-height: normal;
+      }
+      .badge_get {
+        background-color: #63a8e2;
+      }
+      .badge_post {
+        background-color: #6cbd7d;
+      }
+      .badge_put {
+        background-color: #22bac4;
+      }
+      .badge_delete {
+        background-color: #d26460;
+      }
+      .badge_patch {
+        background-color: #ccc444;
+      }
+      .list-group, .panel-group {
+        margin-bottom: 0;
+      }
+      .panel-group .panel+.panel-white {
+        margin-top: 0;
+      }
+      .panel-group .panel-white {
+        border-bottom: 1px solid #F5F5F5;
+        border-radius: 0;
+      }
+      .panel-white:last-child {
+        border-bottom-color: white;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+      }
+      .panel-white .panel-heading {
+        background: white;
+      }
+      .tab-pane ul {
+        padding-left: 2em;
+      }
+      .tab-pane h1 {
+        font-size: 1.3em;
+      }
+      .tab-pane h2 {
+        font-size: 1.2em;
+        padding-bottom: 4px;
+        border-bottom: 1px solid #ddd;
+      }
+      .tab-pane h3 {
+        font-size: 1.1em;
+      }
+      .tab-content {
+        border-left: 1px solid #ddd;
+        border-right: 1px solid #ddd;
+        border-bottom: 1px solid #ddd;
+        padding: 10px;
+      }
+      #sidebar {
+        margin-top: 30px;
+        padding-right: 5px;
+        overflow: auto;
+        height: 90%;
+      }
+      .top-resource-description {
+        border-bottom: 1px solid #ddd;
+        background: #fcfcfc;
+        padding: 15px 15px 0 15px;
+        margin: -15px -15px 10px -15px;
+      }
+      .resource-description {
+        border-bottom: 1px solid #fcfcfc;
+        background: #fcfcfc;
+        padding: 15px 15px 0 15px;
+        margin: -15px -15px 10px -15px;
+      }
+      .resource-description p:last-child {
+        margin: 0;
+      }
+      .list-group .badge {
+        float: left;
+      }
+      .method_description {
+        margin-left: 85px;
+      }
+      .method_description p:last-child {
+        margin: 0;
+      }
+      .list-group-item {
+        cursor: pointer;
+      }
+      .list-group-item:hover {
+        background-color: #f5f5f5;
+      }
+      pre code {
+        overflow: auto;
+        word-wrap: normal;
+        white-space: pre;
+      }
+      .items {
+        background: #f5f5f5;
+        color: #333;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 9.5px;
+        margin: 0 0 10px;
+        font-size: 13px;
+        line-height: 1.42857143;
+      }
+      .examples {
+        margin-left: 0.5em;
+      }
+      .resource-modal li > ul {
+        margin-bottom: 1em;
+      }
+    </style></head><body data-spy="scroll" data-target="#sidebar"><div class="container"><div class="row"><div class="col-md-9" role="main"><div class="page-header"><h1>FOXAPI API documentation <small>version v1</small></h1><p>http://fxmgr.broctagon.com/api/v1/</p></div><div class="panel panel-default"><div class="panel-heading"><h3 id="users" class="panel-title">/users</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_users"><span class="parent"></span>/users</a> <span class="methods"><a href="#users_get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_users" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#users_get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>List all users</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="users_get"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent"></span>/users</h4></div><div class="modal-body"><div class="alert alert-info"><p>List all users</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>Authenticate this to any method that needs a valid JWT to be set.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#users_get_response" data-toggle="tab">Response</a></li><li><a href="#users_get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="users_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+    "data": [
+        {
+            "id": 221,
+            "name": "amiya",
+            "manager_id": 789,
+            "email": "amiya@gmail.com",
+            "server_id": [
+                {
+                    "server_id": 28
+                },
+                {
+                    "server_id": 29
+                },
+                {
+                    "server_id": 30
+                }
+            ],
+            "links": {
+                "rel": "self",
+                "uri": "api/v1/users/221"
+            }
+        },
+        {
+            "id": 222,
+            "name": "Al",
+            "manager_id": 759,
+            "email": "",
+            "server_id": [
+                {
+                    "server_id": 1
+                },
+                {
+                    "server_id": 2
+                },
+                {
+                    "server_id": 3
+                }
+            ],
+            "links": {
+                "rel": "self",
+                "uri": "api/v1/users/222"
+            }
+        },
+        {
+            "id": 244,
+            "name": "Parineeta",
+            "manager_id": 838,
+            "email": "",
+            "server_id": [
+                {
+                    "server_id": 1
+                },
+                {
+                    "server_id": 2
+                },
+                {
+                    "server_id": 3
+                }
+            ],
+            "links": {
+                "rel": "self",
+                "uri": "api/v1/users/244"
+            }
+        },
+        {
+            "id": 245,
+            "name": "Av",
+            "manager_id": 837,
+            "email": "",
+            "server_id": [
+                {
+                    "server_id": 1
+                },
+                {
+                    "server_id": 2
+                },
+                {
+                    "server_id": 3
+                }
+            ],
+            "links": {
+                "rel": "self",
+                "uri": "api/v1/users/245"
+            }
+        },
+        {
+            "id": 248,
+            "name": "sanjeev",
+            "manager_id": 100,
+            "email": "sanjeev@gmail.com",
+            "server_id": [
+                {
+                    "server_id": 1
+                },
+                {
+                    "server_id": 2
+                },
+                {
+                    "server_id": 3
+                }
+            ],
+            "links": {
+                "rel": "self",
+                "uri": "api/v1/users/248"
+            }
+        }
+    ],
+    "meta": {
+        "pagination": {
+            "total": 5,
+            "count": 5,
+            "per_page": 20,
+            "current_page": 1,
+            "total_pages": 1,
+            "links": []
+        }
+    }
+}
+</code></pre></div></div><div class="tab-pane" id="users_get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>x-AuthToken</p></li></ul></div></div></div></div></div></div></div><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_users__id_"><span class="parent">/users</span>/{id}</a> <span class="methods"><a href="#users__id__get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a> <a href="#users__id__put"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_users__id_" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#users__id__get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Get User by id</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#users__id__put'" class="list-group-item"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Update user</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="users__id__get"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/users</span>/{id}</h4></div><div class="modal-body"><div class="alert alert-info"><p>Get User by id</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>Authenticate this to any method that needs a valid JWT to be set.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#users__id__get_request" data-toggle="tab">Request</a></li><li><a href="#users__id__get_response" data-toggle="tab">Response</a></li><li><a href="#users__id__get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="users__id__get_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em></li></ul></div><div class="tab-pane" id="users__id__get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>[object Object]</code></pre></div></div><div class="tab-pane" id="users__id__get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>x-AuthToken</p></li></ul></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="users__id__put"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/users</span>/{id}</h4></div><div class="modal-body"><div class="alert alert-info"><p>Update user</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>Authenticate this to any method that needs a valid JWT to be set.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#users__id__put_request" data-toggle="tab">Request</a></li><li><a href="#users__id__put_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="users__id__put_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em></li></ul><h3>Headers</h3><ul><li><strong>Accept</strong>: <em>required (string - default: application/json)</em><p>The accept is required for validation.</p></li><li><strong>Content-Type</strong>: <em>required (string - default: application/json)</em><p>Type of request.</p></li></ul><h3>Body</h3><p><strong>Media type</strong>: application/x-www-form-urlencoded</p><p><strong>Type</strong>: object</p><strong>Properties</strong><ul><li><strong>user_email</strong>: <em>required (string)</em></li><li><strong>user_name</strong>: <em>(string)</em></li><li><strong>user_manager_id</strong>: <em>required (integer)</em></li><li><strong>server_id</strong>: <em>(integer)</em></li></ul><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+  "user_email": "jamess@gmail.coms",
+  "user_name": "abcd",
+  "user_manager_id": 4000,
+  "server_id": 11
+}
+</code></pre></div></div><div class="tab-pane" id="users__id__put_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>x-AuthToken</p></li></ul></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="getglobalalertom" class="panel-title">/getglobalalertom</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_getglobalalertom"><span class="parent"></span>/getglobalalertom</a> <span class="methods"><a href="#getglobalalertom_get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_getglobalalertom" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#getglobalalertom_get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>List overall monitoring for a particular server and managerid</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="getglobalalertom_get"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent"></span>/getglobalalertom</h4></div><div class="modal-body"><div class="alert alert-info"><p>List overall monitoring for a particular server and managerid</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>Authenticate this to any method that needs a valid JWT to be set.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#getglobalalertom_get_response" data-toggle="tab">Response</a></li><li><a href="#getglobalalertom_get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="getglobalalertom_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+    "bo_buy": {
+        "volume_limit1": 100,
+        "volume_limit2": 300,
+        "avg_volume_limit1": 10,
+        "avg_volume_limit2": 50,
+        "index_limit": 120,
+        "server": "TDSSKY",
+        "login": 100
+    },
+    "bo_sell": {
+        "volume_limit1": 200,
+        "volume_limit2": 300,
+        "avg_volume_limit1": 40,
+        "avg_volume_limit2": 50,
+        "index_limit": 100,
+        "server": "TDSSKY",
+        "login": 100
+    },
+    "fx_buy": {
+        "volume_limit1": 10,
+        "volume_limit2": 100,
+        "avg_volume_limit1": 1,
+        "avg_volume_limit2": 10,
+        "index_limit": 90,
+        "server": "TDSSKY",
+        "login": 100
+    },
+    "fx_sell": {
+        "volume_limit1": 10,
+        "volume_limit2": 100,
+        "avg_volume_limit1": 1,
+        "avg_volume_limit2": 10,
+        "index_limit": 90,
+        "server": "TDSSKY",
+        "login": 100
+    },
+    "index_buy": {
+        "volume_limit1": 0,
+        "volume_limit2": 0,
+        "avg_volume_limit1": 0,
+        "avg_volume_limit2": 0,
+        "index_limit": 0,
+        "server": "TDSSKY",
+        "login": 100
+    },
+    "index_sell": {
+        "volume_limit1": 0,
+        "volume_limit2": 0,
+        "avg_volume_limit1": 0,
+        "avg_volume_limit2": 0,
+        "index_limit": 0,
+        "server": "TDSSKY",
+        "login": 100
+    }
+}
+</code></pre></div></div><div class="tab-pane" id="getglobalalertom_get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>x-AuthToken</p></li></ul></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="setglobalalertom" class="panel-title">/setglobalalertom</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_setglobalalertom"><span class="parent"></span>/setglobalalertom</a> <span class="methods"><a href="#setglobalalertom_post"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_setglobalalertom" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#setglobalalertom_post'" class="list-group-item"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Save/update overallmonitoring for a particular server and managerid - glb_alert_setting_om</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="setglobalalertom_post"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent"></span>/setglobalalertom</h4></div><div class="modal-body"><div class="alert alert-info"><p>Save/update overallmonitoring for a particular server and managerid - glb_alert_setting_om</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>Authenticate this to any method that needs a valid JWT to be set.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#setglobalalertom_post_request" data-toggle="tab">Request</a></li><li><a href="#setglobalalertom_post_response" data-toggle="tab">Response</a></li><li><a href="#setglobalalertom_post_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="setglobalalertom_post_request"><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><strong>Properties</strong><ul><li><strong>bo_buy_volume_limit1</strong>: <em>required (integer)</em></li><li><strong>bo_buy_volume_limit2</strong>: <em>required (integer)</em></li><li><strong>bo_buy_avg_volume_limit1</strong>: <em>required (integer)</em></li><li><strong>bo_buy_avg_volume_limit2</strong>: <em>required (integer)</em></li><li><strong>bo_buy_index_limit</strong>: <em>required (integer)</em></li><li><strong>bo_sell_volume_limit1</strong>: <em>required (integer)</em></li><li><strong>bo_sell_volume_limit2</strong>: <em>required (integer)</em></li><li><strong>bo_sell_avg_volume_limit1</strong>: <em>required (integer)</em></li><li><strong>bo_sell_avg_volume_limit2</strong>: <em>required (integer)</em></li><li><strong>bo_sell_index_limit</strong>: <em>required (integer)</em></li><li><strong>fx_buy_volume_limit1</strong>: <em>required (integer)</em></li><li><strong>fx_buy_volume_limit2</strong>: <em>required (integer)</em></li><li><strong>fx_buy_avg_volume_limit1</strong>: <em>required (integer)</em></li><li><strong>fx_buy_avg_volume_limit2</strong>: <em>required (integer)</em></li><li><strong>fx_buy_index_limit</strong>: <em>required (integer)</em></li><li><strong>fx_sell_volume_limit1</strong>: <em>required (integer)</em></li><li><strong>fx_sell_volume_limit2</strong>: <em>required (integer)</em></li><li><strong>fx_sell_avg_volume_limit1</strong>: <em>required (integer)</em></li><li><strong>fx_sell_avg_volume_limit2</strong>: <em>required (integer)</em></li><li><strong>fx_sell_index_limit</strong>: <em>required (integer)</em></li><li><strong>index_buy_volume_limit1</strong>: <em>required (integer)</em></li><li><strong>index_buy_volume_limit2</strong>: <em>required (integer)</em></li><li><strong>index_buy_avg_volume_limit1</strong>: <em>required (integer)</em></li><li><strong>index_buy_avg_volume_limit2</strong>: <em>required (integer)</em></li><li><strong>index_buy_index_limit</strong>: <em>required (integer)</em></li><li><strong>index_sell_volume_limit1</strong>: <em>required (integer)</em></li><li><strong>index_sell_volume_limit2</strong>: <em>required (integer)</em></li><li><strong>index_sell_avg_volume_limit1</strong>: <em>required (integer)</em></li><li><strong>index_sell_avg_volume_limit2</strong>: <em>required (integer)</em></li><li><strong>index_sell_index_limit</strong>: <em>required (integer)</em></li></ul><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+"bo_buy_volume_limit1":11,
+"bo_buy_volume_limit2":2,
+"bo_buy_avg_volume_limit1":3,
+"bo_buy_avg_volume_limit2":4,
+"bo_buy_index_limit":5,
+"bo_sell_volume_limit1":6,
+"bo_sell_volume_limit2":7,
+"bo_sell_avg_volume_limit1":8,
+"bo_sell_avg_volume_limit2":9,
+"bo_sell_index_limit":10,
+"fx_buy_volume_limit1":11,
+"fx_buy_volume_limit2":12,
+"fx_buy_avg_volume_limit1":13,
+"fx_buy_avg_volume_limit2":14,
+"fx_buy_index_limit":15,
+"fx_sell_volume_limit1":16,
+"fx_sell_volume_limit2":17,
+"fx_sell_avg_volume_limit1":18,
+"fx_sell_avg_volume_limit2":19,
+"fx_sell_index_limit":20,
+"index_buy_volume_limit1":21,
+"index_buy_volume_limit2":22,
+"index_buy_avg_volume_limit1":23,
+"index_buy_avg_volume_limit2":24,
+"index_buy_index_limit":25,
+"index_sell_volume_limit1":26,
+"index_sell_volume_limit2":27,
+"index_sell_avg_volume_limit1":28,
+"index_sell_avg_volume_limit2":29,
+"index_sell_index_limit":210
+}
+</code></pre></div></div><div class="tab-pane" id="setglobalalertom_post_response"><h2>HTTP status code <a href="http://httpstatus.es/201" target="_blank">201</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>
+{
+    "message": "Alert Value saved Sucessfully",
+    "status_code": 200
+}
+</code></pre></div></div><div class="tab-pane" id="setglobalalertom_post_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>x-AuthToken</p></li></ul></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="deleteglobalalertom" class="panel-title">/deleteglobalalertom</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_deleteglobalalertom"><span class="parent"></span>/deleteglobalalertom</a> <span class="methods"><a href="#deleteglobalalertom_delete"><span class="badge badge_delete">delete <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_deleteglobalalertom" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#deleteglobalalertom_delete'" class="list-group-item"><span class="badge badge_delete">delete <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Delete overall monitoring data by delete type for particular serever and manager id - glb_alert_setting_om</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="deleteglobalalertom_delete"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_delete">delete <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent"></span>/deleteglobalalertom</h4></div><div class="modal-body"><div class="alert alert-info"><p>Delete overall monitoring data by delete type for particular serever and manager id - glb_alert_setting_om</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>Authenticate this to any method that needs a valid JWT to be set.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#deleteglobalalertom_delete_request" data-toggle="tab">Request</a></li><li><a href="#deleteglobalalertom_delete_response" data-toggle="tab">Response</a></li><li><a href="#deleteglobalalertom_delete_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="deleteglobalalertom_delete_request"><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><strong>Properties</strong><ul><li><strong>delete_type</strong>: <em>required (string)</em></li></ul><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+  "delete_type":"bo_buy"
+}
+</code></pre></div></div><div class="tab-pane" id="deleteglobalalertom_delete_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+    "message": "Alert deleted Sucessfully",
+    "status_code": 200
+}
+</code></pre></div></div><div class="tab-pane" id="deleteglobalalertom_delete_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>x-AuthToken</p></li></ul></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="saveboalert" class="panel-title">/saveboalert</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_saveboalert"><span class="parent"></span>/saveboalert</a> <span class="methods"><a href="#saveboalert_post"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_saveboalert" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#saveboalert_post'" class="list-group-item"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Save/update Boalert setting for particular server and managerid- bo_alert_setting</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="saveboalert_post"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent"></span>/saveboalert</h4></div><div class="modal-body"><div class="alert alert-info"><p>Save/update Boalert setting for particular server and managerid- bo_alert_setting</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>Authenticate this to any method that needs a valid JWT to be set.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#saveboalert_post_request" data-toggle="tab">Request</a></li><li><a href="#saveboalert_post_response" data-toggle="tab">Response</a></li><li><a href="#saveboalert_post_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="saveboalert_post_request"><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><strong>Properties</strong><ul><li><strong>bo_buy_volume_limit1</strong>: <em>required (integer)</em></li><li><strong>bo_buy_volume_limit2</strong>: <em>required (integer)</em></li><li><strong>bo_buy_avg_volume_limit1</strong>: <em>required (integer)</em></li><li><strong>bo_buy_avg_volume_limit2</strong>: <em>required (integer)</em></li><li><strong>bo_buy_index_limit</strong>: <em>required (integer)</em></li><li><strong>bo_sell_volume_limit1</strong>: <em>required (integer)</em></li><li><strong>bo_sell_volume_limit2</strong>: <em>required (integer)</em></li><li><strong>bo_sell_avg_volume_limit1</strong>: <em>required (integer)</em></li><li><strong>bo_sell_avg_volume_limit2</strong>: <em>required (integer)</em></li><li><strong>bo_sell_index_limit</strong>: <em>required (integer)</em></li><li><strong>symbol</strong>: <em>required (string)</em></li></ul><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+
+"bo_buy_volume_limit1":11,
+"bo_buy_volume_limit2":222,
+"bo_buy_avg_volume_limit1":3,
+"bo_buy_avg_volume_limit2":88,
+"bo_buy_index_limit":55,
+"bo_sell_volume_limit1":6,
+"bo_sell_volume_limit2":7,
+"bo_sell_avg_volume_limit1":88,
+"bo_sell_avg_volume_limit2":9,
+"bo_sell_index_limit":100,
+"symbol":"USD"
+
+}
+</code></pre></div></div><div class="tab-pane" id="saveboalert_post_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+    "data": {
+        "token": "eyJpdiI6IlR4M296NDJ2WllkTnQ5alo2YVNQc1E9PSIsInZhbHVlIjoiUG1IRXlrdU5zdUpaN2JzUmtMd05pV3RWdm43MVB0RGZJK2o5TE5iWUtvWnBIK1FtV2lSeFdIUGZDZG5CNUo2dTFFWmhhbzFZY1Y3SENtNG03NVlrVU1FUnZ5WW4xN2hTT3dKdFk4MEs5UUthWjRBKzl6amVJMWp0VDloODVtRTEyZWZqXC96WDBudXpZMXhKaXZDYnRYUzBhRlwvMXZ0NEJBRVZpSlpvZFFHT0hlVXNIdExGSG9wdlh0OXhRNUNrZ1h3RHB6Qk12VURjYm1KajFrMEpidkYybjBIbTd2aUl0UXNmS3NUU2Y4aFl2V1FpamlRV3RFSVFGd0JVN3d5UGkwMHVySHgzZkYwSkNUODQxMUZwRDZKSjM2VkUyYmhXU0ZZQVNvU1J3UVNzV215MFpJU3M2U24rUGczRjNHYSs0cDFtK2JxZm80N080VFRDZHdjbXA1YlUwWG90SHV3OWRCTHJ5Q3g5d2tTd2YyRFBtS0NnUWFUNlBSNXdXT3Vjdml3RmtXXC8rK083RmJjWFV0RUFxdnd3Zz09IiwibWFjIjoiZDA3Y2VmNmQ0NzBhYTI2ZjFkMDQ1YjkyYjZmYTQ2MjFkMjJhYTQ2OTNiZjFmOGQ1NTY5NTljNzI4ZGI1YzQxZiJ9",
+        "server_details": [
+            {
+                "server_name": "Tds",
+                "server_ip": "all-fox.cluster-cz1rcbccvawq.ap-northeast-2.rds.amazonaws.com",
+                "server_username": "tds_fox_user",
+                "server_password": "zBDC9M6e3L",
+                "server_db": "tds_fox_report",
+                "server_gw": 72
+            }
+        ],
+        "tab_details": [
+            {
+                "AllowMove": 1
+            },
+            {
+                "AllowDelete": 1
+            },
+            {
+                "AllowBatchWithdrawal": 1
+            },
+            {
+                "AllowEquilibrium": 1
+            },
+            {
+                "OverallMonitoring": 1
+            },
+            {
+                "BOMonitoring": 1
+            },
+            {
+                "OnlineUsers": 1
+            },
+            {
+                "VolumeSummary ": 1
+            },
+            {
+                "Top5PendingFX": 1
+            },
+            {
+                "CustomizedBOMonitoring": 1
+            },
+            {
+                "TradeAlert": 1
+            },
+            {
+                "Equilibrium": 1
+            },
+            {
+                "Lasttrade": 1
+            }
+        ],
+        "gateway_details": [
+            {
+                "gateway_name": "HY",
+                "host": "161.202.191.213",
+                "port": "21212",
+                "master_password": "MG_161@HWg",
+                "username": "master"
+            }
+        ],
+        "db_detials": [
+            {
+                "host": "13.228.97.98",
+                "db_name": "fxmgr",
+                "db_username": "app_user",
+                "db_password": "App%$#321"
+            }
+        ],
+        "mail_setting": [
+            {
+                "smtpserver": "smtp.gmail.com",
+                "mailfrom": "test@gmail.com",
+                "mailto": "test123@gmail.com",
+                "password": "12344",
+                "port": 5133,
+                "ssl": 1,
+                "enabled": 0
+            }
+        ]
+    },
+    "status_code": 201
+}
+</code></pre></div></div><div class="tab-pane" id="saveboalert_post_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>x-AuthToken</p></li></ul></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="getboalert" class="panel-title">/getboalert</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_getboalert"><span class="parent"></span>/getboalert</a> <span class="methods"><a href="#getboalert_get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_getboalert" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#getboalert_get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>get list of bo-alert setting for particular server and managerid- bo_alert_setting</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="getboalert_get"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent"></span>/getboalert</h4></div><div class="modal-body"><div class="alert alert-info"><p>get list of bo-alert setting for particular server and managerid- bo_alert_setting</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>Authenticate this to any method that needs a valid JWT to be set.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#getboalert_get_response" data-toggle="tab">Response</a></li><li><a href="#getboalert_get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="getboalert_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+    "bo_buy": {
+        "volume_limit1": 11,
+        "volume_limit2": 222,
+        "avg_volume_limit1": 3,
+        "avg_volume_limit2": 88,
+        "index_limit": 55,
+        "server": "winfxserver",
+        "symbol": "USD",
+        "login": 123
+    },
+    "bo_sell": {
+        "volume_limit1": 6,
+        "volume_limit2": 7,
+        "avg_volume_limit1": 88,
+        "avg_volume_limit2": 9,
+        "index_limit": 100,
+        "server": "winfxserver",
+        "symbol": "USD",
+        "login": 123
+    }
+}
+</code></pre></div></div><div class="tab-pane" id="getboalert_get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>x-AuthToken</p></li></ul></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="deleteboalert" class="panel-title">/deleteboalert</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_deleteboalert"><span class="parent"></span>/deleteboalert</a> <span class="methods"><a href="#deleteboalert_delete"><span class="badge badge_delete">delete <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_deleteboalert" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#deleteboalert_delete'" class="list-group-item"><span class="badge badge_delete">delete <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Delete bo-alert setting record for particular server and managerid- bo_alert_setting</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="deleteboalert_delete"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_delete">delete <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent"></span>/deleteboalert</h4></div><div class="modal-body"><div class="alert alert-info"><p>Delete bo-alert setting record for particular server and managerid- bo_alert_setting</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>Authenticate this to any method that needs a valid JWT to be set.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#deleteboalert_delete_request" data-toggle="tab">Request</a></li><li><a href="#deleteboalert_delete_response" data-toggle="tab">Response</a></li><li><a href="#deleteboalert_delete_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="deleteboalert_delete_request"><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><strong>Properties</strong><ul><li><strong>delete_type</strong>: <em>required (string)</em></li></ul><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+  "delete_type":"bo_buy"
+}
+</code></pre></div></div><div class="tab-pane" id="deleteboalert_delete_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+    "message": "Bo alert setting deleted sucessfully",
+    "status_code": 200
+}
+</code></pre></div></div><div class="tab-pane" id="deleteboalert_delete_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>x-AuthToken</p></li></ul></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="usertrade" class="panel-title">/usertrade</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_usertrade"><span class="parent"></span>/usertrade</a> <span class="methods"><a href="#usertrade_get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_usertrade" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#usertrade_get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Get trade alert details for particular server and managerid- trade_alertusers search can be done by id or without id</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="usertrade_get"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent"></span>/usertrade</h4></div><div class="modal-body"><div class="alert alert-info"><p>Get trade alert details for particular server and managerid- trade_alertusers search can be done by id or without id</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>Authenticate this to any method that needs a valid JWT to be set.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#usertrade_get_response" data-toggle="tab">Response</a></li><li><a href="#usertrade_get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="usertrade_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+    "data": [
+        {
+            "Id": 2754,
+            "login": 3343366,
+            "login_manager_id": 100,
+            "server": "TDSSKY",
+            "volume": 38,
+            "isUpdate": 1,
+            "amount": 0
+        },
+        {
+            "Id": 2745,
+            "login": 3264739,
+            "login_manager_id": 100,
+            "server": "TDSSKY",
+            "volume": 300,
+            "isUpdate": 1,
+            "amount": 0
+        },
+        {
+            "Id": 2728,
+            "login": 2555227,
+            "login_manager_id": 100,
+            "server": "TDSSKY",
+            "volume": 300,
+            "isUpdate": 1,
+            "amount": 0
+        },
+        {
+            "Id": 2747,
+            "login": 3287962,
+            "login_manager_id": 100,
+            "server": "TDSSKY",
+            "volume": 300,
+            "isUpdate": 1,
+            "amount": 0
+        },
+        {
+            "Id": 2726,
+            "login": 2555033,
+            "login_manager_id": 100,
+            "server": "TDSSKY",
+            "volume": 300,
+            "isUpdate": 1,
+            "amount": 0
+        },
+        {
+            "Id": 2724,
+            "login": 3327472,
+            "login_manager_id": 100,
+            "server": "TDSSKY",
+            "volume": 300,
+            "isUpdate": 1,
+            "amount": 0
+        },
+        {
+            "Id": 2755,
+            "login": 3270506,
+            "login_manager_id": 100,
+            "server": "TDSSKY",
+            "volume": 300,
+            "isUpdate": 1,
+            "amount": 0
+        },
+        {
+            "Id": 2756,
+            "login": 3272965,
+            "login_manager_id": 100,
+            "server": "TDSSKY",
+            "volume": 300,
+            "isUpdate": 1,
+            "amount": 0
+        },
+        {
+            "Id": 2757,
+            "login": 3279187,
+            "login_manager_id": 100,
+            "server": "TDSSKY",
+            "volume": 300,
+            "isUpdate": 1,
+            "amount": 0
+        },
+        {
+            "Id": 2758,
+            "login": 3281162,
+            "login_manager_id": 100,
+            "server": "TDSSKY",
+            "volume": 300,
+            "isUpdate": 1,
+            "amount": 0
+        },
+        {
+            "Id": 2759,
+            "login": 3291481,
+            "login_manager_id": 100,
+            "server": "TDSSKY",
+            "volume": 300,
+            "isUpdate": 1,
+            "amount": 0
+        },
+        {
+            "Id": 2760,
+            "login": 3333124,
+            "login_manager_id": 100,
+            "server": "TDSSKY",
+            "volume": 300,
+            "isUpdate": 1,
+            "amount": 0
+        },
+        {
+            "Id": 2761,
+            "login": 3333279,
+            "login_manager_id": 100,
+            "server": "TDSSKY",
+            "volume": 300,
+            "isUpdate": 1,
+            "amount": 0
+        },
+        {
+            "Id": 2762,
+            "login": 3333288,
+            "login_manager_id": 100,
+            "server": "TDSSKY",
+            "volume": 300,
+            "isUpdate": 1,
+            "amount": 0
+        },
+        {
+            "Id": 2806,
+            "login": 9,
+            "login_manager_id": 100,
+            "server": "TDSSKY",
+            "volume": 80,
+            "isUpdate": 1,
+            "amount": 80
+        },
+        {
+            "Id": 2805,
+            "login": 7,
+            "login_manager_id": 100,
+            "server": "TDSSKY",
+            "volume": 80,
+            "isUpdate": 1,
+            "amount": 80
+        },
+        {
+            "Id": 2804,
+            "login": 6,
+            "login_manager_id": 100,
+            "server": "TDSSKY",
+            "volume": 80,
+            "isUpdate": 1,
+            "amount": 80
+        },
+        {
+            "Id": 2803,
+            "login": 3,
+            "login_manager_id": 100,
+            "server": "TDSSKY",
+            "volume": 80,
+            "isUpdate": 1,
+            "amount": 80
+        }
+    ]
+}
+</code></pre></div></div><div class="tab-pane" id="usertrade_get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>x-AuthToken</p></li></ul></div></div></div></div></div></div></div><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_usertrade__id_"><span class="parent">/usertrade</span>/{id}</a> <span class="methods"><a href="#usertrade__id__get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_usertrade__id_" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#usertrade__id__get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Get trade alert details for particular server and managerid - trade_alertusers by id</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="usertrade__id__get"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/usertrade</span>/{id}</h4></div><div class="modal-body"><div class="alert alert-info"><p>Get trade alert details for particular server and managerid - trade_alertusers by id</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>Authenticate this to any method that needs a valid JWT to be set.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#usertrade__id__get_request" data-toggle="tab">Request</a></li><li><a href="#usertrade__id__get_response" data-toggle="tab">Response</a></li><li><a href="#usertrade__id__get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="usertrade__id__get_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em></li></ul></div><div class="tab-pane" id="usertrade__id__get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+    "data": [
+        {
+            "Id": 2754,
+            "login": 3343366,
+            "login_manager_id": 100,
+            "server": "TDSSKY",
+            "volume": 38,
+            "isUpdate": 1,
+            "amount": 0
+        }
+    ]
+}
+</code></pre></div></div><div class="tab-pane" id="usertrade__id__get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>x-AuthToken</p></li></ul></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="saveusertrade" class="panel-title">/saveusertrade</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_saveusertrade"><span class="parent"></span>/saveusertrade</a> <span class="methods"><a href="#saveusertrade_post"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_saveusertrade" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#saveusertrade_post'" class="list-group-item"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Save user trade for particular server and managerid- trade_alertusers</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="saveusertrade_post"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent"></span>/saveusertrade</h4></div><div class="modal-body"><div class="alert alert-info"><p>Save user trade for particular server and managerid- trade_alertusers</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>Authenticate this to any method that needs a valid JWT to be set.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#saveusertrade_post_request" data-toggle="tab">Request</a></li><li><a href="#saveusertrade_post_response" data-toggle="tab">Response</a></li><li><a href="#saveusertrade_post_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="saveusertrade_post_request"><h3>Headers</h3><ul><li><strong>Accept</strong>: <em>required (string - default: application/json)</em><p>The accept is required for validation.</p></li><li><strong>Content-Type</strong>: <em>required (string - default: application/json)</em><p>Type of request.</p></li></ul><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><strong>Properties</strong><ul><li><strong>login</strong>: <em>required (integer)</em></li><li><strong>volume</strong>: <em>required (integer)</em></li><li><strong>amount</strong>: <em>required (integer)</em></li></ul><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+
+"login":115,
+"volume":200,
+"amount":52
+
+}
+</code></pre></div></div><div class="tab-pane" id="saveusertrade_post_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+    "message": "Trade alert saved sucessfully",
+    "status_code": 200
+}
+</code></pre></div></div><div class="tab-pane" id="saveusertrade_post_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>x-AuthToken</p></li></ul></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="updateusertrade" class="panel-title">/updateusertrade</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_updateusertrade__login_"><span class="parent">/updateusertrade</span>/{login}</a> <span class="methods"><a href="#updateusertrade__login__put"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_updateusertrade__login_" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#updateusertrade__login__put'" class="list-group-item"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Update user tarde by login - trade_alertusers</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="updateusertrade__login__put"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/updateusertrade</span>/{login}</h4></div><div class="modal-body"><div class="alert alert-info"><p>Update user tarde by login - trade_alertusers</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>Authenticate this to any method that needs a valid JWT to be set.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#updateusertrade__login__put_request" data-toggle="tab">Request</a></li><li><a href="#updateusertrade__login__put_response" data-toggle="tab">Response</a></li><li><a href="#updateusertrade__login__put_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="updateusertrade__login__put_request"><h3>URI Parameters</h3><ul><li><strong>login</strong>: <em>required (string)</em></li></ul><h3>Headers</h3><ul><li><strong>Accept</strong>: <em>required (string - default: application/json)</em><p>The accept is required for validation.</p></li><li><strong>Content-Type</strong>: <em>required (string - default: application/json)</em><p>Type of request.</p></li></ul><h3>Body</h3><p><strong>Media type</strong>: application/x-www-form-urlencoded</p><p><strong>Type</strong>: object</p><strong>Properties</strong><ul><li><strong>volume</strong>: <em>required (integer)</em></li><li><strong>isUpdate</strong>: <em>(integer)</em></li></ul><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+"volume":111,
+"isUpdate":1
+}
+</code></pre></div></div><div class="tab-pane" id="updateusertrade__login__put_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+    "message": "Trade alert updated sucessfully",
+    "status_code": 200
+}
+</code></pre></div></div><div class="tab-pane" id="updateusertrade__login__put_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>x-AuthToken</p></li></ul></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="deleteusertrade" class="panel-title">/deleteusertrade</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_deleteusertrade__login_"><span class="parent">/deleteusertrade</span>/{login}</a> <span class="methods"><a href="#deleteusertrade__login__delete"><span class="badge badge_delete">delete <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_deleteusertrade__login_" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#deleteusertrade__login__delete'" class="list-group-item"><span class="badge badge_delete">delete <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Delete user trade by server and mangerId - trade_alertusers</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="deleteusertrade__login__delete"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_delete">delete <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/deleteusertrade</span>/{login}</h4></div><div class="modal-body"><div class="alert alert-info"><p>Delete user trade by server and mangerId - trade_alertusers</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>Authenticate this to any method that needs a valid JWT to be set.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#deleteusertrade__login__delete_request" data-toggle="tab">Request</a></li><li><a href="#deleteusertrade__login__delete_response" data-toggle="tab">Response</a></li><li><a href="#deleteusertrade__login__delete_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="deleteusertrade__login__delete_request"><h3>URI Parameters</h3><ul><li><strong>login</strong>: <em>required (string)</em></li></ul><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p></div><div class="tab-pane" id="deleteusertrade__login__delete_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+    "message": "Trade alert deleted sucessfully",
+    "status_code": 200
+}
+</code></pre></div></div><div class="tab-pane" id="deleteusertrade__login__delete_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>x-AuthToken</p></li></ul></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="getlogin" class="panel-title">/getlogin</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_getlogin"><span class="parent"></span>/getlogin</a> <span class="methods"><a href="#getlogin_get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_getlogin" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#getlogin_get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Get login saved for a perticular server and managerId - trade_alertusers</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="getlogin_get"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent"></span>/getlogin</h4></div><div class="modal-body"><div class="alert alert-info"><p>Get login saved for a perticular server and managerId - trade_alertusers</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>Authenticate this to any method that needs a valid JWT to be set.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#getlogin_get_request" data-toggle="tab">Request</a></li><li><a href="#getlogin_get_response" data-toggle="tab">Response</a></li><li><a href="#getlogin_get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="getlogin_get_request"><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p></div><div class="tab-pane" id="getlogin_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+    "login": "3343366,3264739,2555227,3287962,2555033,3327472,3270506,3272965,3279187,3281162,3291481,3333124,3333279,3333288,9,7,6,3,1150,118"
+}
+</code></pre></div></div><div class="tab-pane" id="getlogin_get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>x-AuthToken</p></li></ul></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="lasttrade" class="panel-title">/lasttrade</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_lasttrade"><span class="parent"></span>/lasttrade</a> <span class="methods"><a href="#lasttrade_get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_lasttrade" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#lasttrade_get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Get details by servername without id - lasttrade_whitelabels</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="lasttrade_get"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent"></span>/lasttrade</h4></div><div class="modal-body"><div class="alert alert-info"><p>Get details by servername without id - lasttrade_whitelabels</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>Authenticate this to any method that needs a valid JWT to be set.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#lasttrade_get_response" data-toggle="tab">Response</a></li><li><a href="#lasttrade_get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="lasttrade_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+    "data": [
+        {
+            "id": 26,
+            "servername": "TDSSKY",
+            "whitelabels": "Tds",
+            "groups": "TDVFIX2,TDVFIX1,TDVTESTVIP,TDVTEST",
+            "botime": 3,
+            "fxtime": 1,
+            "emails": "rctestq@gmail.com,broctagonfoxmanager@gmail.com",
+            "editurl": "api/v1/updatelasttrade/26"
+        },
+        {
+            "id": 27,
+            "servername": "TDSSKY",
+            "whitelabels": "Sky",
+            "groups": "SKYLVTEST,SKYLVFIX1,SKYLVHR,SKYLVTESTVIP,SKYLVVIPFIX1",
+            "botime": 3,
+            "fxtime": 3,
+            "emails": "rctestq@gmail.com,broctagonfoxmanager@gmail.com",
+            "editurl": "api/v1/updatelasttrade/27"
+        }
+    ]
+}
+</code></pre></div></div><div class="tab-pane" id="lasttrade_get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>x-AuthToken</p></li></ul></div></div></div></div></div></div></div><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_lasttrade__id_"><span class="parent">/lasttrade</span>/{id}</a> <span class="methods"><a href="#lasttrade__id__get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a> <a href="#lasttrade__id__put"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_lasttrade__id_" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#lasttrade__id__get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Get details by servername by id - lasttrade_whitelabels</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#lasttrade__id__put'" class="list-group-item"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>update only bo_time and fx_time by id - lasttrade_whitelabels</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="lasttrade__id__get"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/lasttrade</span>/{id}</h4></div><div class="modal-body"><div class="alert alert-info"><p>Get details by servername by id - lasttrade_whitelabels</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>Authenticate this to any method that needs a valid JWT to be set.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#lasttrade__id__get_request" data-toggle="tab">Request</a></li><li><a href="#lasttrade__id__get_response" data-toggle="tab">Response</a></li><li><a href="#lasttrade__id__get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="lasttrade__id__get_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em></li></ul></div><div class="tab-pane" id="lasttrade__id__get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+    "data": [
+        {
+            "id": 26,
+            "servername": "TDSSKY",
+            "whitelabels": "Tds",
+            "groups": "TDVFIX2,TDVFIX1,TDVTESTVIP,TDVTEST",
+            "botime": 3,
+            "fxtime": 1,
+            "emails": "rctestq@gmail.com,broctagonfoxmanager@gmail.com",
+            "editurl": "api/v1/updatelasttrade/26"
+        }
+    ]
+}
+</code></pre></div></div><div class="tab-pane" id="lasttrade__id__get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>x-AuthToken</p></li></ul></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="lasttrade__id__put"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/lasttrade</span>/{id}</h4></div><div class="modal-body"><div class="alert alert-info"><p>update only bo_time and fx_time by id - lasttrade_whitelabels</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>Authenticate this to any method that needs a valid JWT to be set.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#lasttrade__id__put_request" data-toggle="tab">Request</a></li><li><a href="#lasttrade__id__put_response" data-toggle="tab">Response</a></li><li><a href="#lasttrade__id__put_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="lasttrade__id__put_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em></li></ul><h3>Headers</h3><ul><li><strong>Accept</strong>: <em>required (string - default: application/json)</em><p>The accept is required for validation.</p></li><li><strong>Content-Type</strong>: <em>required (string - default: application/json)</em><p>Type of request.</p></li></ul><h3>Body</h3><p><strong>Media type</strong>: application/x-www-form-urlencoded</p><p><strong>Type</strong>: object</p><strong>Properties</strong><ul><li><strong>botime</strong>: <em>required (integer)</em></li><li><strong>fxtime</strong>: <em>required (integer)</em></li></ul><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+"botime":1,
+"fxtime":2
+}
+</code></pre></div></div><div class="tab-pane" id="lasttrade__id__put_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+    "message": "Trades updated sucessfully",
+    "status_code": 200
+}
+</code></pre></div></div><div class="tab-pane" id="lasttrade__id__put_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>x-AuthToken</p></li></ul></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="getwhitelabel" class="panel-title">/getwhitelabel</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_getwhitelabel"><span class="parent"></span>/getwhitelabel</a> <span class="methods"><a href="#getwhitelabel_get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_getwhitelabel" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#getwhitelabel_get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Get only whitelable name without id by server - lasttrade_whitelabels</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="getwhitelabel_get"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent"></span>/getwhitelabel</h4></div><div class="modal-body"><div class="alert alert-info"><p>Get only whitelable name without id by server - lasttrade_whitelabels</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>Authenticate this to any method that needs a valid JWT to be set.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#getwhitelabel_get_response" data-toggle="tab">Response</a></li><li><a href="#getwhitelabel_get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="getwhitelabel_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+    "data": [
+        {
+            "id": 26,
+            "server": "TDSSKY",
+            "whitelabels": "Tds"
+        },
+        {
+            "id": 27,
+            "server": "TDSSKY",
+            "whitelabels": "Sky"
+        }
+    ]
+}
+</code></pre></div></div><div class="tab-pane" id="getwhitelabel_get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>x-AuthToken</p></li></ul></div></div></div></div></div></div></div><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_getwhitelabel__id_"><span class="parent">/getwhitelabel</span>/{id}</a> <span class="methods"><a href="#getwhitelabel__id__get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_getwhitelabel__id_" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#getwhitelabel__id__get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Get only whitelable name by id by server - lasttrade_whitelabels</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="getwhitelabel__id__get"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/getwhitelabel</span>/{id}</h4></div><div class="modal-body"><div class="alert alert-info"><p>Get only whitelable name by id by server - lasttrade_whitelabels</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>Authenticate this to any method that needs a valid JWT to be set.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#getwhitelabel__id__get_request" data-toggle="tab">Request</a></li><li><a href="#getwhitelabel__id__get_response" data-toggle="tab">Response</a></li><li><a href="#getwhitelabel__id__get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="getwhitelabel__id__get_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em></li></ul></div><div class="tab-pane" id="getwhitelabel__id__get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+    "data": [
+        {
+            "id": 27,
+            "server": "TDSSKY",
+            "whitelabels": "Sky"
+        }
+    ]
+}
+</code></pre></div></div><div class="tab-pane" id="getwhitelabel__id__get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>x-AuthToken</p></li></ul></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="createtradegroup" class="panel-title">/createtradegroup</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_createtradegroup"><span class="parent"></span>/createtradegroup</a> <span class="methods"><a href="#createtradegroup_post"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_createtradegroup" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#createtradegroup_post'" class="list-group-item"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>save data by managerId and server - report_group,report_gruoptousers</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="createtradegroup_post"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent"></span>/createtradegroup</h4></div><div class="modal-body"><div class="alert alert-info"><p>save data by managerId and server - report_group,report_gruoptousers</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>Authenticate this to any method that needs a valid JWT to be set.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#createtradegroup_post_request" data-toggle="tab">Request</a></li><li><a href="#createtradegroup_post_response" data-toggle="tab">Response</a></li><li><a href="#createtradegroup_post_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="createtradegroup_post_request"><h3>Headers</h3><ul><li><strong>Accept</strong>: <em>required (string - default: application/json)</em><p>The accept is required for validation.</p></li><li><strong>Content-Type</strong>: <em>required (string - default: application/json)</em><p>Type of request.</p></li></ul><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><strong>Properties</strong><ul><li><strong>group_name</strong>: <em>required (string)</em></li><li><strong>login</strong>: <em>(string)</em></li></ul><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+	"group_name":"A",
+  "login": "1,2A"
+}
+</code></pre></div></div><div class="tab-pane" id="createtradegroup_post_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+    "message": "Group and Login added sucessfully",
+    "status_code": 200
+}
+</code></pre></div></div><div class="tab-pane" id="createtradegroup_post_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>x-AuthToken</p></li></ul></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="updatetradegroup" class="panel-title">/updatetradegroup</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_updatetradegroup"><span class="parent"></span>/updatetradegroup</a> <span class="methods"><a href="#updatetradegroup_put"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_updatetradegroup" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#updatetradegroup_put'" class="list-group-item"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>update data (group_name,login) by group_id - report_group,report_gruoptousers</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="updatetradegroup_put"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent"></span>/updatetradegroup</h4></div><div class="modal-body"><div class="alert alert-info"><p>update data (group_name,login) by group_id - report_group,report_gruoptousers</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>Authenticate this to any method that needs a valid JWT to be set.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#updatetradegroup_put_request" data-toggle="tab">Request</a></li><li><a href="#updatetradegroup_put_response" data-toggle="tab">Response</a></li><li><a href="#updatetradegroup_put_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="updatetradegroup_put_request"><h3>Headers</h3><ul><li><strong>Accept</strong>: <em>required (string - default: application/json)</em><p>The accept is required for validation.</p></li><li><strong>Content-Type</strong>: <em>required (string - default: application/json)</em><p>Type of request.</p></li></ul><h3>Body</h3><p><strong>Media type</strong>: application/x-www-form-urlencoded</p><p><strong>Type</strong>: object</p><strong>Properties</strong><ul><li><strong>group_name</strong>: <em>required (string)</em></li><li><strong>login</strong>: <em>(string)</em></li><li><strong>group_id</strong>: <em>required (integer)</em></li></ul><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+"group_name" : "amm",
+"login" : "10,23",
+"group_id" : 286
+}
+</code></pre></div></div><div class="tab-pane" id="updatetradegroup_put_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+    "message": "Group and Login updated sucessfully",
+    "status_code": 200
+}
+</code></pre></div></div><div class="tab-pane" id="updatetradegroup_put_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>x-AuthToken</p></li></ul></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="gettradegrouplist" class="panel-title">/gettradegrouplist</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_gettradegrouplist"><span class="parent"></span>/gettradegrouplist</a> <span class="methods"><a href="#gettradegrouplist_get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_gettradegrouplist" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#gettradegrouplist_get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>get data without id - report_group,report_gruoptousers</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="gettradegrouplist_get"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent"></span>/gettradegrouplist</h4></div><div class="modal-body"><div class="alert alert-info"><p>get data without id - report_group,report_gruoptousers</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>Authenticate this to any method that needs a valid JWT to be set.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#gettradegrouplist_get_response" data-toggle="tab">Response</a></li><li><a href="#gettradegrouplist_get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="gettradegrouplist_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+    "data": [
+        {
+            "report_group_id": 259,
+            "report_group_managerid": 100,
+            "report_group_groupname": "casio",
+            "report_group_servername": "TDSSKY"
+        },
+        {
+            "report_group_id": 260,
+            "report_group_managerid": 100,
+            "report_group_groupname": "test",
+            "report_group_servername": "TDSSKY"
+        },
+        {
+            "report_group_id": 296,
+            "report_group_managerid": 100,
+            "report_group_groupname": "r",
+            "report_group_servername": "TDSSKY"
+        },
+        {
+            "report_group_id": 297,
+            "report_group_managerid": 100,
+            "report_group_groupname": "A",
+            "report_group_servername": "TDSSKY"
+        }
+    ]
+}
+</code></pre></div></div><div class="tab-pane" id="gettradegrouplist_get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>x-AuthToken</p></li></ul></div></div></div></div></div></div></div><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_gettradegrouplist__id_"><span class="parent">/gettradegrouplist</span>/{id}</a> <span class="methods"><a href="#gettradegrouplist__id__get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_gettradegrouplist__id_" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#gettradegrouplist__id__get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>get data by id - report_group,report_gruoptousers</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="gettradegrouplist__id__get"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/gettradegrouplist</span>/{id}</h4></div><div class="modal-body"><div class="alert alert-info"><p>get data by id - report_group,report_gruoptousers</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>Authenticate this to any method that needs a valid JWT to be set.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#gettradegrouplist__id__get_request" data-toggle="tab">Request</a></li><li><a href="#gettradegrouplist__id__get_response" data-toggle="tab">Response</a></li><li><a href="#gettradegrouplist__id__get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="gettradegrouplist__id__get_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em></li></ul></div><div class="tab-pane" id="gettradegrouplist__id__get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+    "data": "2555033,2555220,2555227,2682219,3249218,3257462"
+}
+</code></pre></div></div><div class="tab-pane" id="gettradegrouplist__id__get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>x-AuthToken</p></li></ul></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="deletetradegrouplist" class="panel-title">/deletetradegrouplist</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_deletetradegrouplist"><span class="parent"></span>/deletetradegrouplist</a> <span class="methods"><a href="#deletetradegrouplist_delete"><span class="badge badge_delete">delete <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_deletetradegrouplist" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#deletetradegrouplist_delete'" class="list-group-item"><span class="badge badge_delete">delete <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>delete record by group id</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="deletetradegrouplist_delete"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_delete">delete <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent"></span>/deletetradegrouplist</h4></div><div class="modal-body"><div class="alert alert-info"><p>delete record by group id</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>Authenticate this to any method that needs a valid JWT to be set.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#deletetradegrouplist_delete_request" data-toggle="tab">Request</a></li><li><a href="#deletetradegrouplist_delete_response" data-toggle="tab">Response</a></li><li><a href="#deletetradegrouplist_delete_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="deletetradegrouplist_delete_request"><h3>Headers</h3><ul><li><strong>Accept</strong>: <em>required (string - default: application/json)</em><p>The accept is required for validation.</p></li><li><strong>Content-Type</strong>: <em>required (string - default: application/json)</em><p>Type of request.</p></li></ul><h3>Body</h3><p><strong>Media type</strong>: application/x-www-form-urlencoded</p><p><strong>Type</strong>: object</p><strong>Properties</strong><ul><li><strong>group_id</strong>: <em>required (integer)</em></li></ul><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+  "group_id" : 292
+}
+</code></pre></div></div><div class="tab-pane" id="deletetradegrouplist_delete_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+    "message": "Group and Login deleted sucessfully",
+    "status_code": 200
+}
+</code></pre></div></div><div class="tab-pane" id="deletetradegrouplist_delete_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>x-AuthToken</p></li></ul></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="createauditlog" class="panel-title">/createauditlog</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_createauditlog"><span class="parent"></span>/createauditlog</a> <span class="methods"><a href="#createauditlog_post"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_createauditlog" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#createauditlog_post'" class="list-group-item"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>save data by server and managerId - auditlog</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="createauditlog_post"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent"></span>/createauditlog</h4></div><div class="modal-body"><div class="alert alert-info"><p>save data by server and managerId - auditlog</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>Authenticate this to any method that needs a valid JWT to be set.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#createauditlog_post_request" data-toggle="tab">Request</a></li><li><a href="#createauditlog_post_response" data-toggle="tab">Response</a></li><li><a href="#createauditlog_post_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="createauditlog_post_request"><h3>Headers</h3><ul><li><strong>Accept</strong>: <em>required (string - default: application/json)</em><p>The accept is required for validation.</p></li><li><strong>Content-Type</strong>: <em>required (string - default: application/json)</em><p>Type of request.</p></li></ul><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><strong>Properties</strong><ul><li><strong>logname</strong>: <em>required (string)</em></li><li><strong>date</strong>: <em>required (string)</em></li><li><strong>condition</strong>: <em>(string)</em></li></ul><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+	"logname":"BO SELL",
+	"date":"2016-08-25 16:27:19",
+	"condition":"ASIAbo Exceeded Volume Limit of 10000 and Volume Average of 100.00"
+}
+</code></pre></div></div><div class="tab-pane" id="createauditlog_post_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+    "message": "AuditLog added sucessfully",
+    "status_code": 200
+}
+</code></pre></div></div><div class="tab-pane" id="createauditlog_post_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>x-AuthToken</p></li></ul></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="getauditlog" class="panel-title">/getauditlog</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_getauditlog"><span class="parent"></span>/getauditlog</a> <span class="methods"><a href="#getauditlog_get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_getauditlog" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#getauditlog_get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Get data by parameter - start_date,end_date,logname,condition - auditlog</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="getauditlog_get"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent"></span>/getauditlog</h4></div><div class="modal-body"><div class="alert alert-info"><p>Get data by parameter - start_date,end_date,logname,condition - auditlog</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>Authenticate this to any method that needs a valid JWT to be set.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#getauditlog_get_request" data-toggle="tab">Request</a></li><li><a href="#getauditlog_get_response" data-toggle="tab">Response</a></li><li><a href="#getauditlog_get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="getauditlog_get_request"><h3>Query Parameters</h3><ul><li><strong>start_date</strong>: <em>required (string)</em><p>contains start date</p></li><li><strong>end_date</strong>: <em>required (string - default: containes end date)</em></li><li><strong>logname</strong>: <em>required (string - default: contains log name e.g bo buy)</em></li><li><strong>condition</strong>: <em>required (string - default: e.g METALSbo Exceeded Volume Limit of 1000)</em></li></ul></div><div class="tab-pane" id="getauditlog_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+    "data": [
+        {
+            "server": "TDSSKY",
+            "logname": "BO SELL",
+            "date": "2016-08-25 16:27:19",
+            "condition": "ASIAbo Exceeded Volume Limit of 10000 and Volume Average of 100.00"
+        },
+        {
+            "server": "TDSSKY",
+            "logname": "BO SELL",
+            "date": "2016-08-25 16:27:19",
+            "condition": "ASIAbo Exceeded Volume Limit of 10000 and Volume Average of 100.00"
+        },
+        {
+            "server": "TDSSKY",
+            "logname": "BO SELL",
+            "date": "2016-08-25 16:27:19",
+            "condition": "ASIAbo Exceeded Volume Limit of 10000 and Volume Average of 100.00"
+        }
+    ]
+}
+</code></pre></div></div><div class="tab-pane" id="getauditlog_get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>x-AuthToken</p></li></ul></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="getlasttradealert" class="panel-title">/getlasttradealert</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_getlasttradealert"><span class="parent"></span>/getlasttradealert</a> <span class="methods"><a href="#getlasttradealert_post"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_getlasttradealert" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#getlasttradealert_post'" class="list-group-item"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>get data by ticket - auditlog</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="getlasttradealert_post"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent"></span>/getlasttradealert</h4></div><div class="modal-body"><div class="alert alert-info"><p>get data by ticket - auditlog</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>Authenticate this to any method that needs a valid JWT to be set.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#getlasttradealert_post_request" data-toggle="tab">Request</a></li><li><a href="#getlasttradealert_post_response" data-toggle="tab">Response</a></li><li><a href="#getlasttradealert_post_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="getlasttradealert_post_request"><h3>Headers</h3><ul><li><strong>Accept</strong>: <em>required (string - default: application/json)</em><p>The accept is required for validation.</p></li><li><strong>Content-Type</strong>: <em>required (string - default: application/json)</em><p>Type of request.</p></li></ul><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><strong>Properties</strong><ul><li><strong>ticket</strong>: <em>required (integer)</em></li></ul><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+	"ticket":123
+}
+</code></pre></div></div><div class="tab-pane" id="getlasttradealert_post_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+    "data": [
+        {
+            "ticket": "123",
+            "whitelabels": "tst"
+        }
+    ]
+}
+</code></pre></div></div><div class="tab-pane" id="getlasttradealert_post_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>x-AuthToken</p></li></ul></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="savelasttradealert" class="panel-title">/savelasttradealert</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_savelasttradealert"><span class="parent"></span>/savelasttradealert</a> <span class="methods"><a href="#savelasttradealert_post"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_savelasttradealert" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#savelasttradealert_post'" class="list-group-item"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>save data - auditlog</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="savelasttradealert_post"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent"></span>/savelasttradealert</h4></div><div class="modal-body"><div class="alert alert-info"><p>save data - auditlog</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>Authenticate this to any method that needs a valid JWT to be set.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#savelasttradealert_post_request" data-toggle="tab">Request</a></li><li><a href="#savelasttradealert_post_response" data-toggle="tab">Response</a></li><li><a href="#savelasttradealert_post_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="savelasttradealert_post_request"><h3>Headers</h3><ul><li><strong>Accept</strong>: <em>required (string - default: application/json)</em><p>The accept is required for validation.</p></li><li><strong>Content-Type</strong>: <em>required (string - default: application/json)</em><p>Type of request.</p></li></ul><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><strong>Properties</strong><ul><li><strong>ticket</strong>: <em>required (integer)</em></li><li><strong>whitelabel</strong>: <em>required (string)</em></li></ul><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+	"ticket":890150,
+  "whitelabel":"GQFX"
+}
+</code></pre></div></div><div class="tab-pane" id="savelasttradealert_post_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+    "message": "Email alert added sucessfully",
+    "status_code": 200
+}
+</code></pre></div></div><div class="tab-pane" id="savelasttradealert_post_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>x-AuthToken</p></li></ul></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="savemailsetting" class="panel-title">/savemailsetting</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_savemailsetting"><span class="parent"></span>/savemailsetting</a> <span class="methods"><a href="#savemailsetting_post"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_savemailsetting" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#savemailsetting_post'" class="list-group-item"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>save data for mail setting - mailsettings</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="savemailsetting_post"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent"></span>/savemailsetting</h4></div><div class="modal-body"><div class="alert alert-info"><p>save data for mail setting - mailsettings</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>Authenticate this to any method that needs a valid JWT to be set.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#savemailsetting_post_request" data-toggle="tab">Request</a></li><li><a href="#savemailsetting_post_response" data-toggle="tab">Response</a></li><li><a href="#savemailsetting_post_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="savemailsetting_post_request"><h3>Headers</h3><ul><li><strong>Accept</strong>: <em>required (string - default: application/json)</em><p>The accept is required for validation.</p></li><li><strong>Content-Type</strong>: <em>required (string - default: application/json)</em><p>Type of request.</p></li></ul><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+  "smtpserver":"smtp.gmail.com",
+  "mailfrom":"test@gmail.com",
+  "mailto":"test123@gmail.com",
+  "password":"12344",
+  "port":"5133",
+  "ssl":0,
+  "enabled":1
+}
+</code></pre></div></div><div class="tab-pane" id="savemailsetting_post_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+    "message": "Mail setting saved sucessfully",
+    "status_code": 200
+}
+</code></pre></div></div><div class="tab-pane" id="savemailsetting_post_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>x-AuthToken</p></li></ul></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="savetradealert" class="panel-title">/savetradealert</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_savetradealert"><span class="parent"></span>/savetradealert</a> <span class="methods"><a href="#savetradealert_post"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_savetradealert" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#savetradealert_post'" class="list-group-item"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>save data by login managerid - trade_alert_discard</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="savetradealert_post"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent"></span>/savetradealert</h4></div><div class="modal-body"><div class="alert alert-info"><p>save data by login managerid - trade_alert_discard</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>Authenticate this to any method that needs a valid JWT to be set.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#savetradealert_post_request" data-toggle="tab">Request</a></li><li><a href="#savetradealert_post_response" data-toggle="tab">Response</a></li><li><a href="#savetradealert_post_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="savetradealert_post_request"><h3>Headers</h3><ul><li><strong>Accept</strong>: <em>required (string - default: application/json)</em><p>The accept is required for validation.</p></li><li><strong>Content-Type</strong>: <em>required (string - default: application/json)</em><p>Type of request.</p></li></ul><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><strong>Properties</strong><ul><li><strong>ticket</strong>: <em>required (integer)</em></li></ul><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+	"ticket":937447756
+}
+</code></pre></div></div><div class="tab-pane" id="savetradealert_post_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+    "message": "Trade alert dicrad saved sucessfully",
+    "status_code": 200
+}
+</code></pre></div></div><div class="tab-pane" id="savetradealert_post_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>x-AuthToken</p></li></ul></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="gettradealert" class="panel-title">/gettradealert</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_gettradealert"><span class="parent"></span>/gettradealert</a> <span class="methods"><a href="#gettradealert_post"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_gettradealert" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#gettradealert_post'" class="list-group-item"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>gate data by ticket - trade_alert_discard</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="gettradealert_post"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent"></span>/gettradealert</h4></div><div class="modal-body"><div class="alert alert-info"><p>gate data by ticket - trade_alert_discard</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>Authenticate this to any method that needs a valid JWT to be set.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#gettradealert_post_request" data-toggle="tab">Request</a></li><li><a href="#gettradealert_post_response" data-toggle="tab">Response</a></li><li><a href="#gettradealert_post_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="gettradealert_post_request"><h3>Headers</h3><ul><li><strong>Accept</strong>: <em>required (string - default: application/json)</em><p>The accept is required for validation.</p></li><li><strong>Content-Type</strong>: <em>required (string - default: application/json)</em><p>Type of request.</p></li></ul><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><strong>Properties</strong><ul><li><strong>addedon</strong>: <em>required (string)</em></li></ul><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+	 "addedon":"2017-09-15 13:51:04"
+}
+</code></pre></div></div><div class="tab-pane" id="gettradealert_post_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+    "data": [
+        {
+            "Ticket": "937447756",
+            "Login": "837",
+            "Addedon": "2017-09-15 13:51:04"
+        }
+    ]
+}
+</code></pre></div></div><div class="tab-pane" id="gettradealert_post_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>x-AuthToken</p></li></ul></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="passwordupdate" class="panel-title">/passwordupdate</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_passwordupdate"><span class="parent"></span>/passwordupdate</a> <span class="methods"><a href="#passwordupdate_post"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_passwordupdate" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#passwordupdate_post'" class="list-group-item"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>update/change password by token - users</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="passwordupdate_post"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent"></span>/passwordupdate</h4></div><div class="modal-body"><div class="alert alert-info"><p>update/change password by token - users</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>Authenticate this to any method that needs a valid JWT to be set.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#passwordupdate_post_request" data-toggle="tab">Request</a></li><li><a href="#passwordupdate_post_response" data-toggle="tab">Response</a></li><li><a href="#passwordupdate_post_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="passwordupdate_post_request"><h3>Headers</h3><ul><li><strong>Accept</strong>: <em>required (string - default: application/json)</em><p>The accept is required for validation.</p></li><li><strong>Content-Type</strong>: <em>required (string - default: application/json)</em><p>Type of request.</p></li></ul><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><strong>Properties</strong><ul><li><strong>new_password</strong>: <em>required (string)</em></li></ul><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+  "new_password":"Foc@Av##73"
+}
+</code></pre></div></div><div class="tab-pane" id="passwordupdate_post_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+    "message": "password updated sucessfully",
+    "status_code": 200
+}
+</code></pre></div></div><div class="tab-pane" id="passwordupdate_post_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>x-AuthToken</p></li></ul></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="saveselectedtab" class="panel-title">/saveselectedtab</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_saveselectedtab"><span class="parent"></span>/saveselectedtab</a> <span class="methods"><a href="#saveselectedtab_post"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_saveselectedtab" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#saveselectedtab_post'" class="list-group-item"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>save tab/permission selected by user by token - tab_selected</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="saveselectedtab_post"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent"></span>/saveselectedtab</h4></div><div class="modal-body"><div class="alert alert-info"><p>save tab/permission selected by user by token - tab_selected</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>Authenticate this to any method that needs a valid JWT to be set.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#saveselectedtab_post_request" data-toggle="tab">Request</a></li><li><a href="#saveselectedtab_post_response" data-toggle="tab">Response</a></li><li><a href="#saveselectedtab_post_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="saveselectedtab_post_request"><h3>Headers</h3><ul><li><strong>Accept</strong>: <em>required (string - default: application/json)</em><p>The accept is required for validation.</p></li><li><strong>Content-Type</strong>: <em>required (string - default: application/json)</em><p>Type of request.</p></li></ul><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><strong>Properties</strong><ul><li><strong>tab_setting</strong>: <em>required (string)</em></li></ul><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+	"tab_setting" : "VolumeSummary,Top5PendingFX"
+}
+</code></pre></div></div><div class="tab-pane" id="saveselectedtab_post_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+    "message": "tab setting updated sucessfully",
+    "status_code": 200
+}
+</code></pre></div></div><div class="tab-pane" id="saveselectedtab_post_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>x-AuthToken</p></li></ul></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="tabeselect" class="panel-title">/tabeselect</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_tabeselect"><span class="parent"></span>/tabeselect</a> <span class="methods"><a href="#tabeselect_get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_tabeselect" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#tabeselect_get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>get tab/permission selected by user by token - tab_selected</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="tabeselect_get"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent"></span>/tabeselect</h4></div><div class="modal-body"><div class="alert alert-info"><p>get tab/permission selected by user by token - tab_selected</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>Authenticate this to any method that needs a valid JWT to be set.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#tabeselect_get_response" data-toggle="tab">Response</a></li><li><a href="#tabeselect_get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="tabeselect_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>[
+    {
+        "tabname": "OverallMonitoring",
+        "status": 0
+    },
+    {
+        "tabname": "Lasttrade",
+        "status": 0
+    },
+    {
+        "tabname": "AllowEquilibrium",
+        "status": 0
+    },
+    {
+        "tabname": "AllowLastTrade",
+        "status": 0
+    },
+    {
+        "tabname": "VolumeSummary ",
+        "status": 1
+    },
+    {
+        "tabname": "Top5PendingFX",
+        "status": 0
+    }
+]
+</code></pre></div></div><div class="tab-pane" id="tabeselect_get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>x-AuthToken</p></li></ul></div></div></div></div></div></div></div></div></div></div></div><div class="col-md-3"><div id="sidebar" class="hidden-print affix" role="complementary"><ul class="nav nav-pills nav-stacked"><li><a href="#users">/users</a></li><li><a href="#getglobalalertom">/getglobalalertom</a></li><li><a href="#setglobalalertom">/setglobalalertom</a></li><li><a href="#deleteglobalalertom">/deleteglobalalertom</a></li><li><a href="#saveboalert">/saveboalert</a></li><li><a href="#getboalert">/getboalert</a></li><li><a href="#deleteboalert">/deleteboalert</a></li><li><a href="#usertrade">/usertrade</a></li><li><a href="#saveusertrade">/saveusertrade</a></li><li><a href="#updateusertrade">/updateusertrade</a></li><li><a href="#deleteusertrade">/deleteusertrade</a></li><li><a href="#getlogin">/getlogin</a></li><li><a href="#lasttrade">/lasttrade</a></li><li><a href="#getwhitelabel">/getwhitelabel</a></li><li><a href="#createtradegroup">/createtradegroup</a></li><li><a href="#updatetradegroup">/updatetradegroup</a></li><li><a href="#gettradegrouplist">/gettradegrouplist</a></li><li><a href="#deletetradegrouplist">/deletetradegrouplist</a></li><li><a href="#createauditlog">/createauditlog</a></li><li><a href="#getauditlog">/getauditlog</a></li><li><a href="#getlasttradealert">/getlasttradealert</a></li><li><a href="#savelasttradealert">/savelasttradealert</a></li><li><a href="#savemailsetting">/savemailsetting</a></li><li><a href="#savetradealert">/savetradealert</a></li><li><a href="#gettradealert">/gettradealert</a></li><li><a href="#passwordupdate">/passwordupdate</a></li><li><a href="#saveselectedtab">/saveselectedtab</a></li><li><a href="#tabeselect">/tabeselect</a></li></ul></div></div></div></div></body></html>

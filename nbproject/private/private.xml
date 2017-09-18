@@ -3,21 +3,60 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/amiya/Documents/projects/foxaclapi/src/Broctagon/Api/V1/services/Containers/UserContainer.php</file>
-            <file>file:/Users/amiya/Documents/projects/foxaclapi/src/Broctagon/Api/V1/services/Containers/AlertContainer.php</file>
             <file>file:/Users/amiya/Documents/projects/foxaclapi/src/Broctagon/Api/V1/Models/lasttrade_whitelabels_emails_alert.php</file>
-            <file>file:/Users/amiya/Documents/projects/foxaclapi/src/Broctagon/Api/V1/Alert/Http/Controllers/TradealertdiscardController.php</file>
-            <file>file:/Users/amiya/Documents/projects/foxaclapi/src/Broctagon/Api/V1/Models/Usertrade.php</file>
-            <file>file:/Users/amiya/Documents/projects/foxaclapi/src/Broctagon/Api/V1/Configs/routes.php</file>
-            <file>file:/Users/amiya/Documents/projects/foxaclapi/src/Broctagon/Api/V1/Models/Mt4gateway.php</file>
-            <file>file:/Users/amiya/Documents/projects/foxaclapi/src/Broctagon/Api/V1/Models/lasttrade_whitelabels.php</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/src/Broctagon/Api/V1/Users/Http/Controllers/UserController.php</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/public/views/createRole.html</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/src/Broctagon/Api/V1/Models/TabSelected.php</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/public/views/createGateway.html</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/public/scripts/whiteLabelsController.js</file>
             <file>file:/Users/amiya/Documents/projects/foxaclapi/app/Http/Requests/UpdateUser.php</file>
             <file>file:/Users/amiya/Documents/projects/foxaclapi/src/Broctagon/Api/V1/Alert/Http/Controllers/LastTradeController.php</file>
-            <file>file:/Users/amiya/Documents/projects/foxaclapi/src/Broctagon/Api/V1/services/Containers/GatewayContainer.php</file>
-            <file>file:/Users/amiya/Documents/projects/foxaclapi/src/Broctagon/Api/V1/Alert/Http/Controllers/AlertController.php</file>
-            <file>file:/Users/amiya/Documents/projects/foxaclapi/src/Broctagon/Api/V1/Common/Common.php</file>
-            <file>file:/Users/amiya/Documents/projects/foxaclapi/src/Broctagon/Api/V1/Models/Mailsetting.php</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/public/views/createUser.html</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/app/Http/Requests/Mt4gateway.php</file>
             <file>file:/Users/amiya/Documents/projects/foxaclapi/src/Broctagon/Api/V1/Models/User.php</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/public/index.php</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/app/Http/Requests/user_trade.php</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/src/Broctagon/Api/V1/Models/lasttrade_whitelabels.php</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/app/Http/Requests/StoreUser.php</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/app/Http/Requests/createWhiteLabel.php</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/public/scripts/roleController.js</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/public/scripts/serverController.js</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/app/Http/Requests/reportgroup_update.php</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/src/Broctagon/Api/V1/Users/Http/Controllers/TabselectController.php</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/src/Broctagon/Api/V1/Common/Common.php</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/src/Broctagon/Api/V1/services/Providers/UserServiceProvider.php</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/app/Http/Requests/updateWhiteLabel.php</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/src/Broctagon/Api/V1/services/Containers/AlertContainer.php</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/public/views/createServer.html</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/src/Broctagon/Api/V1/Server/Http/Controllers/ServerController.php</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/public/scripts/gatewayController.js</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/src/Broctagon/Api/V1/Gateway/Http/Controllers/GatewayController.php</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/app/Http/Requests/reportgroup.php</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/public/scripts/authController.js</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/resources/lang/en/validation.php</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/public/views/createWhitelabel.html</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/app/Http/Requests/serverlistUpdate.php</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/public/views/createPermission.html</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/src/Broctagon/Api/V1/Alert/Http/Controllers/AlertController.php</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/public/views/authView.html</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/src/Broctagon/Api/V1/services/Containers/UserContainer.php</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/app/Providers/AppServiceProvider.php</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/src/Broctagon/Api/V1/Alert/Http/Controllers/TradealertdiscardController.php</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/src/Broctagon/Api/V1/Models/Usertrade.php</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/config/app.php</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/src/Broctagon/Api/V1/Configs/routes.php</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/src/Broctagon/Api/V1/Models/Mt4gateway.php</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/src/Broctagon/Api/V1/Alert/Http/Controllers/mailsettingController.php</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/src/Broctagon/Api/V1/Alert/Http/Controllers/ReportGroupController.php</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/src/Broctagon/Api/V1/Common/FoxValidation.php</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/src/Broctagon/Api/V1/services/Containers/ServerContainer.php</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/src/Broctagon/Api/V1/Models/ReportGroup.php</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/src/Broctagon/Api/V1/Models/trade_alert_discard.php</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/app/Http/Requests/serverlist.php</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/public/scripts/userController.js</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/public/scripts/permissionController.js</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/resources/lang/en/user.php</file>
+            <file>file:/Users/amiya/Documents/projects/foxaclapi/app/Http/Requests/user_trade_update.php</file>
         </group>
     </open-files>
 </project-private>

@@ -9,25 +9,19 @@
     function AuthController($auth, $state, $window, $scope, $timeout) {
         var vm = this;
         sessionStorage.AuthUser = ''; 
-             
         vm.login = function() {
+
             var credentials = {
                 email: vm.email,
                 password: vm.password
             }
-           
+
             // Use Satellizer's $auth service to login
             $auth.login(credentials).then(function(data) {
                 $scope.err_message = '';
                 if(data.data.message === 'Invalid Credentials.') {
                      $scope.err_message +=  'Invalid Credentials.' + "\n";  
-                     swal({
-                        title: "Error!",
-                        text: "Invalid Credentials.",
-                        type: "error",
-                        confirmButtonText: "Ok"
-                      });
-
+                     alert( $scope.err_message)
                      $timeout(function() {
                        // $scope.err_message = '';
                      }, 4000); // 4 seconds   
@@ -49,13 +43,6 @@
         
         $scope.logout = function($event) {
             sessionStorage.AuthUser = '';     
-        }
-        $scope.redirect = 0; 
-        vm.checkLogin = function() {            
-            var token = sessionStorage.AuthUser;        
-            if(token === '') {
-               $window.location.href = '/login';
-           }
         }
         
         $scope.onKeyPress = function($event) {
