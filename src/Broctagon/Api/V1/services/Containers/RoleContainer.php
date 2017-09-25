@@ -28,12 +28,13 @@ class RoleContainer extends Base implements RoleContract
         $this->roleTransformer = $roleTransformer;
     }
 
-    /*
-     * Get Users.
-     * Paginator adapter is used for pagination.    
-     * @return Collection
+    /**
+     * create role
+     * 
+     * 
+     * @param type $request
+     * @return type json
      */
-
     public function createRole($request)
     {
         $res = $this->roleModel->addRole($request);
@@ -51,12 +52,12 @@ class RoleContainer extends Base implements RoleContract
         ]);
     }
 
-    /*
-     * Get Users.
-     * Paginator adapter is used for pagination.    
-     * @return Collection
+    /**
+     * update role
+     * 
+     * @param type $request
+     * @return type json
      */
-
     public function updateRole($request)
     {        
         $res = $this->roleModel->updateRole($request);
@@ -74,6 +75,13 @@ class RoleContainer extends Base implements RoleContract
         ]);
     }
 
+    /**
+     * Delete Role
+     * 
+     * 
+     * @param type $request
+     * @return type json
+     */
     public function deleteRole($request)
     {
         $res = $this->roleModel->deleteRole($request);
@@ -99,8 +107,10 @@ class RoleContainer extends Base implements RoleContract
     }
 
     /**
-     * Get Roles
-     * Paginator adapter is used for pagination.    
+     * get roles b id
+     * 
+     * 
+     * @param type $id
      * @return Collection
      */
     public function getRoles($id)
@@ -122,9 +132,10 @@ class RoleContainer extends Base implements RoleContract
     }
 
     /**
+     * Assign permission to role
      * 
-     * Paginator adapter is used for pagination.    
-     * @return Collection
+     * @param type $request
+     * @return type
      */
     public function assignPermRole($request)
     {

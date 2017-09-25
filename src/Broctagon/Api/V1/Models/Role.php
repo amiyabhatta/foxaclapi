@@ -19,6 +19,14 @@ class Role extends Model
         'role', 'role_slug'
     ];
 
+    /**
+     * Get All role
+     * 
+     * 
+     * @param type $limit
+     * @param type $id
+     * @return type array
+     */
     public function getAllRoles($limit, $id = NULL)
     {
 
@@ -35,7 +43,9 @@ class Role extends Model
     }
 
     /**
-     * Add a resource.
+     * Add role
+     * 
+     * 
      * @param type $request
      * @return boolean
      */
@@ -56,7 +66,9 @@ class Role extends Model
     }
 
     /**
-     * Add a resource.
+     * update role
+     * 
+     * 
      * @param type $request
      * @return boolean
      */
@@ -80,7 +92,8 @@ class Role extends Model
     }
 
     /**
-     * Add a resource.
+     * delete role
+     * 
      * @param type $request
      * @return boolean
      */
@@ -107,7 +120,9 @@ class Role extends Model
     }
 
     /**
-     * Add a resource.
+     * Assign Role role to permission
+     * 
+     * 
      * @param type $request
      * @return boolean
      */

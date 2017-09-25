@@ -23,9 +23,9 @@ class UserController extends Controller
     }
 
     /**
-     * List all users
-     * @author Dibya lochan Nayak <dibyalochan.nayak@broctagon.com>
-     * @return Json
+     * 
+     * @param type $id
+     * @return type json
      */
     public function index($id = NUll)
     {       

@@ -19,7 +19,8 @@ class Permissions extends Model
     ];
 
     /**
-     * Add a resource.
+     * save permission 
+     * 
      * @param type $request
      * @return boolean
      */
@@ -40,7 +41,8 @@ class Permissions extends Model
     }
 
     /**
-     * Add a resource.
+     * Update permission 
+     * 
      * @param type $request
      * @return boolean
      */
@@ -68,7 +70,9 @@ class Permissions extends Model
     }
 
     /**
-     * Add a resource.
+     * Delete permission by id
+     * 
+     * 
      * @param type $request
      * @return boolean
      */
@@ -95,9 +99,12 @@ class Permissions extends Model
     }
 
     /**
-     * Add a resource.
-     * @param type $request
-     * @return boolean
+     * Get all permission 
+     * 
+     * 
+     * @param type $limit
+     * @param type $id
+     * @return type array
      */
     public function getAllPermission($limit, $id = NULL)
     {

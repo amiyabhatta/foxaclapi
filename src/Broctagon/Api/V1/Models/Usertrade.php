@@ -110,6 +110,13 @@ class Usertrade extends Model {
         }
     }
 
+    /**
+     * 
+     * @param type $server_name
+     * @param type $login_id
+     * @param type $id
+     * @return type
+     */
     public function getTradeValue($server_name, $login_id, $id) {
         $query = $this->select('*')
                 ->where('server', '=', $server_name)
@@ -124,6 +131,13 @@ class Usertrade extends Model {
         return array('data' => $result);
     }
 
+    /**
+     * Get Login assign to server
+     *  
+     * @param type $servername
+     * @param type $loginmgr
+     * @return type array
+     */
     public function getLogin($servername, $loginmgr) {
 
         $query = DB::select("select GROUP_CONCAT(LOGIN) as login from trade_alertusers where `server` = '$servername' AND `login_manager_id` = $loginmgr ");
@@ -131,6 +145,15 @@ class Usertrade extends Model {
         return array('login' => $query[0]->login);
     }
 
+    /**
+     * Check login is available or not
+     * 
+     * 
+     * @param type $login
+     * @param type $servername
+     * @param type $login_mgr
+     * @return type int
+     */
     public function checkTradelogin($login, $servername, $login_mgr){
         
         $checkLogin = $this->select('*')

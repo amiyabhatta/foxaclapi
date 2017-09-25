@@ -14,6 +14,15 @@ class TabSelected extends Model {
     protected $table = 'tab_selected';
     public $timestamps = false;
 
+    /**
+     * Save tab setting
+     * 
+     * 
+     * @param type $request
+     * @param type $server
+     * @param type $loginmgr
+     * @return boolean
+     */
     public function saveTab($request, $server, $loginmgr) {
 
         if ($request->input('tab_setting')) {
@@ -31,6 +40,14 @@ class TabSelected extends Model {
         return true;
     }
 
+    /**
+     * Update permission id
+     * 
+     * @param type $perm_name
+     * @param type $server
+     * @param type $loginmgr
+     * @return boolean
+     */
     public function permissionId($perm_name, $server, $loginmgr) {
 
 
@@ -70,6 +87,14 @@ class TabSelected extends Model {
         }
     }
 
+    /**
+     * Get selected tab
+     * 
+     * 
+     * @param type $server
+     * @param type $loginmgr
+     * @return type array
+     */
     public function getTab($server, $loginmgr) {
         $perm = new Permissions;
         $getTabSetting = $perm->select('permissions.name', 'tab_selected.status')

@@ -17,8 +17,12 @@ class UserHasRole extends Model
     
     protected $table = 'users_has_roles';
     
-    /*
-     * return string
+    /**
+     * Get user role id
+     * 
+     * 
+     * @param type $userid
+     * @return int
      */
     public function getUserRole($userid)
     {

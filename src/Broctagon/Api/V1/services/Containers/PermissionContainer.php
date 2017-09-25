@@ -29,12 +29,12 @@ class PermissionContainer extends Base implements PermissionContract
         $this->fractal = $manager;
     }
 
-    /*
-     * Get Users.
-     * Paginator adapter is used for pagination.    
-     * @return Collection
+    /**
+     * Create permission
+     * 
+     * @param type $request
+     * @return type json
      */
-
     public function createPermission($request)
     {
 
@@ -53,12 +53,13 @@ class PermissionContainer extends Base implements PermissionContract
         ]);
     }
 
-    /*
-     * Get Users.
-     * Paginator adapter is used for pagination.    
-     * @return Collection
+    /**
+     * update permission
+     * 
+     * 
+     * @param type $request
+     * @return type json
      */
-
     public function updatePermission($request)
     {
 
@@ -78,10 +79,15 @@ class PermissionContainer extends Base implements PermissionContract
         ]);
     }
 
+    /**
+     * Delete permission
+     * 
+     * @param type $request
+     * @return type json
+     */
     public function deletePermission($request)
     {
-
-
+        
         $res = $this->permissionModel->deletePermission($request);
 
         if (!$res) {
@@ -106,7 +112,8 @@ class PermissionContainer extends Base implements PermissionContract
 
     /**
      * Get All permission
-     * Paginator adapter is used for pagination.    
+     * 
+     * @param type $request   
      * @return Collection
      */
     public function getPermission($id = NULL)

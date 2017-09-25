@@ -14,6 +14,13 @@ class lasttrade_whitelabels_emails_alert extends Model {
     protected $table = 'lasttrade_whitelabels_emails_alert';
     public $timestamps = false;
 
+    /**
+     * Get Last trade white label email alert
+     * 
+     * 
+     * @param type $request
+     * @return boolean|string
+     */
     public function getLastTradeWlEmailAlert($request) {
 
         
@@ -36,6 +43,13 @@ class lasttrade_whitelabels_emails_alert extends Model {
         }
     }
 
+    /**
+     * Save data for Last trade white label email alert
+     * 
+     * 
+     * @param type $request
+     * @return boolean
+     */
     public function saveLastTradeWlEmailAlert($request) {
         try {
             $this->ticket = $request->input("ticket");

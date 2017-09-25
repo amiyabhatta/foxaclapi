@@ -18,6 +18,13 @@ class Serverlist extends Model
     ];
     protected $table = 'serverlist';
 
+    /**
+     * Add server list
+     * 
+     * 
+     * @param type $request
+     * @return boolean
+     */
     public function addServer($request)
     {
 
@@ -37,6 +44,13 @@ class Serverlist extends Model
         return true;
     }
 
+    /**
+     * update server
+     * 
+     * 
+     * @param type $request
+     * @return boolean
+     */
     public function updateServer($request)
     {
 
@@ -63,6 +77,12 @@ class Serverlist extends Model
         return true;
     }
 
+    /**
+     * Delete server by id
+     * 
+     * @param type $id
+     * @return boolean|string
+     */
     public function deleteServer($id)
     {
 
@@ -81,6 +101,14 @@ class Serverlist extends Model
         return true;
     }
 
+    /**
+     * get all server list
+     * 
+     * 
+     * @param type $limit
+     * @param type $id
+     * @return type array
+     */
     public function getAllServerList($limit, $id)
     {
 

@@ -41,22 +41,17 @@ class GatewayController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * save gateway settings
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Response json
      */
     public function store(Mt4gateway $request)
     {
         return $this->gatewayContainer->createGateway($request);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function show($id)
     {
         //
@@ -74,11 +69,11 @@ class GatewayController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
+     * Update gateway details 
+     * 
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Response json
      */
     public function update(Mt4gatewayUpdate $request)
     {
@@ -86,7 +81,7 @@ class GatewayController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Delete gateway details by id
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response

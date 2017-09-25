@@ -11,7 +11,8 @@ use Fox\Models\Mt4gateway;
 use Fox\Common\Common;
 use Fox\Models\Mailsetting;
 
-class User extends Authenticatable {
+class User extends Authenticatable
+{
 
     /**
      * The attributes that are mass assignable.
@@ -31,7 +32,15 @@ class User extends Authenticatable {
         'password', 'remember_token',
     ];
 
-    public function getAllUsers($limit, $id) {
+    /**
+     * Get All users
+     * 
+     * @param type $limit
+     * @param type $id
+     * @return type array
+     */
+    public function getAllUsers($limit, $id)
+    {
         $query = $this->select('*')
                 ->where('email', '!=', 'james@gmail.com')
                 ->where('activate_status', '=', 1)
@@ -46,11 +55,13 @@ class User extends Authenticatable {
     }
 
     /**
-     * Add a resource.
+     * Create user
+     * 
      * @param type $request
      * @return boolean
      */
-    public function addUser($request) {
+    public function addUser($request)
+    {
 
         try {
             $data = DB::transaction(function() use ($request) {
@@ -81,7 +92,13 @@ class User extends Authenticatable {
         return true;
     }
 
-    public function getRoleId() {
+    /**
+     * Get Role id 
+     * 
+     * @return int
+     */
+    public function getRoleId()
+    {
 
         $role_id = Role::select('id')
                         ->where('role_slug', '=', 'user')->first();
@@ -92,11 +109,14 @@ class User extends Authenticatable {
     }
 
     /**
-     * Add a resource.
+     * Update user filed
+     * 
+     * 
      * @param type $request
      * @return boolean
      */
-    public function updateUser($request) {
+    public function updateUser($request)
+    {
         $user = $this->find($request->segment(4));
 
         if (!$user) {
@@ -164,11 +184,14 @@ class User extends Authenticatable {
     }
 
     /**
-     * Add a resource.
+     * Delete user (By changing status)
+     * 
+     * 
      * @param type $request
      * @return boolean
      */
-    public function deleteUser($request) {
+    public function deleteUser($request)
+    {
 
         $user = $this->find($request->segment(4));
 
@@ -185,16 +208,21 @@ class User extends Authenticatable {
         }
     }
 
-    public function assignRoleToUser($request) {
+    /**
+     * Assign Role to user
+     * 
+     * 
+     * @param type $request
+     * @return boolean
+     */
+    public function assignRoleToUser($request)
+    {
 
         $user_has_role = new UserHasRole;
-
         //Update 
         $role_id = $user_has_role->select('*')
                 ->where('user_id', '=', $request->segment(4))
                 ->get();
-
-
 
         if (count($role_id)) {
             try {
@@ -210,14 +238,10 @@ class User extends Authenticatable {
         //Insert
         $check_user = $this->find($request->segment(4));
 
-
-
         if ($check_user) {
             $user_has_role->user_id = $request->segment(4);
             $user_has_role->roles_id = $request->input('role_id');
             $user_has_role->action = $request->input('action');
-
-
             try {
                 $user_has_role->save();
                 return true;
@@ -230,7 +254,16 @@ class User extends Authenticatable {
         return false;
     }
 
-    public function getUserServerDetails($user_id, $server_name = null) {
+    /**
+     * Get server details assign to user
+     * 
+     * 
+     * @param type $user_id
+     * @param type $server_name
+     * @return type
+     */
+    public function getUserServerDetails($user_id, $server_name = null)
+    {
 
         $user_server_access = new user_server_access;
         $result = $user_server_access->select('serverlist.servername', 'serverlist.ipaddress', 'serverlist.username', 'serverlist.password', 'serverlist.databasename', 'serverlist.GatewayID')
@@ -253,7 +286,14 @@ class User extends Authenticatable {
         return $server_array;
     }
 
-    public function getUserPermissionDetails($user_id) {
+    /**
+     * Get list of permission assign to user
+     * 
+     * @param type $user_id
+     * @return aray
+     */
+    public function getUserPermissionDetails($user_id)
+    {
 
         $result = $this->select('permissions.name')
                 ->leftjoin('users_has_roles', 'users.id', '=', 'users_has_roles.user_id')
@@ -273,7 +313,14 @@ class User extends Authenticatable {
         return $permission_array;
     }
 
-    public function getUserGatewayDetails($server_name) {
+    /**
+     * Get gateway details assign to a particular server
+     * 
+     * @param type $server_name
+     * @return array
+     */
+    public function getUserGatewayDetails($server_name)
+    {
         $gw_model = new Mt4gateway();
         $gw_result = $gw_model->select('gateway_name', 'host', 'port', 'master_password', 'mt4gateway.username')
                         ->join('serverlist', 'serverlist.GatewayID', '=', 'mt4gateway.id')
@@ -292,7 +339,13 @@ class User extends Authenticatable {
         return $gw_details;
     }
 
-    public function getDbDetails() {
+    /**
+     * Get DB details
+     * 
+     * @return type array
+     */
+    public function getDbDetails()
+    {
 
         $db_detials = [];
         $db_detials[0]['host'] = env('DB_HOST', false);
@@ -303,9 +356,17 @@ class User extends Authenticatable {
         return $db_detials;
     }
 
-    //update password
-
-    public function passwordUpdate($request, $servername, $loginmgr) {
+    /**
+     * update|change password
+     * 
+     * 
+     * @param type $request
+     * @param type $servername
+     * @param type $loginmgr
+     * @return boolean
+     */
+    public function passwordUpdate($request, $servername, $loginmgr)
+    {
 
         $newpassword = bcrypt($request->input('new_password'));
 
@@ -318,9 +379,15 @@ class User extends Authenticatable {
         return true;
     }
 
-    //Mail Setting for login user
-
-    public function getMailSetting($loginid, $server) {
+    /**
+     * Mail Setting for login user
+     * 
+     * @param type $loginid
+     * @param type $server
+     * @return array
+     */
+    public function getMailSetting($loginid, $server)
+    {
         //get manager id
         $loginmgr = $this->select('manager_id')
                         ->where('id', $loginid)->first();
@@ -349,7 +416,16 @@ class User extends Authenticatable {
         return $mailsetting;
     }
 
-    public function checkServerAssign($userId, $serverName) {
+    /**
+     * Get server details assign to user
+     * 
+     * 
+     * @param type $userId
+     * @param type $serverName
+     * @return boolean
+     */
+    public function checkServerAssign($userId, $serverName)
+    {
         $user_server_access = new user_server_access;
         $result = $user_server_access->select('serverlist.servername')
                 ->leftjoin('users', 'user_server_access.user_id', '=', 'users.id')

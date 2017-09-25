@@ -28,10 +28,10 @@ class GatewayContainer extends Base implements GatewayContract
     }
 
     /**
-     * Get Users.
-     * Paginator adapter is used for pagination.
-     * @author Dibya lochan Nayak <dibyalochan.nayak@broctagon.com>
-     * @return Collection
+     * gateway list
+     * 
+     * @param type $id
+     * @return Collection|json
      */
     public function gatewaytList($id)
     {
@@ -54,7 +54,7 @@ class GatewayContainer extends Base implements GatewayContract
      * Create Gateway
      *
      * @param type $request
-     * @return type
+     * @return type json
      */
     public function createGateway($request)
     {
@@ -76,6 +76,12 @@ class GatewayContainer extends Base implements GatewayContract
         ]);
     }
 
+    /**
+     * update gateway
+     * 
+     * @param type $request
+     * @return type json
+     */
     public function updateGateway($request)
     {
 
@@ -96,11 +102,15 @@ class GatewayContainer extends Base implements GatewayContract
         ]);
     }
 
+    /**
+     * Delete Gateway
+     * 
+     * @param type $id
+     * @return type json
+     */
     public function deleteGateway($id)
     {
-
-
-
+        
         $res = $this->gatewaymodel->deleteGateway($id);
 
         if (!$res) {

@@ -13,6 +13,15 @@ class Mailsetting extends Model {
     protected $table = 'mailsettings';
     public $timestamps = false;
 
+    /**
+     * Save mail setting info for a particular server
+     * 
+     * 
+     * @param type $request
+     * @param type $server_name
+     * @param type $loginmgrid
+     * @return boolean
+     */
     public function saveMailSetting($request, $server_name, $loginmgrid) {
 
         //check data already saved or not for same server

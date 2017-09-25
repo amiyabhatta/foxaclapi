@@ -11,6 +11,15 @@ class Bo_alert_setting extends Model
     ];
     protected $table = 'bo_alert_setting';
     
+    /**
+     * Save boalert setting
+     * 
+     * 
+     * @param type $request 
+     * @param type $servername
+     * @param type $login
+     * @return boolean
+     */
     public function saveBoAlertSetting($request, $servername , $login)
     {
         
@@ -95,8 +104,6 @@ class Bo_alert_setting extends Model
                 }
             }
             return true;
-            
-            
         }
         else {
             //Insert
@@ -110,8 +117,15 @@ class Bo_alert_setting extends Model
             return true;
         }
     }
-
-    //Get global setting
+    
+    /**
+     * Get global setting
+     * 
+     * 
+     * @param type $servername
+     * @param type $login
+     * @return type array
+     */
     public function getBoAlertSetting($servername, $login)
     {
         return $this->select('*')
@@ -120,7 +134,16 @@ class Bo_alert_setting extends Model
                     ->get();
     }
 
-    //Delete global setting
+    
+    /**
+     * Delete global setting
+     * 
+     * 
+     * @param type $servername
+     * @param type $login
+     * @param type $request
+     * @return boolean
+     */
     public function deleteBoAlertSetting($servername, $login, $request)
     {
         try {

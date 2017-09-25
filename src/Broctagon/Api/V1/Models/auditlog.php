@@ -13,6 +13,14 @@ class auditlog extends Model
     protected $table = 'auditlog';
     public $timestamps = false;
 
+    /**
+     * Save Audit log report
+     * 
+     * 
+     * @param type $server_name
+     * @param type $request
+     * @return boolean
+     */
     public function saveAuditLog($server_name, $request)
     {
         $this->server = $server_name;
@@ -29,6 +37,14 @@ class auditlog extends Model
         return true;
     }
 
+    /**
+     * Get Auditlog record
+     * 
+     * 
+     * @param type $server_name
+     * @param type $request
+     * @return type mix(e.g array and boolean)
+     */
     public function getAuditLog($server_name, $request)
     {
 
@@ -61,7 +77,7 @@ class auditlog extends Model
             }, $query->get()->toArray());
         }
         catch (\Exception $exc) {
-            dd($exc);
+            return false;
         }
 
         return array('data' => $result);

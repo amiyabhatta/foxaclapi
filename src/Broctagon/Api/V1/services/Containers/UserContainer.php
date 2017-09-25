@@ -33,9 +33,9 @@ class UserContainer extends Base implements UserContract
     }
 
     /**
-     * Get Users.
-     * Paginator adapter is used for pagination.
-     * @author Dibya lochan Nayak <dibyalochan.nayak@broctagon.com>
+     * Get users details
+     * 
+     * @param type $id
      * @return Collection
      */
     public function getUsers($id)
@@ -56,7 +56,7 @@ class UserContainer extends Base implements UserContract
     }
 
     /**
-     * Login
+     * API Login
      *
      * @param type $request
      * @return type
@@ -111,6 +111,13 @@ class UserContainer extends Base implements UserContract
         return $this->setStatusCode(200)->respondWithToken(compact('token', 'server_details', 'tab_details', 'gateway_details', 'db_detials', 'mail_setting'));
     }
 
+    /**
+     * create user
+     * 
+     * 
+     * @param type $request
+     * @return type json
+     */
     public function createUser($request)
     {
         $res = $this->usermodel->addUser($request);
@@ -128,6 +135,12 @@ class UserContainer extends Base implements UserContract
         ]);
     }
 
+    /**
+     * Update user details
+     * 
+     * @param type $request
+     * @return type json
+     */
     public function updateUser($request)
     {
 
@@ -156,6 +169,12 @@ class UserContainer extends Base implements UserContract
         ]);
     }
 
+    /**
+     * Delete user e.g soft delete
+     * 
+     * @param type $request
+     * @return type json
+     */
     public function deleteUser($request)
     {
 
@@ -180,6 +199,12 @@ class UserContainer extends Base implements UserContract
         ]);
     }
 
+    /**
+     * Assign role to user
+     * 
+     * @param type $request
+     * @return type json
+     */
     public function assignRole($request)
     {
 
@@ -198,12 +223,23 @@ class UserContainer extends Base implements UserContract
         ]);
     }
 
+    /**
+     * logout user
+     * 
+     * @return type json
+     */
     public function logout()
     {
         JWTAuth::invalidate(JWTAuth::getToken());
         return $this->respond(['status_code' => 401, 'message' => trans('user.logout')]);
     }
 
+    /**
+     * Login in userInterface
+     * 
+     * @param type $request
+     * @return type json
+     */
     public function Uilogin($request)
     {
 
@@ -228,6 +264,12 @@ class UserContainer extends Base implements UserContract
         return $this->setStatusCode(200)->respondWithToken(compact('token'));
     }
 
+    /**
+     * Save setting for global alert for overall monitoring
+     * 
+     * @param type $request
+     * @return type json
+     */
     public function setGlobalAlertOm($request)
     {
 
@@ -262,6 +304,11 @@ class UserContainer extends Base implements UserContract
         ]);
     }
 
+    /**
+     * Get settings for Overall monitoring
+     * 
+     * @return type json
+     */
     public function getGlobalAlertOm()
     {
         $payload = JWTAuth::parseToken()->getPayload();
@@ -285,6 +332,12 @@ class UserContainer extends Base implements UserContract
         return response()->json($ret);
     }
 
+    /**
+     * Delete overall monitoring by servere and loginmanager
+     * 
+     * @param type $request
+     * @return type
+     */
     public function deleteGlobalAlertOm($request)
     {
         $payload = JWTAuth::parseToken()->getPayload();
@@ -306,8 +359,12 @@ class UserContainer extends Base implements UserContract
         ]);
     }
 
-    //Bo alert setting
-
+    /**
+     * Save settings for Bo Alert
+     * 
+     * @param type $request
+     * @return type json
+     */
     public function setBoAlert($request)
     {
         //get server name from token
@@ -330,6 +387,11 @@ class UserContainer extends Base implements UserContract
         ]);
     }
 
+    /**
+     * Get settings for Bo alert
+     * 
+     * @return type json
+     */
     public function getBoAlert()
     {
 
@@ -355,6 +417,12 @@ class UserContainer extends Base implements UserContract
         return response()->json($ret);
     }
 
+    /**
+     * Delete bo alert 
+     * 
+     * @param type $request
+     * @return type json
+     */
     public function deleteBoAlert($request)
     {
         $payload = JWTAuth::parseToken()->getPayload();
@@ -376,8 +444,12 @@ class UserContainer extends Base implements UserContract
         ]);
     }
 
-    //Update password
-
+    /**
+     * Update|change password for any user
+     * 
+     * @param type $request
+     * @return type json
+     */
     public function passwordUpdate($request)
     {
 
@@ -405,10 +477,12 @@ class UserContainer extends Base implements UserContract
         ]);
     }
 
-    /*
-     * Save Permisison tab 
+    /**
+     * Save tab settings
+     * 
+     * @param type $request
+     * @return type json
      */
-
     public function saveTab($request)
     {
 
@@ -436,21 +510,24 @@ class UserContainer extends Base implements UserContract
         ]);
     }
 
-    /*
-     * get Tabe selected tab setting
+    /**
+     * get saved tab setting details
+     * 
+     * @return type json
      */
-
     public function getTabSetting()
     {
-
+        
         $servermgrId = common::serverManagerId();
         return $res = $this->tabselectmodel->getTab($servermgrId['server_name'], $servermgrId['login']);
     }
 
-    /*
-     * Check servere is assing to user
+    /**
+     * Assign server to user
+     * @param type $userId
+     * @param type $serverName
+     * @return type json
      */
-
     public function serverAssigntoUser($userId, $serverName)
     {
         return $this->usermodel->checkServerAssign($userId, $serverName);

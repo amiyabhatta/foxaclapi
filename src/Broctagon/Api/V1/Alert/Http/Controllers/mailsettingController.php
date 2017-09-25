@@ -15,6 +15,13 @@ class mailsettingController extends Controller
         $this->fractal = $manager;
     }
     
+    /**
+     * save data for mail for different server
+     * 
+     * 
+     * @param Request $request
+     * @return type json
+     */
     public function saveMailSetting(Request $request){
        return $this->alertContainer->saveMailSetting($request);
     }

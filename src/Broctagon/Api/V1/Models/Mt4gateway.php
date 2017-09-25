@@ -17,6 +17,13 @@ class Mt4gateway extends Model
     ];
     protected $table = 'mt4gateway';
 
+    /**
+     * Save gateway details
+     * 
+     * 
+     * @param type $request
+     * @return boolean
+     */
     public function addGateway($request)
     {
 
@@ -34,6 +41,13 @@ class Mt4gateway extends Model
         return true;
     }
 
+    /**
+     * update gateway details
+     * 
+     *  
+     * @param type $request
+     * @return boolean
+     */
     public function updateGateway($request)
     {
 
@@ -59,6 +73,12 @@ class Mt4gateway extends Model
         return true;
     }
 
+    /**
+     * Delete gateway by id
+     * 
+     * @param type $id
+     * @return boolean|string
+     */
     public function deleteGateway($id)
     {
 
@@ -77,6 +97,14 @@ class Mt4gateway extends Model
         return true;
     }
 
+    /**
+     * Get gateway list by id
+     * 
+     * 
+     * @param type $limit
+     * @param type $id
+     * @return type array
+     */
     public function getAllGwList($limit, $id)
     {
         $query = $this->select('*')

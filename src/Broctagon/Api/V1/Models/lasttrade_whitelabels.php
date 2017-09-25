@@ -5,7 +5,8 @@ namespace Fox\Models;
 use Illuminate\Database\Eloquent\Model;
 use Fox\Common\Common;
 
-class lasttrade_whitelabels extends Model {
+class lasttrade_whitelabels extends Model
+{
 
     protected $fillable = [
         'ServerName', 'WhiteLabels', 'Groups', 'BoTime', 'FxTime', 'Emails'
@@ -13,7 +14,17 @@ class lasttrade_whitelabels extends Model {
     protected $table = 'lasttrade_whitelabels';
     public $timestamps = false;
 
-    public function getlatsTradeList($server_name, $login_id, $id) {
+    /**
+     * Gate trade list by Id
+     * 
+     * 
+     * @param type $server_name
+     * @param type $login_id
+     * @param type $id
+     * @return type array
+     */
+    public function getlatsTradeList($server_name, $login_id, $id)
+    {
 
         $query = $this->select('*')
                 ->where('ServerName', '=', $server_name);
@@ -22,7 +33,6 @@ class lasttrade_whitelabels extends Model {
             $query->where('id', '=', $id);
         }
 
-//return $query->get();
         $result = array_map(function($v) {
             return [
                 'id' => $v['Id'],
@@ -39,11 +49,17 @@ class lasttrade_whitelabels extends Model {
         return array('data' => $result);
     }
 
-    /*
+    /**
      * Update Last trade
+     * 
+     * @param type $server_name
+     * @param type $login_id
+     * @param type $id
+     * @param type $request
+     * @return boolean
      */
-
-    public function updatelatsTrade($server_name, $login_id, $id, $request) {
+    public function updatelatsTrade($server_name, $login_id, $id, $request)
+    {
 
         $check_id = $this->find($id);
 
@@ -61,11 +77,15 @@ class lasttrade_whitelabels extends Model {
         return false;
     }
 
-    /*
+    /**
      * Create WhiteLabel
+     * 
+     * 
+     * @param type $request
+     * @return boolean
      */
-
-    public function createWl($request) {
+    public function createWl($request)
+    {
 
         $this->ServerName = $request->input('servername');
         $this->WhiteLabels = $request->input('whitelabels');
@@ -82,12 +102,16 @@ class lasttrade_whitelabels extends Model {
         }
     }
 
-    /*
+    /**
      * update WhiteLabel
-     * @param array
+     * 
+     * 
+     * @param type $request
+     * @param type $id
+     * @return boolean
      */
-
-    public function updateWl($request, $id) {
+    public function updateWl($request, $id)
+    {
 
         $check_id = $this->find($id);
 
@@ -110,11 +134,14 @@ class lasttrade_whitelabels extends Model {
         return false;
     }
 
-    /*
-     * Delete whitelabel
+    /**
+     * Delete white label
+     * 
+     * @param type $id
+     * @return boolean
      */
-
-    public function deleteWl($id) {
+    public function deleteWl($id)
+    {
         $check_id = $this->find($id);
 
         if (count($check_id)) {
@@ -129,16 +156,21 @@ class lasttrade_whitelabels extends Model {
         return false;
     }
 
-    /*
-     * Get whitelabels 
+    /**
+     * Get white labels 
+     * 
+     * 
+     * @param type $server_name
+     * @param type $id
+     * @return boolean
      */
-
-    public function getWhiteLabelList($server_name, $id) {
+    public function getWhiteLabelList($server_name, $id)
+    {
         $check_user_role = common::checkRole();
-        
+
         if ($check_user_role == 'super_administrator') {
             $query = $this->select('*')
-                          ->orderBy('id', 'desc');
+                    ->orderBy('id', 'desc');
 
             if ($id) {
                 $query->where('id', '=', $id);

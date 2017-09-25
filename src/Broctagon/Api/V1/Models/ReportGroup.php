@@ -15,6 +15,15 @@ class ReportGroup extends Model
     protected $table = 'report_group';
     public $timestamps = false;
 
+    /**
+     * Save report group
+     * 
+     * 
+     * @param type $servername
+     * @param type $logimanagerid
+     * @param type $request
+     * @return boolean
+     */
     public function saveReportGroup($servername, $logimanagerid, $request)
     {
 
@@ -45,6 +54,15 @@ class ReportGroup extends Model
         return true;
     }
 
+    /**
+     * update Report group
+     * 
+     * 
+     * @param type $servername
+     * @param type $logimanagerid
+     * @param type $request
+     * @return boolean
+     */
     public function updateReportGroup($servername, $logimanagerid, $request)
     {
 
@@ -92,6 +110,15 @@ class ReportGroup extends Model
         }
     }
 
+    /**
+     * Get trade group list by some parameter
+     * 
+     * 
+     * @param type $servername
+     * @param type $logimanagerid
+     * @param type $id
+     * @return type array
+     */
     public function getTradeGrpList($servername, $logimanagerid, $id)
     {
 
@@ -126,6 +153,15 @@ class ReportGroup extends Model
         return array('data' => $result);
     }
 
+    /**
+     * Delete Trade group list
+     * 
+     * 
+     * @param type $servername
+     * @param type $logimanagerid
+     * @param type $request
+     * @return boolean
+     */
     public function deleteTradeGrpList($servername, $logimanagerid, $request)
     {
 
@@ -152,7 +188,15 @@ class ReportGroup extends Model
         }
     }
     
-    //Check Report group id
+    /**
+     * Get group id is exist or not
+     * 
+     * 
+     * @param type $serverName
+     * @param type $logimanagerid
+     * @param type $request
+     * @return type integer
+     */
     public function checkGroupid($serverName, $logimanagerid, $request){
         
         $check_id = $this->select('id')

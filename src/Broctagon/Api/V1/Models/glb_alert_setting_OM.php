@@ -12,6 +12,15 @@ class glb_alert_setting_OM extends Model
     ];
     protected $table = 'glb_alert_setting_om';
 
+    /**
+     * Save setting for global alert settings for overall monitoring
+     * 
+     * 
+     * @param type $request
+     * @param type $servername
+     * @param type $login
+     * @return boolean
+     */
     public function saveSetting($request, $servername, $login)
     {
 
@@ -53,25 +62,7 @@ class glb_alert_setting_OM extends Model
 
 
         if (count($server)) {
-//            foreach ($input as $input_update) {
-//                try {
-//                    $alert_type = $input_update['alert_type'];
-//                    $this->where('server_name', $servername)
-//                            ->where('alert_type', $input_update['alert_type'])
-//                            ->where('login', $login)
-//                            ->update(array(
-//                                "volume_limit1" => ($input_update['volume_limit1'] ? $input_update['volume_limit1'] : $exist_record[$alert_type]['volume_limit1']),
-//                                "volume_limit2" => ($input_update['volume_limit2'] ? $input_update['volume_limit2'] : $exist_record[$alert_type]['volume_limit2'] ),
-//                                "avg_volume_limit1" => ($input_update['avg_volume_limit1'] ? $input_update['avg_volume_limit1'] : $exist_record[$alert_type]['avg_volume_limit1']),
-//                                "avg_volume_limit2" => ($input_update['avg_volume_limit2'] ? $input_update['avg_volume_limit2'] : $exist_record[$alert_type]['avg_volume_limit2']),
-//                                "index_limit" => ($input_update['index_limit'] ? $input_update['index_limit'] : $exist_record[$alert_type]['index_limit']),
-//                    ));
-//                }
-//                catch (\Exception $exc) {
-//                    //return FALSE;
-//                    dd($exc);
-//                }
-//            }
+            
              foreach ($server as $input_update) {
                  
                 //Check alert type is available is there or not
@@ -126,7 +117,14 @@ class glb_alert_setting_OM extends Model
         }
     }
 
-    //Get global setting
+    /**
+     * Get global setting
+     * 
+     * 
+     * @param type $servername
+     * @param type $login
+     * @return type
+     */
     public function getSetting($servername, $login)
     {
         return $this->select('*')
@@ -135,7 +133,15 @@ class glb_alert_setting_OM extends Model
                         ->get();
     }
 
-    //Delete global setting
+    /**
+     * Delete setting for overall monitoring
+     * 
+     * 
+     * @param type $servername
+     * @param type $login
+     * @param type $request
+     * @return boolean
+     */
     public function deleteSetting($servername, $login, $request)
     {
         

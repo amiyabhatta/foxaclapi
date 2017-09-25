@@ -16,13 +16,15 @@ use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use Fox\Common\Common;
 use Fox\Common\Foxvalidation;
 
-class AlertContainer extends Base implements AlertContract {
+class AlertContainer extends Base implements AlertContract
+{
 
     use Foxvalidation;
 
     protected $userTransformer;
 
-    public function __construct($usertrade, $lasttrade, $reportgroup, $reportgroupuser, $auditlog, $lasttradeemailalert, $mailsetting, $tradealertdiscard) {
+    public function __construct($usertrade, $lasttrade, $reportgroup, $reportgroupuser, $auditlog, $lasttradeemailalert, $mailsetting, $tradealertdiscard)
+    {
         $this->usertrade = $usertrade;
         $this->lasttrade = $lasttrade;
         $this->reportgroup = $reportgroup;
@@ -34,9 +36,13 @@ class AlertContainer extends Base implements AlertContract {
     }
 
     /**
-     * Get Users Trades.
+     * save user trade data
+     * 
+     * @param type $request
+     * @return type json
      */
-    public function saveuserTrades($request) {
+    public function saveuserTrades($request)
+    {
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
         $userinfo = JWTAuth::parseToken()->authenticate();
@@ -56,7 +62,14 @@ class AlertContainer extends Base implements AlertContract {
         ]);
     }
 
-    public function updateuserTrades($request, $login) {
+    /**
+     * update user trade data by passing volume and isUpdate
+     * @param type $request
+     * @param type $login
+     * @return type json
+     */
+    public function updateuserTrades($request, $login)
+    {
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
         $userinfo = JWTAuth::parseToken()->authenticate();
@@ -93,7 +106,14 @@ class AlertContainer extends Base implements AlertContract {
         ]);
     }
 
-    public function deleteuserTrades($login) {
+    /**
+     * Delete user trade by login
+     * 
+     * @param type $login
+     * @return type json
+     */
+    public function deleteuserTrades($login)
+    {
 
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
@@ -125,7 +145,15 @@ class AlertContainer extends Base implements AlertContract {
         ]);
     }
 
-    public function getuserTrades($id) {
+    /**
+     * get user trade by Id Note : id is optional
+     * 
+     * 
+     * @param type $id
+     * @return type json
+     */
+    public function getuserTrades($id)
+    {
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
         $userinfo = JWTAuth::parseToken()->authenticate();
@@ -137,11 +165,14 @@ class AlertContainer extends Base implements AlertContract {
     }
 
     /**
-     * Get Last Trades.
-     * Paginator adapter is used for pagination.     * 
-     * @return Collection
+     * Get Last trade list by Id
+     * 
+     * 
+     * @param type $id
+     * @return type json
      */
-    public function getLastTradeList($id) {
+    public function getLastTradeList($id)
+    {
         $servermgrId = common::serverManagerId();
 
         $res = $this->lasttrade->getlatsTradeList($servermgrId['server_name'], $servermgrId['login'], $id);
@@ -149,7 +180,15 @@ class AlertContainer extends Base implements AlertContract {
         return response()->json($res);
     }
 
-    public function updateLastTradeList($id, $request) {
+    /**
+     * Update last trade list by Id
+     * 
+     * @param type $id
+     * @param type $request
+     * @return type json
+     */
+    public function updateLastTradeList($id, $request)
+    {
         $validate = Validator::make($request->all(), [
                     "botime" => 'required|numeric',
                     "fxtime" => 'required|numeric'
@@ -174,7 +213,14 @@ class AlertContainer extends Base implements AlertContract {
         ]);
     }
 
-    public function createWhiteLabel($request) {
+    /**
+     * Create whitelable
+     * 
+     * @param type $request
+     * @return type json
+     */
+    public function createWhiteLabel($request)
+    {
         $check_user_role = common::checkRole();
 
         if ($check_user_role == 'super_administrator') {
@@ -199,7 +245,16 @@ class AlertContainer extends Base implements AlertContract {
         ]);
     }
 
-    public function updateWhiteLabel($request, $id) {
+    /**
+     * update whitelabel by Id
+     * 
+     * 
+     * @param type $request
+     * @param type $id
+     * @return type json
+     */
+    public function updateWhiteLabel($request, $id)
+    {
         $check_user_role = common::checkRole();
 
         if ($check_user_role == 'super_administrator') {
@@ -224,7 +279,15 @@ class AlertContainer extends Base implements AlertContract {
         ]);
     }
 
-    public function deleteWhiteLabel($id) {
+    /**
+     * Delete whitelable by id
+     * 
+     * 
+     * @param type $id
+     * @return type json
+     */
+    public function deleteWhiteLabel($id)
+    {
         $check_user_role = common::checkRole();
 
         if ($check_user_role == 'super_administrator') {
@@ -249,11 +312,15 @@ class AlertContainer extends Base implements AlertContract {
         ]);
     }
 
-    /*
-     * Save Report and group
+    /**
+     * Save report group
+     * 
+     * 
+     * @param type $request
+     * @return type json
      */
-
-    public function saveReportGroup($request) {
+    public function saveReportGroup($request)
+    {
         $servermgrId = common::serverManagerId();
 
         $res = $this->reportgroup->saveReportGroup($servermgrId['server_name'], $servermgrId['login'], $request);
@@ -271,7 +338,15 @@ class AlertContainer extends Base implements AlertContract {
         ]);
     }
 
-    public function updateReportGroup($request) {
+    /**
+     * update report group by groupname
+     * 
+     * 
+     * @param type $request
+     * @return type json
+     */
+    public function updateReportGroup($request)
+    {
 
         $servermgrId = common::serverManagerId();
 
@@ -290,7 +365,15 @@ class AlertContainer extends Base implements AlertContract {
         ]);
     }
 
-    public function getTradeList($id) {
+    /**
+     * Get trade list by id
+     * 
+     * 
+     * @param type $id
+     * @return type json
+     */
+    public function getTradeList($id)
+    {
 
         $servermgrId = common::serverManagerId();
 
@@ -299,7 +382,15 @@ class AlertContainer extends Base implements AlertContract {
         return $res;
     }
 
-    public function deleteTradeList($request) {
+    /**
+     * Delete tradelist by groupid
+     * 
+     * 
+     * @param type $request
+     * @return type json
+     */
+    public function deleteTradeList($request)
+    {
 
         //Calling trait for validation
         $validate = $this->deleteReportGroupValidation($request);
@@ -334,11 +425,14 @@ class AlertContainer extends Base implements AlertContract {
         ]);
     }
 
-    /*
-     * Audit Log
+    /**
+     * Save data fro Audit log
+     * 
+     * @param type $request
+     * @return type json
      */
-
-    public function saveAuditLog($request) {
+    public function saveAuditLog($request)
+    {
         $servermgrId = common::serverManagerId();
 
         $res = $this->auditlog->saveAuditLog($servermgrId['server_name'], $request);
@@ -356,7 +450,15 @@ class AlertContainer extends Base implements AlertContract {
         ]);
     }
 
-    public function getAuditLog($request) {
+    /**
+     * Get data from Auditlog by different parameter
+     * 
+     * 
+     * @param type $request
+     * @return type json
+     */
+    public function getAuditLog($request)
+    {
 
         $servermgrId = common::serverManagerId();
 
@@ -380,23 +482,31 @@ class AlertContainer extends Base implements AlertContract {
         return $res;
     }
 
-    /*
-     * Get white label list
+    /**
+     * Get whitelabel by id
+     * 
+     * 
+     * @param type $id
+     * @return type json
      */
-
-    public function getWhiteLabel($id) {
+    public function getWhiteLabel($id)
+    {
 
         $servermgrId = common::serverManagerId();
 
         return $res = $this->lasttrade->getWhiteLabelList($servermgrId['server_name'], $id);
     }
 
-    /*
-     * Get White labellast trade 
+    /**
+     * Get record by some parameter
+     * 
+     * 
+     * @param type $request
+     * @return type json 
      */
+    public function getLastTradeWlEmailAlert($request)
+    {
 
-    public function getLastTradeWlEmailAlert($request) {
-        
         //Validation
         $validate = Validator::make($request->all(), [
                     "ticket" => 'required|numeric',
@@ -407,7 +517,15 @@ class AlertContainer extends Base implements AlertContract {
         return $res = $this->lasttradeemailalert->getLastTradeWlEmailAlert($request);
     }
 
-    public function saveLastTradeWlEmailAlert($request) {
+    /**
+     * Save Last trade email alert data
+     * 
+     * 
+     * @param type $request
+     * @return type json
+     */
+    public function saveLastTradeWlEmailAlert($request)
+    {
 
         //Validation
         $validate = Validator::make($request->all(), [
@@ -432,11 +550,15 @@ class AlertContainer extends Base implements AlertContract {
         ]);
     }
 
-    /*
-     * Save mail setting
+    /**
+     * Save mailsetting info for different server
+     * 
+     * 
+     * @param type $request
+     * @return type json
      */
-
-    public function saveMailSetting($request) {
+    public function saveMailSetting($request)
+    {
 
         //validation
         $servermgrId = common::serverManagerId();
@@ -454,13 +576,15 @@ class AlertContainer extends Base implements AlertContract {
         ]);
     }
 
-    /*
-     * Save Tarde Alert Discrad
+    /**
+     * Save trade alert discard data
+     * 
+     * 
+     * @param type $request
+     * @return type json
      */
-
-    public function saveTradeAlertDiscrad($request) {
-
-        //validation
+    public function saveTradeAlertDiscrad($request)
+    {
         //Validation
         $validate = Validator::make($request->all(), [
                     "ticket" => 'required|valid_ticket|unique:trade_alert_discard',
@@ -484,7 +608,14 @@ class AlertContainer extends Base implements AlertContract {
         ]);
     }
 
-    public function getTradeAlertDiscrad($request) {
+    /**
+     * Get Trade alert discard data
+     * 
+     * @param type $request
+     * @return type json
+     */
+    public function getTradeAlertDiscrad($request)
+    {
 
         //validation
         //Validation
@@ -501,11 +632,13 @@ class AlertContainer extends Base implements AlertContract {
         return $res;
     }
 
-    /*
-     * get login for logim
+    /**
+     * 
+     * Get login for a particular login and server
+     * @return type array
      */
-
-    public function getLogin() {
+    public function getLogin()
+    {
         $servermgrId = common::serverManagerId();
         $res = $this->usertrade->getLogin($servermgrId['server_name'], $servermgrId['login']);
         return $res;

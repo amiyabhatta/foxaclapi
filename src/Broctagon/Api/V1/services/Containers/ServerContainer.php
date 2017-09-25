@@ -28,8 +28,10 @@ class ServerContainer extends Base implements ServerContract
     }
 
     /**
-     * Get Users.
-     * Paginator adapter is used for pagination.     * 
+     * get server list by Id
+     * 
+     * 
+     * @param type $id
      * @return Collection
      */
     public function getServerList($id)
@@ -50,16 +52,22 @@ class ServerContainer extends Base implements ServerContract
     }
 
     /**
-     * Login
-     *
-     * @param type $request
-     * @return type
+     * Get server list with Id to show at time of user create
+     * 
+     * @return type json
      */
     public function getServerListForUserCreate()
     {
         return response()->json($this->servermodel->getAllServerLists());
     }
 
+    /**
+     * save server details
+     * 
+     * 
+     * @param type $request
+     * @return type json
+     */
     public function createServer($request)
     {
 
@@ -109,6 +117,12 @@ class ServerContainer extends Base implements ServerContract
         ]);
     }
 
+    /**
+     * Update server details 
+     * 
+     * @param type $request
+     * @return type json
+     */
     public function updateServer($request)
     {
         $res = $this->servermodel->updateServer($request);
@@ -126,6 +140,12 @@ class ServerContainer extends Base implements ServerContract
         ]);
     }
 
+    /**
+     * Delete server
+     * 
+     * @param type $id
+     * @return type json
+     */
     public function deleteServer($id)
     {
 
