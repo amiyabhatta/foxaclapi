@@ -22,8 +22,8 @@ class ServerController extends Controller {
         $this->fractal = $manager;
     }
 
-    public function index($id = NULL) {
-        return $this->fractal->createData($this->serverContainer->getServerList($id))->toJson();
+    public function index($serverId = NULL) {
+        return $this->fractal->createData($this->serverContainer->getServerList($serverId))->toJson();
     }
 
     /**
@@ -46,30 +46,9 @@ class ServerController extends Controller {
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id) {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id) {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(serverlistUpdate $request) {
@@ -79,17 +58,16 @@ class ServerController extends Controller {
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int  $serverId
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
-        return $this->serverContainer->deleteServer($id);
+    public function destroy($serverId) {
+        return $this->serverContainer->deleteServer($serverId);
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
+     * Get serverlist
+     * 
      * @return \Illuminate\Http\Response
      */
     public function serverlist() {

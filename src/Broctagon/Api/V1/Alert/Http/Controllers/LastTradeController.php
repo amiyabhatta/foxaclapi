@@ -3,45 +3,46 @@
 namespace Fox\Alert\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Fox\Services\Contracts\AlertContract;
-use League\Fractal\Manager;
+use Fox\Services\Contracts\LastTradeContract;
 use Illuminate\Http\Request;
 use App\Http\Requests\user_trade;
 use App\Http\Requests\createWhiteLabel;
 use App\Http\Requests\updateWhiteLabel;
+use Fox\Services\Contracts\WlEmailAlertContract;
 
 class LastTradeController extends Controller
 {
 
-    public function __construct(AlertContract $alertContainer, Manager $manager)
+    public function __construct(LastTradeContract $lastTradeContainer,WlEmailAlertContract $wlTradeEmailAlert)
     {
-        $this->alertContainer = $alertContainer;
-        $this->fractal = $manager;
+        $this->lastTradeContainer = $lastTradeContainer;
+        $this->WlEmailAlertContract = $wlTradeEmailAlert;
+        
     }
 
     /**
      * Get Last trade 
      * 
      * 
-     * @param type $id
+     * @param type $lastTradeId
      * @return type json
      */
-    public function getLastTrade($id = NULL)
+    public function getLastTrade($lastTradeId = NULL)
     {
-        return $this->alertContainer->getLastTradeList($id);
+        return $this->lastTradeContainer->getLastTradeList($lastTradeId);
     }
 
     /**
      * update last trade 
      * 
      * 
-     * @param type $id
+     * @param type $lastTradeId
      * @param Request $request
      * @return type json
      */
-    public function updateLastTrade($id, Request $request)
+    public function updateLastTrade($lastTradeId, Request $request)
     {
-        return $this->alertContainer->updateLastTradeList($id, $request);
+        return $this->lastTradeContainer->updateLastTradeList($lastTradeId, $request);
     }
 
     /**
@@ -52,30 +53,30 @@ class LastTradeController extends Controller
      */
     public function createWhitelabel(createWhiteLabel $request)
     {
-        return $this->alertContainer->createWhiteLabel($request);
+        return $this->lastTradeContainer->createWhiteLabel($request);
     }
 
     /**
      * update whitelabel
      * 
      * @param updateWhiteLabel $request
-     * @param type $id
+     * @param type $wlId
      * @return type json
      */
-    public function updateWhitelabel(updateWhiteLabel $request, $id)
+    public function updateWhitelabel(updateWhiteLabel $request,$wlId)
     {
-        return $this->alertContainer->updateWhiteLabel($request, $id);
+        return $this->lastTradeContainer->updateWhiteLabel($request, $wlId);
     }
 
     /**
      * delete whitelabel by id
      * 
-     * @param type $id
+     * @param type $wlId
      * @return type json
      */
-    public function deleteWhitelabel($id)
+    public function deleteWhitelabel($wlId)
     {
-        return $this->alertContainer->deleteWhiteLabel($id);
+        return $this->lastTradeContainer->deleteWhiteLabel($wlId);
     }
 
     /**
@@ -84,9 +85,9 @@ class LastTradeController extends Controller
      * @param type $id
      * @return type json
      */
-    public function getWhitelabel($id = null)
+    public function getWhitelabel($wlId = null)
     {
-        return $this->alertContainer->getWhiteLabel($id);
+        return $this->lastTradeContainer->getWhiteLabel($wlId);
     }
 
     /**
@@ -98,7 +99,7 @@ class LastTradeController extends Controller
      */
     public function getLastTradeEmailAlert(Request $request)
     {
-        return $this->alertContainer->getLastTradeWlEmailAlert($request);
+        return $this->WlEmailAlertContract->getLastTradeWlEmailAlert($request);
     }
 
     /**
@@ -110,7 +111,7 @@ class LastTradeController extends Controller
      */
     public function saveLastTradeEmailAlert(Request $request)
     {
-        return $this->alertContainer->saveLastTradeWlEmailAlert($request);
+        return $this->WlEmailAlertContract->saveLastTradeWlEmailAlert($request);
     }
 
 }

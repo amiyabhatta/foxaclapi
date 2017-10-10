@@ -3,16 +3,14 @@
 namespace Fox\Alert\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Fox\Services\Contracts\AlertContract;
-use League\Fractal\Manager;
+use Fox\Services\Contracts\TradeAlertDiscardContract;
 use Illuminate\Http\Request;
 
 class TradealertdiscardController extends Controller
 {
-    public function __construct(AlertContract $alertContainer, Manager $manager)
+    public function __construct(TradeAlertDiscardContract $tradealertDiscard)
     {
-        $this->alertContainer = $alertContainer;
-        $this->fractal = $manager;
+        $this->tradealertDiscard = $tradealertDiscard;
     }
     
     /**
@@ -23,7 +21,7 @@ class TradealertdiscardController extends Controller
      */
     
     public function saveTradealertDiscrad(Request $request){
-       return $this->alertContainer->saveTradeAlertDiscrad($request);
+       return $this->tradealertDiscard->saveTradeAlertDiscrad($request);
     }
     
     /**
@@ -34,6 +32,6 @@ class TradealertdiscardController extends Controller
      * @return type json
      */
     public function getTradealertDiscrad(Request $request){
-       return $this->alertContainer->getTradeAlertDiscrad($request);
+       return $this->tradealertDiscard->getTradeAlertDiscrad($request);
     }
 }

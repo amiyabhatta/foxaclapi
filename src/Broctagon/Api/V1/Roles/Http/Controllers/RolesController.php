@@ -26,9 +26,9 @@ class RolesController extends Controller
     }
     
     
-    public function index($id = null)
+    public function index($roleId = null)
     {           
-        return $this->fractal->createData($this->roleContainer->getRoles($id))->toJson();  
+        return $this->fractal->createData($this->roleContainer->getRoles($roleId))->toJson();  
     }
 
     /**
@@ -51,29 +51,6 @@ class RolesController extends Controller
     {
         return $this->roleContainer->createRole($request); 
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        
-    }
-
     /**
      * Update Role
      *

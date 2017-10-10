@@ -13,7 +13,7 @@ use App\Http\Requests\Mt4gatewayUpdate;
 class GatewayController extends Controller
 {
     
-    
+   
    public function __construct(GatewayContract $gatewayContainer, Manager $manager)
     {
         $this->gatewayContainer = $gatewayContainer;
@@ -24,10 +24,10 @@ class GatewayController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id = NULL)
+    public function index($gatewayId = NULL)
     {
        
-       return $this->fractal->createData($this->gatewayContainer->gatewaytList($id))->toJson();
+       return $this->fractal->createData($this->gatewayContainer->gatewaytList($gatewayId))->toJson();
     }
 
     /**
@@ -51,22 +51,6 @@ class GatewayController extends Controller
         return $this->gatewayContainer->createGateway($request);
     }
 
-    
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
     /**
      * Update gateway details 
@@ -86,8 +70,8 @@ class GatewayController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($gatewayId)
     {       
-       return $this->gatewayContainer->deleteGateway($id);
+       return $this->gatewayContainer->deleteGateway($gatewayId);
     }
 }

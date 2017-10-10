@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use DB;
 
-class trade_alert_discard extends Model
+class TradeAlertDiscard extends Model
 {
 
     protected $fillable = [
@@ -20,17 +20,15 @@ class trade_alert_discard extends Model
      * 
      * 
      * @param type $request
-     * @param type $login_mgr
+     * @param type $loginMgr
      * @return boolean
      */
-    public function saveTardeAlertDiscrd($request, $login_mgr)
+    public function saveTardeAlertDiscrd($request, $loginMgr)
     {
-        //$mytime = Carbon::now();
-
         try {
             $this->Ticket = $request->input('ticket');
             $this->Addedon = Carbon::now();
-            $this->login_mgr = $login_mgr;
+            $this->login_mgr = $loginMgr;
             $this->save();
         } catch (\Exception $exc) {
             return false;
@@ -43,23 +41,23 @@ class trade_alert_discard extends Model
      * Get Trade alert discard data
      * 
      * @param type $request
-     * @param type $login_mgr
-     * @return boolean
+     * @param type $loginMgr
+     * @return array|String
      */
-    public function getTardeAlertDiscrd($request, $login_mgr)
+    public function getTardeAlertDiscrd($request, $loginMgr)
     {
 
         $date = $request->input('addedon');
         
         try {
-            $query = DB::select(DB::raw("SELECT * FROM trade_alert_discard WHERE Addedon >= date('$date') AND login_mgr = $login_mgr"));
+            $query = DB::select(DB::raw("SELECT * FROM trade_alert_discard WHERE Addedon >= date('$date') AND login_mgr = $loginMgr"));
             $result = [];
-            $i = 0;
+            $indexresult = 0;
             foreach ($query as $queryResult) {
-                $result[$i]['Ticket'] = $queryResult->Ticket;
-                $result[$i]['Login'] = $queryResult->login_mgr;
-                $result[$i]['Addedon'] = $queryResult->Addedon;
-                $i++;
+                $result[$indexresult]['Ticket'] = $queryResult->Ticket;
+                $result[$indexresult]['Login'] = $queryResult->login_mgr;
+                $result[$indexresult]['Addedon'] = $queryResult->Addedon;
+                $indexresult++;
             }
         } catch (\Exception $exc) {
             return false;

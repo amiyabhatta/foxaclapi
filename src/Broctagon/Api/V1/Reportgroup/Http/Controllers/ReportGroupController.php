@@ -1,9 +1,9 @@
 <?php
 
-namespace Fox\Alert\Http\Controllers;
+namespace Fox\Reportgroup\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Fox\Services\Contracts\AlertContract;
+use Fox\Services\Contracts\ReportGroupContract;
 use League\Fractal\Manager;
 use Illuminate\Http\Request;
 use App\Http\Requests\reportgroup;
@@ -13,10 +13,9 @@ use App\Http\Requests\reportgroup_update;
 class ReportGroupController extends Controller
 {
 
-    public function __construct(AlertContract $alertContainer, Manager $manager)
+    public function __construct(ReportGroupContract $reportGroupContainer)
     {
-        $this->alertContainer = $alertContainer;
-        $this->fractal = $manager;
+        $this->reportGroupContainer = $reportGroupContainer;
     }
 
     /**
@@ -28,7 +27,7 @@ class ReportGroupController extends Controller
      */
     public function saveGroup(reportgroup $request)
     {        
-        return $this->alertContainer->saveReportGroup($request);
+        return $this->reportGroupContainer->saveReportGroup($request);
     }
 
     /**
@@ -39,7 +38,7 @@ class ReportGroupController extends Controller
      */
     public function updateGroup(reportgroup_update $request)
     {       
-       return $this->alertContainer->updateReportGroup($request);
+       return $this->reportGroupContainer->updateReportGroup($request);
     }
     
     /**
@@ -48,8 +47,9 @@ class ReportGroupController extends Controller
      * @param type $id
      * @return type json
      */
-    public function getTradeGroupList($id = null){
-       return $this->alertContainer->getTradeList($id); 
+    public function getTradeGroupList($tradegroupId = null){
+     
+       return $this->reportGroupContainer->getTradeList($tradegroupId); 
     }
     
     /**
@@ -61,7 +61,7 @@ class ReportGroupController extends Controller
      */
     public function deleteTradeGroupList(Request $request){
       
-      return $this->alertContainer->deleteTradeList($request);  
+      return $this->reportGroupContainer->deleteTradeList($request);  
     }
     
 

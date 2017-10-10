@@ -5,14 +5,14 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
-use Fox\Services\Contracts\UserContract;
+use Fox\Services\Contracts\TabselectContract;
 
 class TabselectController extends Controller
 {
     
-    public function __construct(UserContract $userContainer)
+    public function __construct(TabselectContract $tabselectContainer)
     {
-        $this->userContainer = $userContainer;
+        $this->tabselectContainer = $tabselectContainer;
     }
     
     /**
@@ -42,9 +42,8 @@ class TabselectController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function savetab(Request $request)
-    {
-       
-       return $this->userContainer->saveTab($request); 
+    {  
+       return $this->tabselectContainer->saveTab($request); 
     }
 
     /**
@@ -55,42 +54,6 @@ class TabselectController extends Controller
      */
     public function show()
     {
-       
-       return $this->userContainer->getTabSetting(); 
+       return $this->tabselectContainer->getTabSetting(); 
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-    
 }

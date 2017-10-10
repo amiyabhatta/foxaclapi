@@ -83,17 +83,17 @@ class Serverlist extends Model
      * @param type $id
      * @return boolean|string
      */
-    public function deleteServer($id)
+    public function deleteServer($serverId)
     {
 
-        $server = $this->find($id);
+        $server = $this->find($serverId);
 
         if (!$server) {
             return false;
         }
 
         try {
-            $server->where('id', '=', $id)->delete();
+            $server->where('id', '=', $serverId)->delete();
         }
         catch (\Exception $exc) {
             return 'error';
@@ -109,15 +109,15 @@ class Serverlist extends Model
      * @param type $id
      * @return type array
      */
-    public function getAllServerList($limit, $id)
+    public function getAllServerList($limit, $serverId)
     {
 
         $query = $this->select('serverlist.id','serverlist.servername','serverlist.ipaddress','serverlist.username','serverlist.password','serverlist.databasename','serverlist.masterid','serverlist.GatewayID','mt4gateway.gateway_name')
                       ->leftjoin('mt4gateway', 'mt4gateway.id', '=', 'serverlist.GatewayID')
                      ->orderBy('id', 'desc'); 
 
-        if ($id) {
-            $query->where('serverlist.id', '=', $id);
+        if ($serverId) {
+            $query->where('serverlist.id', '=', $serverId);
         }
 
         $result = $query->paginate($limit);

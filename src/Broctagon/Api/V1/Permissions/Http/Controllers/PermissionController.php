@@ -29,9 +29,9 @@ class PermissionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id = null)
+    public function index($permissionId = null)
     {
-       return $this->permissionContainer->getPermission($id);
+       return $this->permissionContainer->getPermission($permissionId);
     }
 
     /**
@@ -54,29 +54,6 @@ class PermissionController extends Controller
     {        
         return $this->permissionContainer->createPermission($request); 
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
     /**
      * Update the specified resource in storage.
      *

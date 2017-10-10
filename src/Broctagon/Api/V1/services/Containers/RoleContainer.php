@@ -113,13 +113,14 @@ class RoleContainer extends Base implements RoleContract
      * @param type $id
      * @return Collection
      */
-    public function getRoles($id)
+    public function getRoles($roleId)
     {
 
         $limit = Input::get('limit', 20);
+        
 
-        $role = $this->roleModel->getAllRoles($limit, $id);
-
+        $role = $this->roleModel->getAllRoles($limit, $roleId);
+        
         $queryParams = array_diff_key($_GET, array_flip(['page']));
 
         $role->appends($queryParams);

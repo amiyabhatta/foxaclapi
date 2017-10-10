@@ -34,11 +34,11 @@ class ServerContainer extends Base implements ServerContract
      * @param type $id
      * @return Collection
      */
-    public function getServerList($id)
+    public function getServerList($serverId)
     {
         $limit = Input::get('limit', 20);
 
-        $server = $this->servermodel->getAllServerList($limit, $id);
+        $server = $this->servermodel->getAllServerList($limit, $serverId);
 
         $queryParams = array_diff_key($_GET, array_flip(['page']));
 
@@ -143,13 +143,13 @@ class ServerContainer extends Base implements ServerContract
     /**
      * Delete server
      * 
-     * @param type $id
+     * @param type $serverId
      * @return type json
      */
-    public function deleteServer($id)
+    public function deleteServer($serverId)
     {
 
-            $res = $this->servermodel->deleteServer($id);
+            $res = $this->servermodel->deleteServer($serverId);
 
             if (!$res) {
 

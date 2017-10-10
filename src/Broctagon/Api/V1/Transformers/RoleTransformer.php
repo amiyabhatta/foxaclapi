@@ -3,12 +3,12 @@
 namespace Fox\Transformers;
 
 use League\Fractal;
-use Fox\Models\roleHasPermission;
+use Fox\Models\RoleHasPermission;
 
 class RoleTransformer extends Fractal\TransformerAbstract {
 
     public function transform($data) {
-       $role_permissions = roleHasPermission::select('permissions_id','action')
+       $role_permissions = RoleHasPermission::select('permissions_id','action')
                                        ->where('role_id',$data['id'])->get()->toArray();
         return [
             'id' => $data['id'],

@@ -5,9 +5,11 @@ namespace Fox\Models;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
-class Usertrade extends Model {
+class Usertrade extends Model
+{
 
     //trade_alertusers
+
 
     protected $fillable = [
         'login', 'login_manager_id', 'server', 'volume', 'isUpdate', 'amount'
@@ -15,59 +17,41 @@ class Usertrade extends Model {
     protected $table = 'trade_alertusers';
     public $timestamps = false;
 
-    public function saveTradeValue($request, $server_name, $login_manager_id) {
+    public function saveTradeValue($request, $serverName, $loginMgrId)
+    {
 
-//        $server = $this->where('server', '=', $server_name)
-//                ->where('login', '=', $request->input('login'))
-//                ->first();
-//
-//
-//        $user_trade_data = [];
-//        $user_trade_data['login'] = $request->input('login');
-//        $user_trade_data['login_manager_id'] = $login_manager_id;
-//        $user_trade_data['server'] = $server_name;
-//        $user_trade_data['volume'] = $request->input('volume');
-//        $user_trade_data['isUpdate'] = 1;
-//        $user_trade_data['amount'] = $request->input('amount');
-//
-//        if (count($server)) {
-//            return $server->id;
-//        }
-
-        $explode_login = explode(',', $request->input('login'));
+        $explodeLogin = explode(',', $request->input('login'));
 
         try {
-            foreach ($explode_login as $login) {
-                $this->create(['login' => $login, 'login_manager_id' => $login_manager_id,
-                    'server' => $server_name, 'volume' => $request->input('volume'), 'isUpdate' => 1, 'amount' => $request->input('amount')]);
+            foreach ($explodeLogin as $login) {
+                $this->create(['login' => $login, 'login_manager_id' => $loginMgrId,
+                    'server' => $serverName, 'volume' => $request->input('volume'), 'isUpdate' => 1, 'amount' => $request->input('amount')]);
             }
-            //$last_insert_id = $this->insertGetId($user_trade_data);
         } catch (\Exception $exc) {
             return FALSE;
         }
         return true;
-        //return $last_insert_id;
     }
 
-    public function updateTradeValue($request, $server_name, $login_manager_id, $login) {
+    public function updateTradeValue($request, $serverName, $loginMgrId, $login)
+    {
 
-        $server = $this->where('server', '=', $server_name)
-                ->where('login_manager_id', '=', $login_manager_id)
+        $server = $this->where('server', '=', $serverName)
+                ->where('login_manager_id', '=', $loginMgrId)
                 ->first();
 
-        $user_trade = $this->where(array('login' => $login))->first();
+        $userTrade = $this->where(array('login' => $login))->first();
 
-        if (count($server) && count($user_trade)) {
+        if (count($server) && count($userTrade)) {
             try {
 
                 DB::table('trade_alertusers')
-                        ->where('login_manager_id', $login_manager_id)
+                        ->where('login_manager_id', $loginMgrId)
                         ->where('login', $login)
                         ->update(array(
                             "volume" => $request->input('volume'),
                             "isUpdate" => $request->input('isUpdate')
                 ));
-                
             } catch (\Exception $exc) {
                 return FALSE;
             }
@@ -76,37 +60,36 @@ class Usertrade extends Model {
         return FALSE;
     }
 
-    public function deleteTradeValue($server_name, $login_manager_id, $login) {
+    public function deleteTradeValue($serverName, $loginMgrId, $login)
+    {
 
-        
-        if ($login) {
-            $server = $this->where('server', '=', $server_name)
-                    ->where('login_manager_id', '=', $login_manager_id)
-                    ->where('login', '=', $login)
-                    ->get();
+        try {
+            if ($login) {
+                $server = $this->where('server', '=', $serverName)
+                        ->where('login_manager_id', '=', $loginMgrId)
+                        ->where('login', '=', $login)
+                        ->get();
 
-            if (count($server)) {
-                try {
-                    $this->where('server', '=', $server_name)
-                            ->where('login_manager_id', '=', $login_manager_id)
-                            ->where('login', '=', $login)
-                            ->delete();
-                } catch (\Exception $exc) {
-                    return FALSE;
+                if (count($server)) {
+                    try {
+                        $this->where('server', '=', $serverName)
+                                ->where('login_manager_id', '=', $loginMgrId)
+                                ->where('login', '=', $login)
+                                ->delete();
+                    } catch (\Exception $exc) {
+                        return FALSE;
+                    }
+                    return true;
                 }
-                return true;
-            }
-            return FALSE;
-        } else {
-            //Delete All record fro loginmgr and serever
-            try {
-                $this->where('server', '=', $server_name)
-                        ->where('login_manager_id', '=', $login_manager_id)
-                        ->delete();
-            } catch (\Exception $exc) {
                 return FALSE;
             }
+        //Delete All record fro loginmgr and serever
+            $this->where('server', '=', $serverName)
+                    ->where('login_manager_id', '=', $loginMgrId)
+                    ->delete();
             return true;
+        } catch (\Exception $exc) {
+            return FALSE;
         }
     }
 
@@ -117,14 +100,16 @@ class Usertrade extends Model {
      * @param type $id
      * @return type
      */
-    public function getTradeValue($server_name, $login_id, $id) {
+    public function getTradeValue($serverName, $loginMgrId, $tradeId)
+    {
+
         $query = $this->select('*')
-                ->where('server', '=', $server_name)
-                ->where('login_manager_id', '=', $login_id);
+                ->where('server', '=', $serverName)
+                ->where('login_manager_id', '=', $loginMgrId);
         //->paginate($limit);
 
-        if ($id) {
-            $query->where('id', '=', $id);
+        if ($tradeId) {
+            $query->where('id', '=', $tradeId);
         }
         $result = $query->get();
 
@@ -134,13 +119,14 @@ class Usertrade extends Model {
     /**
      * Get Login assign to server
      *  
-     * @param type $servername
-     * @param type $loginmgr
+     * @param type $serverName
+     * @param type $loginMgrId
      * @return type array
      */
-    public function getLogin($servername, $loginmgr) {
+    public function getLogin($serverName, $loginMgrId)
+    {
 
-        $query = DB::select("select GROUP_CONCAT(LOGIN) as login from trade_alertusers where `server` = '$servername' AND `login_manager_id` = $loginmgr ");
+        $query = DB::select("select GROUP_CONCAT(LOGIN) as login from trade_alertusers where `server` = '$serverName' AND `login_manager_id` = $loginMgrId ");
 
         return array('login' => $query[0]->login);
     }
@@ -154,13 +140,15 @@ class Usertrade extends Model {
      * @param type $login_mgr
      * @return type int
      */
-    public function checkTradelogin($login, $servername, $login_mgr){
-        
+    public function checkTradelogin($login, $serverName, $loginMgrId)
+    {
+
         $checkLogin = $this->select('*')
-                           ->where('server', '=', $servername)
-                           ->where('login_manager_id', '=', $login_mgr)
-                           ->where('login','=',$login)->get();
-        
+                        ->where('server', '=', $serverName)
+                        ->where('login_manager_id', '=', $loginMgrId)
+                        ->where('login', '=', $login)->get();
+
         return count($checkLogin);
     }
+
 }

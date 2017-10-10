@@ -4,7 +4,7 @@ namespace Fox\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class user_server_access extends Model
+class UserserverAccess extends Model
 {
     protected $fillable = [
         'user_id','server_id'

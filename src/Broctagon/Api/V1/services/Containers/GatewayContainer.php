@@ -33,18 +33,18 @@ class GatewayContainer extends Base implements GatewayContract
      * @param type $id
      * @return Collection|json
      */
-    public function gatewaytList($id)
+    public function gatewaytList($gatewayId)
     {
         $limit = Input::get('limit', 20);
 
-        $gw = $this->gatewaymodel->getAllGwList($limit, $id);
+        $gwList = $this->gatewaymodel->getAllGwList($limit, $gatewayId);
 
         $queryParams = array_diff_key($_GET, array_flip(['page']));
 
-        $gw->appends($queryParams);
+        $gwList->appends($queryParams);
 
-        $gwAdapter = new IlluminatePaginatorAdapter($gw);
-        $resource = new Collection($gw, $this->gatewayTransformer);
+        $gwAdapter = new IlluminatePaginatorAdapter($gwList);
+        $resource = new Collection($gwList, $this->gatewayTransformer);
         $resource->setPaginator($gwAdapter);
 
         return $resource;
@@ -108,10 +108,10 @@ class GatewayContainer extends Base implements GatewayContract
      * @param type $id
      * @return type json
      */
-    public function deleteGateway($id)
+    public function deleteGateway($gatewayId)
     {
         
-        $res = $this->gatewaymodel->deleteGateway($id);
+        $res = $this->gatewaymodel->deleteGateway($gatewayId);
 
         if (!$res) {
 

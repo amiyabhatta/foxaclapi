@@ -3,13 +3,13 @@
 namespace Fox\Transformers;
 
 use League\Fractal;
-use Fox\Models\user_server_access;
+use Fox\Models\UserserverAccess;
 use Fox\Models\UserHasRole;
 
 class UserTransformer extends Fractal\TransformerAbstract {
 
     public function transform($user) {
-       $srever_id = user_server_access::select('server_id')
+       $srever_id = UserserverAccess::select('server_id')
                                        ->where('user_id',$user['id'])->get()->toArray();
        
        $user_role   = UserHasRole::select('roles_id')

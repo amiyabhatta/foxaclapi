@@ -27,14 +27,14 @@ class UserController extends Controller
      * @param type $id
      * @return type json
      */
-    public function index($id = NUll)
-    {       
-        return $this->fractal->createData($this->userContainer->getUsers($id))->toJson();
+    public function index($userId = NUll)
+    {   
+       return $this->fractal->createData($this->userContainer->getUsers($userId))->toJson();
     }
 
     /**
      * @param LoginUser $request
-     * @author Dibya lochan Nayak <dibyalochan.nayak@broctagon.com>
+     * 
      * @return type
      */
     public function login(LoginUser $request)
@@ -60,62 +60,61 @@ class UserController extends Controller
         return $this->userContainer->updateUser($request);
     }
     
+    /**
+     * Delete user
+     * 
+     * @param Request $request
+     * @return type json
+     */
     public function destroy(Request $request){        
       
         return $this->userContainer->deleteUser($request);
     }
     
+    /**
+     * Assign Role to user
+     * 
+     * @param assignRoleToUser $request
+     * @return type json
+     */
     public function assignRoletoUser(assignRoleToUser $request){
        return $this->userContainer->assignRole($request); 
     }
    
     //Show all User
     public function dashboard(){       
-       $user_data = $this->fractal->createData($this->userContainer->getUsers())->toarray();
+       $userData = $this->fractal->createData($this->userContainer->getUsers())->toarray();
        
-       return View::make('pages.home')->with(compact('user_data'));
+       return View::make('pages.home')->with(compact('userData'));
     }
     
+    /**
+     * Delete authentication 
+     * 
+     * @return type json
+     */
     public function logout(){
         
         return $this->userContainer->logout();
-        
     }
 
+    /**
+     * login into Ui part
+     * 
+     * 
+     * @param UiLogin $request
+     * @return type json
+     */
     public function uilogin(UiLogin $request){         
-       return $this->userContainer->Uilogin($request); 
+       return $this->userContainer->uiLogin($request); 
     }
     
-    //Set global alert for Overall Monitoring
-    public function setGlobalAlertOm(Request $request){         
-       return $this->userContainer->setGlobalAlertOm($request); 
-    }
-    
-    //Get global alert for Overall monitoring
-    public function getGlobalAlertOm(){       
-       return $this->userContainer->getGlobalAlertOm(); 
-    }
-    //Delete global alert for overall monitoring
-    public function deleteglobalalertom(Request $request){
-       return $this->userContainer->deleteGlobalAlertOm($request);  
-    }
-    
-    //Save bo alert setting
-    public function setBoAlert(Request $request){        
-       return $this->userContainer->setBoAlert($request); 
-    }
-    
-    //Get bo alert setting
-     public function getBoAlert(Request $request){       
-       return $this->userContainer->getBoAlert($request); 
-    }
-    
-    //Delete bo alert setting
-    public function deleteBoalert(Request $request){        
-       return $this->userContainer->deleteBoAlert($request);  
-    }
-    
-    //Update password
+    /**
+     * Update user password
+     * 
+     * @param Request $request
+     * @return type json
+     */
     public function passwordUpdate(Request $request){
       return $this->userContainer->passwordUpdate($request);  
     }

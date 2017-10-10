@@ -165,7 +165,15 @@ return [
         Fox\Services\Providers\PermissionServiceProvider::class,
         Fox\Services\Providers\GatewayServiceProvider::class,
         Fox\Services\Providers\ServerServiceProvider::class,
-        Fox\Services\Providers\AlertServiceProvider::class
+        Fox\Services\Providers\AlertServiceProvider::class,
+        Fox\Services\Providers\MonitorServiceProvider::class,
+        Fox\Services\Providers\TabselectServiceProvider::class,
+        Fox\Services\Providers\AuditlogServiceProvider::class,
+        Fox\Services\Providers\WlEmailAlertServiceProvider::class,
+        Fox\Services\Providers\MailsettingServiceProvider::class,
+        Fox\Services\Providers\TradeAlertDiscardServiceProvider::class,
+        Fox\Services\Providers\ReportgroupServiceProvider::class,
+        Fox\Services\Providers\LastTradeServiceProvider::class,
 
     ],
 

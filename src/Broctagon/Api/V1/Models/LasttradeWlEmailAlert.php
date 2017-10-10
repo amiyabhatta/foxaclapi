@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use function dump;
 
-class lasttrade_whitelabels_emails_alert extends Model {
+class LasttradeWlEmailAlert extends Model {
 
     protected $fillable = [
         'ticket', 'whitelabels'
@@ -23,17 +23,16 @@ class lasttrade_whitelabels_emails_alert extends Model {
      */
     public function getLastTradeWlEmailAlert($request) {
 
-        
         if ($request->input('ticket')) {
             $ticket = rtrim($request->input('ticket'), ',');
             $arrId = explode(',', $ticket);
 
             $query = $this->whereIn('ticket', $arrId);
             try {
-                $result = array_map(function($v) {
+                $result = array_map(function($lastTradeResult) {
                     return [
-                        'ticket' => $v['ticket'],
-                        'whitelabels' => $v['whitelabels'],
+                        'ticket' => $lastTradeResult['ticket'],
+                        'whitelabels' => $lastTradeResult['whitelabels'],
                     ];
                 }, $query->get()->toArray());
             } catch (\Exception $exc) {

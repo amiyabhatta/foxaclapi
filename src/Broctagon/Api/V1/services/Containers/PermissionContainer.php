@@ -22,10 +22,10 @@ class PermissionContainer extends Base implements PermissionContract
     //private $usermodel;
     //private $roleModel;
 
-    public function __construct($permission, $permissionTransformer, $manager)
+    public function __construct($permission, $permTransformer, $manager)
     {
         $this->permissionModel = $permission;
-        $this->permissionTransformer = $permissionTransformer;
+        $this->permissionTransformer = $permTransformer;
         $this->fractal = $manager;
     }
 
@@ -116,12 +116,12 @@ class PermissionContainer extends Base implements PermissionContract
      * @param type $request   
      * @return Collection
      */
-    public function getPermission($id = NULL)
+    public function getPermission($permissionId = NULL)
     {
 
         $limit = Input::get('limit', 20000);
 
-        $permission = $this->permissionModel->getAllPermission($limit, $id);
+        $permission = $this->permissionModel->getAllPermission($limit, $permissionId);
 
         $queryParams = array_diff_key($_GET, array_flip(['page']));
 

@@ -52,6 +52,7 @@ class Common extends Base
     //Get server name and manager id from Token
     public static function serverManagerId()
     {
+       
         $payload = JWTAuth::parseToken()->getPayload();
         $userinfo = JWTAuth::parseToken()->authenticate();
 

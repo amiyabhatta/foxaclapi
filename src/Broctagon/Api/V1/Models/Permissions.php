@@ -3,7 +3,7 @@
 namespace Fox\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Fox\Models\roleHasPermission;
+use Fox\Models\RoleHasPermission;
 use Illuminate\Support\Facades\DB;
 
 class Permissions extends Model
@@ -85,11 +85,11 @@ class Permissions extends Model
             return false;
         }
         try {
-            $perm_id = $request->segment(4);
-            DB::transaction(function () use ($perm_id) {
-                $this->where('id', '=', $perm_id)->delete();
+            $permId = $request->segment(4);
+            DB::transaction(function () use ($permId) {
+                $this->where('id', '=', $permId)->delete();
 
-                roleHasPermission::where('permissions_id', '=', $perm_id)->delete();
+                RoleHasPermission::where('permissions_id', '=', $permId)->delete();
             });
             return true;
         }
@@ -106,13 +106,15 @@ class Permissions extends Model
      * @param type $id
      * @return type array
      */
-    public function getAllPermission($limit, $id = NULL)
+    public function getAllPermission($limit, $permissionId = NULL)
     {
         $query = $this->select('id', 'name', 'user_type')
                       ->orderBy('id', 'desc');
-        if ($id) {
-            $query->where('id', '=', $id);
+        
+        if ($permissionId) {
+            $query->where('id', '=', $permissionId);
         }
+        
         $result = $query->paginate($limit);
 
         return $result;

@@ -5,7 +5,6 @@ namespace Fox\Services\Providers;
 
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
-//use Fox\Transformers\UserTransformer;
 use Fox\Models\Permissions;
 use Fox\Services\Containers\PermissionContainer;
 use Fox\Transformers\permissionTransformer;
@@ -28,11 +27,12 @@ class PermissionServiceProvider extends ServiceProvider {
         /**
          * Service Layer
          */
-        $permissionTransformer = new permissionTransformer;             
+        $permTransformer = new permissionTransformer;             
         $permission = new Permissions; 
         $manager = new Manager;
-        App::bind('Fox\Services\Contracts\PermissionContract', function() use($permission, $permissionTransformer, $manager) {                        
-            return new PermissionContainer($permission, $permissionTransformer, $manager);
+        
+        App::bind('Fox\Services\Contracts\PermissionContract', function() use($permission, $permTransformer, $manager) {                        
+            return new PermissionContainer($permission, $permTransformer, $manager);
         });
     }
 

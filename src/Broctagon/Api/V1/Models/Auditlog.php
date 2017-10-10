@@ -4,7 +4,7 @@ namespace Fox\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class auditlog extends Model
+class Auditlog extends Model
 {
 
     protected $fillable = [
@@ -47,7 +47,6 @@ class auditlog extends Model
      */
     public function getAuditLog($server_name, $request)
     {
-
         $start_date = $request->input('start_date');
         $end_date = $request->input('end_date');
         $logname = $request->input('logname');

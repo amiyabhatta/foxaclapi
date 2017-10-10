@@ -32,7 +32,7 @@ Route::group(['prefix' => 'api/v1'], function () {
     Route::group(['middleware' => 'dycryptjwt', 'jwt-auth'], function () {
 
         Route::group(['middleware' => 'superadmin'], function () {
-
+            
             //User
             Route::resource('users', 'Users\Http\Controllers\UserController', ['only' => ['update', 'destroy']]);
             Route::post('register', 'Users\Http\Controllers\UserController@store'); //Save User
@@ -71,18 +71,23 @@ Route::group(['prefix' => 'api/v1'], function () {
 
             //logout
             Route::post('logout', 'Users\Http\Controllers\UserController@logout');
+            
+            //Whitelabel create
+            Route::post('createwhitelabel', 'Alert\Http\Controllers\LastTradeController@createWhitelabel');
+            Route::put('updatewhitelabel/{id}', 'Alert\Http\Controllers\LastTradeController@updateWhitelabel');
+            Route::delete('deletewhitelabel/{id}', 'Alert\Http\Controllers\LastTradeController@deleteWhitelabel');
         });
 
 
         //Set global alert for Overall Monitoring
-        Route::post('setglobalalertom', 'Users\Http\Controllers\UserController@setGlobalAlertOm');
-        Route::get('getglobalalertom', 'Users\Http\Controllers\UserController@getGlobalAlertOm');
-        Route::delete('deleteglobalalertom', 'Users\Http\Controllers\UserController@deleteGlobalAlertOm');
+        Route::post('setglobalalertom', 'Monitor\Http\Controllers\MonitorController@setGlobalAlertOm');
+        Route::get('getglobalalertom', 'Monitor\Http\Controllers\MonitorController@getGlobalAlertOm');
+        Route::delete('deleteglobalalertom', 'Monitor\Http\Controllers\MonitorController@deleteGlobalAlertOm');
 
         //Set Bo Alert
-        Route::post('saveboalert', 'Users\Http\Controllers\UserController@setBoAlert');
-        Route::get('getboalert', 'Users\Http\Controllers\UserController@getBoAlert');
-        Route::delete('deleteboalert', 'Users\Http\Controllers\UserController@deleteBoAlert');
+        Route::post('saveboalert', 'Monitor\Http\Controllers\MonitorController@setBoAlert');
+        Route::get('getboalert', 'Monitor\Http\Controllers\MonitorController@getBoAlert');
+        Route::delete('deleteboalert', 'Monitor\Http\Controllers\MonitorController@deleteBoAlert');
 
         //User Trade ALert
         Route::get('usertrade/{id?}', 'Alert\Http\Controllers\AlertController@getTradeAlert');
@@ -91,33 +96,30 @@ Route::group(['prefix' => 'api/v1'], function () {
         Route::delete('deleteusertrade/{login?}', 'Alert\Http\Controllers\AlertController@deleteUserTrade');
         Route::get('getlogin', 'Alert\Http\Controllers\AlertController@getLogin');
 
-        //Last Trade
-        //Fox APi
+        //Last Trade whitelable
         Route::get('lasttrade/{id?}', 'Alert\Http\Controllers\LastTradeController@getLastTrade');
         Route::put('updatelasttrade/{id}', 'Alert\Http\Controllers\LastTradeController@updateLastTrade');
-        //Witelabel create
-        Route::post('createwhitelabel', 'Alert\Http\Controllers\LastTradeController@createWhitelabel');
-        Route::put('updatewhitelabel/{id}', 'Alert\Http\Controllers\LastTradeController@updateWhitelabel');
-        Route::delete('deletewhitelabel/{id}', 'Alert\Http\Controllers\LastTradeController@deleteWhitelabel');
+        
+        //Get WHite Labels
         Route::get('getwhitelabel/{id?}', 'Alert\Http\Controllers\LastTradeController@getWhitelabel');
         
-        //Trade Group
-        Route::post('createtradegroup', 'Alert\Http\Controllers\ReportGroupController@saveGroup');
-        Route::put('updatetradegroup', 'Alert\Http\Controllers\ReportGroupController@updateGroup');
-        Route::get('gettradegrouplist/{id?}', 'Alert\Http\Controllers\ReportGroupController@getTradeGroupList');
-        Route::delete('deletetradegrouplist', 'Alert\Http\Controllers\ReportGroupController@deleteTradeGroupList');
+         //Lasttrade Whitelabel email alert
+        Route::post('getlasttradealert', 'Alert\Http\Controllers\LastTradeController@getLastTradeEmailAlert');
+        Route::post('savelasttradealert', 'Alert\Http\Controllers\LastTradeController@saveLastTradeEmailAlert');
+        
+        //Report Group
+        Route::post('createtradegroup', 'Reportgroup\Http\Controllers\ReportGroupController@saveGroup');
+        Route::put('updatetradegroup', 'Reportgroup\Http\Controllers\ReportGroupController@updateGroup');
+        Route::get('gettradegrouplist/{id?}', 'Reportgroup\Http\Controllers\ReportGroupController@getTradeGroupList');
+        Route::delete('deletetradegrouplist', 'Reportgroup\Http\Controllers\ReportGroupController@deleteTradeGroupList');
 
 
         //Audit Log
         Route::post('createauditlog', 'Alert\Http\Controllers\AuditlogController@save');
         Route::get('getauditlog', 'Alert\Http\Controllers\AuditlogController@get');
         
-         //Whitelabel trade alert
-        Route::post('getlasttradealert', 'Alert\Http\Controllers\LastTradeController@getLastTradeEmailAlert');
-        Route::post('savelasttradealert', 'Alert\Http\Controllers\LastTradeController@saveLastTradeEmailAlert');
-        
         //Mail Setting
-        Route::post('savemailsetting', 'Alert\Http\Controllers\mailsettingController@saveMailSetting');
+        Route::post('savemailsetting', 'Alert\Http\Controllers\MailsettingController@saveMailSetting');
         
         //Trade Alert Discard
         Route::post('savetradealert', 'Alert\Http\Controllers\TradealertdiscardController@saveTradealertDiscrad');

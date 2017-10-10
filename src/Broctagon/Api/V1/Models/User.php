@@ -6,7 +6,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Fox\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Fox\Models\UserHasRole;
-use Fox\Models\user_server_access;
+use Fox\Models\UserserverAccess;
 use Fox\Models\Mt4gateway;
 use Fox\Common\Common;
 use Fox\Models\Mailsetting;
@@ -39,7 +39,7 @@ class User extends Authenticatable
      * @param type $id
      * @return type array
      */
-    public function getAllUsers($limit, $id)
+    public function getAllUsers($limit, $userId)
     {
         $query = $this->select('*')
                 ->where('email', '!=', 'james@gmail.com')
@@ -47,8 +47,8 @@ class User extends Authenticatable
                 ->orderBy('id', 'desc');
         //->paginate($limit);
 
-        if ($id) {
-            $query->where('id', '=', $id);
+        if ($userId) {
+            $query->where('id', '=', $userId);
         }
         $result = $query->paginate($limit);
         return $result;
@@ -64,28 +64,28 @@ class User extends Authenticatable
     {
 
         try {
-            $data = DB::transaction(function() use ($request) {
+            DB::transaction(function() use ($request) {
 
-                        $this->name = $request->input('user_name');
-                        $this->manager_id = $request->input('user_manager_id');
-                        $this->email = $request->input('user_email');
-                        $this->password = bcrypt($request->input('password'));
-                        $this->activate_status = 1;
-                        $this->save();
-                        //Inserting into relationships(pivot table user_server_access)                        
+                $this->name = $request->input('user_name');
+                $this->manager_id = $request->input('user_manager_id');
+                $this->email = $request->input('user_email');
+                $this->password = bcrypt($request->input('password'));
+                $this->activate_status = 1;
+                $this->save();
+                //Inserting into relationships(pivot table UserserverAccess)                        
 
 
-                        $server_id = $request->input('server_id');
+                $serverId = $request->input('server_id');
 
-                        $ids = explode(',', $server_id);
+                $ids = explode(',', $serverId);
 
-                        foreach ($ids as $serve_ids) {
-                            $userserver = new user_server_access();
-                            $userserver->user_id = $this->id;
-                            $userserver->server_id = $serve_ids;
-                            $userserver->save();
-                        }
-                    });
+                foreach ($ids as $serveIds) {
+                    $userserver = new UserserverAccess();
+                    $userserver->user_id = $this->id;
+                    $userserver->server_id = $serveIds;
+                    $userserver->save();
+                }
+            });
         } catch (\Exception $exc) {
             return FALSE;
         }
@@ -100,10 +100,10 @@ class User extends Authenticatable
     public function getRoleId()
     {
 
-        $role_id = Role::select('id')
+        $roleId = Role::select('id')
                         ->where('role_slug', '=', 'user')->first();
-        if (count($role_id)) {
-            return $role_id->id;
+        if (count($roleId)) {
+            return $roleId->id;
         }
         return 0;
     }
@@ -117,6 +117,7 @@ class User extends Authenticatable
      */
     public function updateUser($request)
     {
+        
         $user = $this->find($request->segment(4));
 
         if (!$user) {
@@ -134,50 +135,20 @@ class User extends Authenticatable
 
         $user->activate_status = 1;
 
-        if ($request->input('server_id')) {
-
-            $server_id = $request->input('server_id');
-
-            $ids = explode(',', $server_id);
-
-            foreach ($ids as $serve_ids) {
-                $userserver = new user_server_access();
-//                            $userserver->user_id = $this->id;
-//                            $userserver->server_id = $serve_ids;
-//                            $userserver->save();
-                $check_already_exist = $userserver->where('user_id', '=', $request->segment(4))
-                                ->where('server_id', '=', $serve_ids)->first();
-                if (!count($check_already_exist)) {
-                    $userserver->user_id = $request->segment(4);
-                    $userserver->server_id = $serve_ids;
-                    $userserver->save();
-                }
-            }
-            //Do unselect
-            $check_already_assign = $userserver->where('user_id', '=', $request->segment(4))->get();
-            $assign_server = [];
-            $i = 0;
-            foreach ($check_already_assign as $check_already_assign) {
-                $assign_server[$i] = $check_already_assign->server_id;
-                $i++;
-            }
-            $result = array_diff($assign_server, $ids);
-            //$result = array_diff($assign_server, $ids);
-
-            if (count($result)) {
-                foreach ($result as $server_id) {
-                    $userserver->where('user_id', '=', $request->segment(4))
-                            ->where('server_id', '=', $server_id)
-                            ->delete();
-                }
-            }
-        } else {
-            $userserver = new user_server_access();
-            $userserver->where('user_id', '=', $request->segment(4))->delete();
-        }
-
-
-        if (!$user->save()) {
+//        if ($request->input('server_id')) {
+//            //assign or unassing server to user
+//            $this->serverToUser($request->input('server_id'),$request);
+//        } 
+//        else {
+//            $userserver = new UserserverAccess();
+//            $userserver->where('user_id', '=', $request->segment(4))->delete();
+//        }
+        
+        
+        //assign or unassing server to user
+        $assignStatus = $this->serverToUser($request->input('server_id'),$request);
+       
+        if (!$user->save() || (!$assignStatus)) {
             return false;
         }
         return true;
@@ -195,16 +166,15 @@ class User extends Authenticatable
 
         $user = $this->find($request->segment(4));
 
-        if (!$user) {
-            return false;
-        } else {
-            $user->activate_status = 0;
-            try {
-                $user->save();
-            } catch (\Exception $exc) {
-                return 'error';
+        try {
+            if (!$user) {
+                return false;
             }
+            $user->activate_status = 0;
+            $user->save();
             return true;
+        } catch (\Exception $exc) {
+            return 'error';
         }
     }
 
@@ -218,15 +188,15 @@ class User extends Authenticatable
     public function assignRoleToUser($request)
     {
 
-        $user_has_role = new UserHasRole;
+        $userHasRole = new UserHasRole;
         //Update 
-        $role_id = $user_has_role->select('*')
+        $roleId = $userHasRole->select('*')
                 ->where('user_id', '=', $request->segment(4))
                 ->get();
 
-        if (count($role_id)) {
+        if (count($roleId)) {
             try {
-                $user_has_role->where('user_id', $request->segment(4))
+                $userHasRole->where('user_id', $request->segment(4))
                         ->update(['action' => $request->input('action'), 'roles_id' => $request->input('role_id')]);
 
                 return true;
@@ -236,17 +206,16 @@ class User extends Authenticatable
         }
 
         //Insert
-        $check_user = $this->find($request->segment(4));
+        $checkUser = $this->find($request->segment(4));
 
-        if ($check_user) {
-            $user_has_role->user_id = $request->segment(4);
-            $user_has_role->roles_id = $request->input('role_id');
-            $user_has_role->action = $request->input('action');
+        if ($checkUser) {
+            $userHasRole->user_id = $request->segment(4);
+            $userHasRole->roles_id = $request->input('role_id');
+            $userHasRole->action = $request->input('action');
             try {
-                $user_has_role->save();
+                $userHasRole->save();
                 return true;
             } catch (\Exception $e) {
-                dd($e);
                 return false;
             }
         }
@@ -262,28 +231,29 @@ class User extends Authenticatable
      * @param type $server_name
      * @return type
      */
-    public function getUserServerDetails($user_id, $server_name = null)
+    public function getUserServerDetails($userId, $serverName = null)
     {
 
-        $user_server_access = new user_server_access;
-        $result = $user_server_access->select('serverlist.servername', 'serverlist.ipaddress', 'serverlist.username', 'serverlist.password', 'serverlist.databasename', 'serverlist.GatewayID')
+        $userServerAccess = new UserserverAccess;
+        $result = $userServerAccess->select('serverlist.servername', 'serverlist.ipaddress', 'serverlist.username', 'serverlist.password', 'serverlist.databasename', 'serverlist.GatewayID')
                 ->leftjoin('users', 'user_server_access.user_id', '=', 'users.id')
                 ->leftjoin('serverlist', 'serverlist.id', '=', 'user_server_access.server_id')
-                ->where('user_server_access.user_id', '=', $user_id)
-                ->where('serverlist.servername', '=', $server_name)
+                ->where('user_server_access.user_id', '=', $userId)
+                ->where('serverlist.servername', '=', $serverName)
                 ->get();
-        $server_array = [];
-        $i = 0;
-        foreach ($result as $serverdetails) {
-            $server_array[$i]['server_name'] = $serverdetails['servername'];
-            $server_array[$i]['server_ip'] = $serverdetails['ipaddress'];
-            $server_array[$i]['server_username'] = $serverdetails['username'];
-            $server_array[$i]['server_password'] = $serverdetails['password'];
-            $server_array[$i]['server_db'] = $serverdetails['databasename'];
-            $server_array[$i]['server_gw'] = $serverdetails['GatewayID'];
-            $i++;
+
+        $serverArray = [];
+        $increament = 0;
+        foreach ($result as $serverDetails) {
+            $serverArray[$increament]['server_name'] = $serverDetails['servername'];
+            $serverArray[$increament]['server_ip'] = $serverDetails['ipaddress'];
+            $serverArray[$increament]['server_username'] = $serverDetails['username'];
+            $serverArray[$increament]['server_password'] = $serverDetails['password'];
+            $serverArray[$increament]['server_db'] = $serverDetails['databasename'];
+            $serverArray[$increament]['server_gw'] = $serverDetails['GatewayID'];
+            $increament++;
         }
-        return $server_array;
+        return $serverArray;
     }
 
     /**
@@ -292,25 +262,25 @@ class User extends Authenticatable
      * @param type $user_id
      * @return aray
      */
-    public function getUserPermissionDetails($user_id)
+    public function getUserPermissionDetails($userId)
     {
 
         $result = $this->select('permissions.name')
                 ->leftjoin('users_has_roles', 'users.id', '=', 'users_has_roles.user_id')
                 ->leftjoin('roles_has_permissions', 'users_has_roles.roles_id', '=', 'roles_has_permissions.role_id')
                 ->leftjoin('permissions', 'roles_has_permissions.permissions_id', '=', 'permissions.id')
-                ->where('users.id', '=', $user_id)
+                ->where('users.id', '=', $userId)
                 ->where('roles_has_permissions.action', '=', 1)
                 ->get();
 
-        $permission_array = [];
-        $i = 0;
-        foreach ($result as $permissiondetails) {
+        $permissionArray = [];
+        $increament = 0;
+        foreach ($result as $permissionDetails) {
             //$permission_array[$i]['tab_name'] = $permissiondetails['name'];
-            $permission_array[$i][$permissiondetails['name']] = 1;
-            $i++;
+            $permissionArray[$increament][$permissionDetails['name']] = 1;
+            $increament++;
         }
-        return $permission_array;
+        return $permissionArray;
     }
 
     /**
@@ -319,24 +289,22 @@ class User extends Authenticatable
      * @param type $server_name
      * @return array
      */
-    public function getUserGatewayDetails($server_name)
+    public function getUserGatewayDetails($serverName)
     {
-        $gw_model = new Mt4gateway();
-        $gw_result = $gw_model->select('gateway_name', 'host', 'port', 'master_password', 'mt4gateway.username')
+        $gwModel = new Mt4gateway();
+        $gwResult = $gwModel->select('gateway_name', 'host', 'port', 'master_password', 'mt4gateway.username')
                         ->join('serverlist', 'serverlist.GatewayID', '=', 'mt4gateway.id')
-                        ->where('serverlist.servername', '=', $server_name)->first();
-        $gw_details = [];
-        if ($gw_result) {
-            $gw_details[0]['gateway_name'] = $gw_result->gateway_name;
-            $gw_details[0]['host'] = $gw_result->host;
-            $gw_details[0]['port'] = $gw_result->port;
-            $gw_details[0]['master_password'] = $gw_result->master_password;
-            $gw_details[0]['username'] = $gw_result->username;
-        } else {
-            $gw_details = [];
+                        ->where('serverlist.servername', '=', $serverName)->first();
+        $gwDetails = [];
+        if ($gwResult) {
+            $gwDetails[0]['gateway_name'] = $gwResult->gateway_name;
+            $gwDetails[0]['host'] = $gwResult->host;
+            $gwDetails[0]['port'] = $gwResult->port;
+            $gwDetails[0]['master_password'] = $gwResult->master_password;
+            $gwDetails[0]['username'] = $gwResult->username;
+            return $gwDetails;
         }
-
-        return $gw_details;
+        return $gwDetails;
     }
 
     /**
@@ -347,13 +315,13 @@ class User extends Authenticatable
     public function getDbDetails()
     {
 
-        $db_detials = [];
-        $db_detials[0]['host'] = env('DB_HOST', false);
-        $db_detials[0]['db_name'] = env('DB_DATABASE', false);
-        $db_detials[0]['db_username'] = env('DB_USERNAME', false);
-        $db_detials[0]['db_password'] = env('DB_PASSWORD', false);
+        $dbDetials = [];
+        $dbDetials[0]['host'] = env('DB_HOST', false);
+        $dbDetials[0]['db_name'] = env('DB_DATABASE', false);
+        $dbDetials[0]['db_username'] = env('DB_USERNAME', false);
+        $dbDetials[0]['db_password'] = env('DB_PASSWORD', false);
 
-        return $db_detials;
+        return $dbDetials;
     }
 
     /**
@@ -365,14 +333,14 @@ class User extends Authenticatable
      * @param type $loginmgr
      * @return boolean
      */
-    public function passwordUpdate($request, $servername, $loginmgr)
+    public function passwordUpdate($request, $loginMgr)
     {
 
-        $newpassword = bcrypt($request->input('new_password'));
+        $newPassword = bcrypt($request->input('new_password'));
 
         try {
-            $this->where('manager_id', $loginmgr)
-                    ->update(['password' => $newpassword]);
+            $this->where('manager_id', $loginMgr)
+                    ->update(['password' => $newPassword]);
         } catch (\Exception $e) {
             return false;
         }
@@ -386,11 +354,11 @@ class User extends Authenticatable
      * @param type $server
      * @return array
      */
-    public function getMailSetting($loginid, $server)
+    public function getMailSetting($loginId, $server)
     {
         //get manager id
         $loginmgr = $this->select('manager_id')
-                        ->where('id', $loginid)->first();
+                        ->where('id', $loginId)->first();
 
 
         $mailsetting = new Mailsetting();
@@ -398,22 +366,21 @@ class User extends Authenticatable
                         ->where('login', '=', $loginmgr->manager_id)
                         ->where('server', '=', $server)->get()->toArray();
 
-        $mailsetting = [];
+        $mailsettingArray = [];
         if ($getmailsetting) {
-            $mailsetting[0]['login'] = $getmailsetting[0]['login'];
-            $mailsetting[0]['server'] = $getmailsetting[0]['server'];
-            $mailsetting[0]['smtpserver'] = $getmailsetting[0]['smtpserver'];
-            $mailsetting[0]['mailfrom'] = $getmailsetting[0]['mailfrom'];
-            $mailsetting[0]['mailto'] = $getmailsetting[0]['mailto'];
-            $mailsetting[0]['password'] = $getmailsetting[0]['password'];
-            $mailsetting[0]['port'] = $getmailsetting[0]['port'];
-            $mailsetting[0]['ssl'] = $getmailsetting[0]['ssl'];
-            $mailsetting[0]['enabled'] = $getmailsetting[0]['enabled'];
-        } else {
-            $mailsetting = [];
+            $mailsettingArray[0]['login'] = $getmailsetting[0]['login'];
+            $mailsettingArray[0]['server'] = $getmailsetting[0]['server'];
+            $mailsettingArray[0]['smtpserver'] = $getmailsetting[0]['smtpserver'];
+            $mailsettingArray[0]['mailfrom'] = $getmailsetting[0]['mailfrom'];
+            $mailsettingArray[0]['mailto'] = $getmailsetting[0]['mailto'];
+            $mailsettingArray[0]['password'] = $getmailsetting[0]['password'];
+            $mailsettingArray[0]['port'] = $getmailsetting[0]['port'];
+            $mailsettingArray[0]['ssl'] = $getmailsetting[0]['ssl'];
+            $mailsettingArray[0]['enabled'] = $getmailsetting[0]['enabled'];
+            return $mailsettingArray;
         }
 
-        return $mailsetting;
+        return $mailsettingArray;
     }
 
     /**
@@ -426,8 +393,8 @@ class User extends Authenticatable
      */
     public function checkServerAssign($userId, $serverName)
     {
-        $user_server_access = new user_server_access;
-        $result = $user_server_access->select('serverlist.servername')
+        $userServerAccess = new UserserverAccess;
+        $result = $userServerAccess->select('serverlist.servername')
                 ->leftjoin('users', 'user_server_access.user_id', '=', 'users.id')
                 ->leftjoin('serverlist', 'serverlist.id', '=', 'user_server_access.server_id')
                 ->where('user_server_access.user_id', '=', $userId)
@@ -437,6 +404,47 @@ class User extends Authenticatable
             return true;
         }
         return false;
+    }
+
+    public function serverToUser($serverId, $request)
+    {
+
+        try {
+            $ids = explode(',', $serverId);
+            
+            foreach ($ids as $serveIds) {
+                $userserver = new UserserverAccess();
+                $checkAlreadyExist = $userserver->where('user_id', '=', $request->segment(4))
+                                ->where('server_id', '=', $serveIds)->first();
+
+                if (!count($checkAlreadyExist)) {
+                    $userserver->user_id = $request->segment(4);
+                    $userserver->server_id = $serveIds;
+                    $userserver->save();
+                }
+            }
+            //Do unselect
+            $checkAlreadyAssign = $userserver->where('user_id', '=', $request->segment(4))->get();
+            $assignServer = [];
+            $increament = 0;
+            foreach ($checkAlreadyAssign as $checkAlreadyAssign) {
+                $assignServer[$increament] = $checkAlreadyAssign->server_id;
+                $increament++;
+            }
+            $result = array_diff($assignServer, $ids);
+
+
+            if (count($result)) {
+                foreach ($result as $serverId) {
+                    $userserver->where('user_id', '=', $request->segment(4))
+                            ->where('server_id', '=', $serverId)
+                            ->delete();
+                }
+            }
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
 }

@@ -5,7 +5,7 @@ namespace Fox\Models;
 use Illuminate\Database\Eloquent\Model;
 use Fox\Common\Common;
 
-class lasttrade_whitelabels extends Model
+class LastTradeWhitelabels extends Model
 {
 
     protected $fillable = [
@@ -18,31 +18,31 @@ class lasttrade_whitelabels extends Model
      * Gate trade list by Id
      * 
      * 
-     * @param type $server_name
+     * @param type $serverName
      * @param type $login_id
      * @param type $id
      * @return type array
      */
-    public function getlatsTradeList($server_name, $login_id, $id)
+    public function getlatsTradeList($serverName, $lastTradeId)
     {
-
+        
         $query = $this->select('*')
-                ->where('ServerName', '=', $server_name);
+                ->where('ServerName', '=', $serverName);
 
-        if ($id) {
-            $query->where('id', '=', $id);
+        if ($lastTradeId) {
+            $query->where('id', '=', $lastTradeId);
         }
 
-        $result = array_map(function($v) {
+        $result = array_map(function($tradeResult) {
             return [
-                'id' => $v['Id'],
-                'servername' => $v['ServerName'],
-                'whitelabels' => $v['WhiteLabels'],
-                'groups' => $v['Groups'],
-                'botime' => $v['BoTime'],
-                'fxtime' => $v['FxTime'],
-                'emails' => $v['Emails'],
-                'editurl' => 'api/v1/updatelasttrade/' . $v['Id']
+                'id' => $tradeResult['Id'],
+                'servername' => $tradeResult['ServerName'],
+                'whitelabels' => $tradeResult['WhiteLabels'],
+                'groups' => $tradeResult['Groups'],
+                'botime' => $tradeResult['BoTime'],
+                'fxtime' => $tradeResult['FxTime'],
+                'emails' => $tradeResult['Emails'],
+                'editurl' => 'api/v1/updatelasttrade/' . $tradeResult['Id']
             ];
         }, $query->get()->toArray());
 
@@ -52,21 +52,21 @@ class lasttrade_whitelabels extends Model
     /**
      * Update Last trade
      * 
-     * @param type $server_name
+     * @param type $serverName
      * @param type $login_id
      * @param type $id
      * @param type $request
      * @return boolean
      */
-    public function updatelatsTrade($server_name, $login_id, $id, $request)
+    public function updatelatsTrade($serverName, $lastTradeId, $request)
     {
 
-        $check_id = $this->find($id);
+        $checkId = $this->find($lastTradeId);
 
-        if (count($check_id)) {
+        if (count($checkId)) {
             try {
-                $this->where('Id', $id)
-                        ->where('ServerName', $server_name)
+                $this->where('Id', $lastTradeId)
+                        ->where('ServerName', $serverName)
                         ->update(['BoTime' => $request->input('botime'), 'FxTime' => $request->input('fxtime')]);
                 return true;
             } catch (\Exception $exc) {
@@ -110,14 +110,14 @@ class lasttrade_whitelabels extends Model
      * @param type $id
      * @return boolean
      */
-    public function updateWl($request, $id)
+    public function updateWl($request, $wlId)
     {
 
-        $check_id = $this->find($id);
+        $checkId = $this->find($wlId);
 
-        if (count($check_id)) {
+        if (count($checkId)) {
             try {
-                $this->where('Id', $id)
+                $this->where('Id', $wlId)
                         ->update(['ServerName' => $request->input('servername'),
                             'WhiteLabels' => $request->input('whitelabels'),
                             'Groups' => $request->input('groups'),
@@ -140,13 +140,13 @@ class lasttrade_whitelabels extends Model
      * @param type $id
      * @return boolean
      */
-    public function deleteWl($id)
+    public function deleteWl($wlId)
     {
-        $check_id = $this->find($id);
+        $checkId = $this->find($wlId);
 
-        if (count($check_id)) {
+        if (count($checkId)) {
             try {
-                $this->where('Id', $id)->delete();
+                $this->where('Id', $wlId)->delete();
                 return true;
             } catch (\Exception $exc) {
                 return false;
@@ -160,34 +160,34 @@ class lasttrade_whitelabels extends Model
      * Get white labels 
      * 
      * 
-     * @param type $server_name
+     * @param type $serverName
      * @param type $id
-     * @return boolean
+     * @return array
      */
-    public function getWhiteLabelList($server_name, $id)
+    public function getWhiteLabelList($serverName, $wlId)
     {
-        $check_user_role = common::checkRole();
+        $checkUserRole = common::checkRole();
 
-        if ($check_user_role == 'super_administrator') {
+        if ($checkUserRole == 'super_administrator') {
             $query = $this->select('*')
                     ->orderBy('id', 'desc');
 
-            if ($id) {
-                $query->where('id', '=', $id);
+            if ($wlId) {
+                $query->where('id', '=', $wlId);
             }
 
 
 
             try {
-                $result = array_map(function($v) {
+                $result = array_map(function($tardeList) {
                     return [
-                        'id' => $v['Id'],
-                        'server' => $v['ServerName'],
-                        'whitelabels' => $v['WhiteLabels'],
-                        'groups' => $v['Groups'],
-                        'botime' => $v['BoTime'],
-                        'fxtime' => $v['FxTime'],
-                        'emails' => $v['Emails']
+                        'id' => $tardeList['Id'],
+                        'server' => $tardeList['ServerName'],
+                        'whitelabels' => $tardeList['WhiteLabels'],
+                        'groups' => $tardeList['Groups'],
+                        'botime' => $tardeList['BoTime'],
+                        'fxtime' => $tardeList['FxTime'],
+                        'emails' => $tardeList['Emails']
                     ];
                 }, $query->get()->toArray());
             } catch (\Exception $exc) {
@@ -198,20 +198,20 @@ class lasttrade_whitelabels extends Model
         }
         //if not superadmin
         $query = $this->select('*')
-                ->where('ServerName', $server_name);
+                ->where('ServerName', $serverName);
 
-        if ($id) {
-            $query->where('id', '=', $id);
+        if ($wlId) {
+            $query->where('id', '=', $wlId);
         }
 
 
 
         try {
-            $result = array_map(function($v) {
+            $result = array_map(function($tardeList) {
                 return [
-                    'id' => $v['Id'],
-                    'server' => $v['ServerName'],
-                    'whitelabels' => $v['WhiteLabels'],
+                    'id' => $tardeList['Id'],
+                    'server' => $tardeList['ServerName'],
+                    'whitelabels' => $tardeList['WhiteLabels'],
                 ];
             }, $query->get()->toArray());
         } catch (\Exception $exc) {

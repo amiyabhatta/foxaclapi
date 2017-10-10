@@ -5,7 +5,7 @@ namespace Fox\Models;
 use Illuminate\Database\Eloquent\Model;
 use Fox\Models\UserHasRole;
 use Illuminate\Support\Facades\DB;
-use Fox\Models\roleHasPermission;
+use Fox\Models\RoleHasPermission;
 
 class Role extends Model
 {
@@ -27,13 +27,13 @@ class Role extends Model
      * @param type $id
      * @return type array
      */
-    public function getAllRoles($limit, $id = NULL)
+    public function getAllRoles($limit, $roleId = NULL)
     {
 
         $query = $this->select('id', 'role', 'role_slug');
         
-        if ($id) {
-            $query->where('id', '=', $id);
+        if ($roleId) {
+            $query->where('id', '=', $roleId);
         }
 
         $query->where('role_slug', '!=', 'super_administrator');
@@ -106,11 +106,11 @@ class Role extends Model
             return false;
         }
         try {
-            $role_id = $request->segment(4);
-            DB::transaction(function () use ($role_id) {
-                $this->where('id', '=', $role_id)->delete();
+            $roleId = $request->segment(4);
+            DB::transaction(function () use ($roleId) {
+                $this->where('id', '=', $roleId)->delete();
 
-                UserHasRole::where('roles_id', '=', $role_id)->delete();
+                UserHasRole::where('roles_id', '=', $roleId)->delete();
             });
             return true;
         }
@@ -129,17 +129,17 @@ class Role extends Model
     public function assignRoletoPerm($request)
     {
 
-        $role_has_perm = new roleHasPermission;
+        $roleHasPerm = new RoleHasPermission;
 
         //Update 
-        $perm_id = $role_has_perm->select('*')
+        $permId = $roleHasPerm->select('*')
                 ->where('role_id', '=', $request->segment(4))
                 ->where('permissions_id', '=', $request->input('permission_id'))
                 ->get();
 
-        if (count($perm_id)) {
+        if (count($permId)) {
             try {
-                $role_has_perm->where('role_id', $request->segment(4))
+                $roleHasPerm->where('role_id', $request->segment(4))
                         ->where('permissions_id', $request->input('permission_id'))
                         ->update(['action' => $request->input('action')]);
 
@@ -151,14 +151,14 @@ class Role extends Model
         }
 
         //Insert
-        $check_role = $this->find($request->segment(4));
-        if ($check_role) {
-            $role_has_perm->role_id = $request->segment(4);
-            $role_has_perm->permissions_id = $request->input('permission_id');
-            $role_has_perm->action = $request->input('action');
+        $checkRole = $this->find($request->segment(4));
+        if ($checkRole) {
+            $roleHasPerm->role_id = $request->segment(4);
+            $roleHasPerm->permissions_id = $request->input('permission_id');
+            $roleHasPerm->action = $request->input('action');
 
             try {
-                $role_has_perm->save();
+                $roleHasPerm->save();
                 return true;
             }
             catch (\Exception $e) {

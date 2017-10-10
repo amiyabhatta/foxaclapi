@@ -79,17 +79,17 @@ class Mt4gateway extends Model
      * @param type $id
      * @return boolean|string
      */
-    public function deleteGateway($id)
+    public function deleteGateway($gatewayId)
     {
 
-        $gw = $this->find($id);
+        $gwId = $this->find($gatewayId);
 
-        if (!$gw) {
+        if (!$gwId) {
             return false;
         }
 
         try {
-            $gw->where('id', '=', $id)->delete();
+            $gwId->where('id', '=', $gatewayId)->delete();
         }
         catch (\Exception $exc) {
             return 'error';
@@ -105,13 +105,13 @@ class Mt4gateway extends Model
      * @param type $id
      * @return type array
      */
-    public function getAllGwList($limit, $id)
+    public function getAllGwList($limit, $gatewayId)
     {
         $query = $this->select('*')
                       ->orderBy('id', 'desc');
 
-        if ($id) {
-            $query->where('id', "=", $id);
+        if ($gatewayId) {
+            $query->where('id', "=", $gatewayId);
         }
 
         $result = $query->paginate($limit);

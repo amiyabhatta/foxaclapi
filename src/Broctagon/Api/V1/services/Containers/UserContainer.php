@@ -16,20 +16,18 @@ use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use Fox\Common\Common;
 use Fox\Models\Role;
 
+
 class UserContainer extends Base implements UserContract
 {
 
+    
     protected $userTransformer;
     private $usermodel;
-    private $roleModel;
-
-    public function __construct($userTransformer, $user, $global_setting, $bo_alert, $tabselect)
+    
+    public function __construct($userTransformer, $user)
     {
         $this->userTransformer = $userTransformer;
         $this->usermodel = $user;
-        $this->globalSettingOm = $global_setting;
-        $this->bolAlertSetting = $bo_alert;
-        $this->tabselectmodel = $tabselect;
     }
 
     /**
@@ -38,13 +36,13 @@ class UserContainer extends Base implements UserContract
      * @param type $id
      * @return Collection
      */
-    public function getUsers($id)
+    public function getUsers($userId)
     {
         $limit = Input::get('limit', 20);
 
-        $user = $this->usermodel->getAllUsers($limit, $id);
-
-        $queryParams = array_diff_key($_GET, array_flip(['page']));
+        $user = $this->usermodel->getAllUsers($limit, $userId);
+        
+        $queryParams = array_diff_key(Input::all(), array_flip(['page']));
 
         $user->appends($queryParams);
 
@@ -67,11 +65,11 @@ class UserContainer extends Base implements UserContract
         //$credentials = $request->only('email', 'password');
         $credentials = $request->only('manager_id', 'password');
 
-        $custom_value = $request->only('server_name');
+        $customValue = $request->only('server_name');
 
         try {
             // attempt to verify the credentials and create a token for the user
-            if (!$token = JWTAuth::attempt($credentials, $custom_value)) {
+            if (!$token = JWTAuth::attempt($credentials, $customValue)) {
 
                 // return $this->setStatusCode(401)->respondWithError('Invalid Credentials');
                 return $this->setStatusCode(200)->respond(['message' => trans('user.invalid_creds'),
@@ -92,23 +90,22 @@ class UserContainer extends Base implements UserContract
                         'status_code' => 404]);
         }
 
-        $server_name = $request->input('server_name');
+        $serverName = $request->input('server_name');
         //check server is assign to user
-        $checkserver = $this->serverAssigntoUser($user->id, $server_name);
-        if (!$checkserver) {
+        $checkServer = $this->serverAssigntoUser($user->id, $serverName);
+        if (!$checkServer) {
             return $this->setStatusCode(200)->respond(['message' => trans('user.user_not_registered'),
                         'status_code' => 404]);
         }
 
-        $server_details = $this->usermodel->getUserServerDetails($user->id, $server_name);
-        $tab_details = $this->usermodel->getUserPermissionDetails($user->id);
-        $gateway_details = $this->usermodel->getUserGatewayDetails($server_name);
-        $db_detials = $this->usermodel->getDbDetails();
-        $mail_setting = $this->usermodel->getMailSetting($user->id, $server_name);
-
+        $serverDetails = $this->usermodel->getUserServerDetails($user->id, $serverName);
+        $tabDetails = $this->usermodel->getUserPermissionDetails($user->id);
+        $gatewayDetails = $this->usermodel->getUserGatewayDetails($serverName);
+        $dbDetials = $this->usermodel->getDbDetails();
+        $mailSetting = $this->usermodel->getMailSetting($user->id, $serverName);
         $token = encrypt($token);
         // all good so return the token
-        return $this->setStatusCode(200)->respondWithToken(compact('token', 'server_details', 'tab_details', 'gateway_details', 'db_detials', 'mail_setting'));
+        return $this->setStatusCode(200)->respondWithToken(compact('token', 'serverDetails', 'tabDetails', 'gatewayDetails', 'dbDetials', 'mailSetting'));
     }
 
     /**
@@ -240,9 +237,9 @@ class UserContainer extends Base implements UserContract
      * @param type $request
      * @return type json
      */
-    public function Uilogin($request)
+    public function uiLogin($request)
     {
-
+        
         $credentials = $request->only('email', 'password');
 
         try {
@@ -263,187 +260,7 @@ class UserContainer extends Base implements UserContract
         // all good so return the token
         return $this->setStatusCode(200)->respondWithToken(compact('token'));
     }
-
-    /**
-     * Save setting for global alert for overall monitoring
-     * 
-     * @param type $request
-     * @return type json
-     */
-    public function setGlobalAlertOm($request)
-    {
-
-        //All value should be numeric
-        foreach ($request->all() as $boFileds => $value) {
-            if (!is_numeric($value) && $value != NULL) {
-                return $this->setStatusCode(400)->respond([
-                            'message' => trans($boFileds . ' ' . 'value should be numeric'),
-                            'status_code' => 400
-                ]);
-            }
-        }
-
-
-        //get server name from token
-        $payload = JWTAuth::parseToken()->getPayload();
-        $server_name = $payload->get('server_name');
-        $userinfo = JWTAuth::parseToken()->authenticate();
-        $login_id = $userinfo->manager_id;
-        $res = $this->globalSettingOm->saveSetting($request, $server_name, $login_id);
-
-        if (!$res) {
-            return $this->setStatusCode(500)->respond([
-                        'message' => trans('user.some_error_occur'),
-                        'status_code' => 500
-            ]);
-        }
-
-        return $this->setStatusCode(200)->respond([
-                    'message' => (trans('user.global_alert')),
-                    'status_code' => 200
-        ]);
-    }
-
-    /**
-     * Get settings for Overall monitoring
-     * 
-     * @return type json
-     */
-    public function getGlobalAlertOm()
-    {
-        $payload = JWTAuth::parseToken()->getPayload();
-        $server_name = $payload->get('server_name');
-        $userinfo = JWTAuth::parseToken()->authenticate();
-        $login_id = $userinfo->manager_id;
-        $getGloablSettingData = $this->globalSettingOm->getSetting($server_name, $login_id);
-
-        $ret = [];
-
-        foreach ($getGloablSettingData as $key => $dt) {
-            $ret[$dt->alert_type]['volume_limit1'] = $dt->volume_limit1;
-            $ret[$dt->alert_type]['volume_limit2'] = $dt->volume_limit2;
-            $ret[$dt->alert_type]['avg_volume_limit1'] = $dt->avg_volume_limit1;
-            $ret[$dt->alert_type]['avg_volume_limit2'] = $dt->avg_volume_limit2;
-            $ret[$dt->alert_type]['index_limit'] = $dt->index_limit;
-            $ret[$dt->alert_type]['server'] = $dt->server_name;
-            $ret[$dt->alert_type]['login'] = $dt->login;
-        }
-
-        return response()->json($ret);
-    }
-
-    /**
-     * Delete overall monitoring by servere and loginmanager
-     * 
-     * @param type $request
-     * @return type
-     */
-    public function deleteGlobalAlertOm($request)
-    {
-        $payload = JWTAuth::parseToken()->getPayload();
-        $server_name = $payload->get('server_name');
-        $userinfo = JWTAuth::parseToken()->authenticate();
-        $login_id = $userinfo->manager_id;
-        $deleteGloablSettingData = $this->globalSettingOm->deleteSetting($server_name, $login_id, $request);
-
-        if (!$deleteGloablSettingData) {
-            return $this->setStatusCode(500)->respond([
-                        'message' => trans('user.some_error_occur'),
-                        'status_code' => 500
-            ]);
-        }
-
-        return $this->setStatusCode(200)->respond([
-                    'message' => (trans('user.global_alert_delete')),
-                    'status_code' => 200
-        ]);
-    }
-
-    /**
-     * Save settings for Bo Alert
-     * 
-     * @param type $request
-     * @return type json
-     */
-    public function setBoAlert($request)
-    {
-        //get server name from token
-        $payload = JWTAuth::parseToken()->getPayload();
-        $server_name = $payload->get('server_name');
-        $userinfo = JWTAuth::parseToken()->authenticate();
-        $login_id = $userinfo->manager_id;
-        $res = $this->bolAlertSetting->saveBoAlertSetting($request, $server_name, $login_id);
-
-        if (!$res) {
-            return $this->setStatusCode(500)->respond([
-                        'message' => trans('user.some_error_occur'),
-                        'status_code' => 500
-            ]);
-        }
-
-        return $this->setStatusCode(200)->respond([
-                    'message' => (trans('user.bo_alert_setting')),
-                    'status_code' => 200
-        ]);
-    }
-
-    /**
-     * Get settings for Bo alert
-     * 
-     * @return type json
-     */
-    public function getBoAlert()
-    {
-
-        $payload = JWTAuth::parseToken()->getPayload();
-        $server_name = $payload->get('server_name');
-        $userinfo = JWTAuth::parseToken()->authenticate();
-        $login_id = $userinfo->manager_id;
-        $getGloablSettingData = $this->bolAlertSetting->getBoAlertSetting($server_name, $login_id);
-
-        $ret = [];
-
-        foreach ($getGloablSettingData as $key => $dt) {
-            $ret[$dt->alert_type]['volume_limit1'] = $dt->volume_limit1;
-            $ret[$dt->alert_type]['volume_limit2'] = $dt->volume_limit2;
-            $ret[$dt->alert_type]['avg_volume_limit1'] = $dt->avg_volume_limit1;
-            $ret[$dt->alert_type]['avg_volume_limit2'] = $dt->avg_volume_limit2;
-            $ret[$dt->alert_type]['index_limit'] = $dt->index_limit;
-            $ret[$dt->alert_type]['server'] = $dt->server_name;
-            $ret[$dt->alert_type]['symbol'] = $dt->symbol;
-            $ret[$dt->alert_type]['login'] = $dt->login;
-        }
-
-        return response()->json($ret);
-    }
-
-    /**
-     * Delete bo alert 
-     * 
-     * @param type $request
-     * @return type json
-     */
-    public function deleteBoAlert($request)
-    {
-        $payload = JWTAuth::parseToken()->getPayload();
-        $server_name = $payload->get('server_name');
-        $userinfo = JWTAuth::parseToken()->authenticate();
-        $login_id = $userinfo->manager_id;
-        $deleteGloablSettingData = $this->bolAlertSetting->deleteBoAlertSetting($server_name, $login_id, $request);
-
-        if (!$deleteGloablSettingData) {
-            return $this->setStatusCode(500)->respond([
-                        'message' => trans('user.some_error_occur'),
-                        'status_code' => 500
-            ]);
-        }
-
-        return $this->setStatusCode(200)->respond([
-                    'message' => (trans('user.bo_alert_setting_delete')),
-                    'status_code' => 200
-        ]);
-    }
-
+    
     /**
      * Update|change password for any user
      * 
@@ -463,7 +280,7 @@ class UserContainer extends Base implements UserContract
         }
 
         $servermgrId = common::serverManagerId();
-        $res = $this->usermodel->passwordUpdate($request, $servermgrId['server_name'], $servermgrId['login']);
+        $res = $this->usermodel->passwordUpdate($request, $servermgrId['login']);
         if (!$res) {
             return $this->setStatusCode(500)->respond([
                         'message' => trans('user.some_error_occur'),
@@ -475,51 +292,6 @@ class UserContainer extends Base implements UserContract
                     'message' => (trans('user.password_update')),
                     'status_code' => 200
         ]);
-    }
-
-    /**
-     * Save tab settings
-     * 
-     * @param type $request
-     * @return type json
-     */
-    public function saveTab($request)
-    {
-
-
-        $validate = Validator::make($request->all(), [
-                    "tab_setting" => 'required|check_validtab',
-        ]);
-        if ($validate->fails()) {
-            return $validate->errors();
-        }
-
-        $servermgrId = common::serverManagerId();
-        $res = $this->tabselectmodel->saveTab($request, $servermgrId['server_name'], $servermgrId['login']);
-
-        if (!$res) {
-            return $this->setStatusCode(500)->respond([
-                        'message' => trans('user.some_error_occur'),
-                        'status_code' => 500
-            ]);
-        }
-
-        return $this->setStatusCode(200)->respond([
-                    'message' => (trans('user.save_tab')),
-                    'status_code' => 200
-        ]);
-    }
-
-    /**
-     * get saved tab setting details
-     * 
-     * @return type json
-     */
-    public function getTabSetting()
-    {
-        
-        $servermgrId = common::serverManagerId();
-        return $res = $this->tabselectmodel->getTab($servermgrId['server_name'], $servermgrId['login']);
     }
 
     /**

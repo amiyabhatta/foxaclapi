@@ -5,7 +5,6 @@ namespace Fox\Services\Providers;
 use Fox\Services\Containers\RoleContainer;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
-//use Fox\Transformers\UserTransformer;
 use Fox\Models\Role;
 use Fox\Transformers\RoleTransformer;
 
@@ -27,7 +26,6 @@ class RoleServiceProvider extends ServiceProvider {
          * Service Layer
          */
         
-       
         $roleTransformer = new RoleTransformer;             
         $role = new Role;        
         App::bind('Fox\Services\Contracts\RoleContract', function() use($role, $roleTransformer) {            
