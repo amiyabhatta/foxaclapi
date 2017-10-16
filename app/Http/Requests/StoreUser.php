@@ -29,7 +29,8 @@ class StoreUser extends Request
             'user_email' => 'email|unique:users,email',
             'password' => 'required',
             'conifrm_password' => 'required|same:password',
-            'server_id' => 'required'
+            'server_id' => 'required',
+            'groups' => 'required'
         ];
     }
 }

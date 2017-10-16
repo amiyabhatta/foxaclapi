@@ -44,6 +44,7 @@
                     $scope.manager_id = $scope.user_data.manager_id,
                             $scope.username = $scope.user_data.name,
                             $scope.email = $scope.user_data.email,
+                            $scope.groups = $scope.user_data.groups,
                             $scope.server_id = $scope.user_data.server_id
 
                     angular.forEach($scope.servers, function (value, key) {
@@ -132,6 +133,7 @@
                         {user_manager_id: $scope.manager_id,
                             user_name: $scope.username,
                             user_email: $scope.email,
+                            groups:$scope.groups,
                             password: $scope.password,
                             conifrm_password: $scope.confirmpassword,
                             server_id: $scope.server_id
@@ -140,6 +142,7 @@
                             $scope.fullname = '';
                             $scope.username = '';
                             $scope.email = '';
+                            $scope.groups = '';
                             $scope.password = '';
                             $scope.confirmpassword = '';
                             sessionStorage.succ_message = "User has been created successfully.";
@@ -163,6 +166,7 @@
                         {user_manager_id: $scope.manager_id,
                             user_name: $scope.username,
                             user_email: $scope.email,
+                            groups: $scope.groups,
                             password: $scope.password,
                             confirm_password: $scope.confirmpassword,
                             server_id: $scope.server_id
@@ -171,6 +175,7 @@
                             $scope.fullname = '';
                             $scope.username = '';
                             $scope.email = '';
+                            $scope.groups = '';
                             $scope.password = '';
                             $scope.confirmpassword = '';
                             sessionStorage.succ_message = "User has been updated successfully.";
@@ -224,6 +229,7 @@
             $scope.email = '';
             $scope.server_id = '';
             $scope.ser = '';
+            $scope.groups = '';
             angular.forEach($scope.servers, function (value, key) {
                         value.checked = false;
                         angular.forEach($scope.server_id, function (val, key2) {

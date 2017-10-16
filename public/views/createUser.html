@@ -8,55 +8,57 @@
                     <fieldset>
                         <!-- Name input-->
                         <div class="form-group">
-                            <!-- <label class="col-12 control-label no-padding" for="name">Name</label> -->
-
+                            <label class="col-12 control-label no-padding" for="name">Manager Id</label>
                             <div class="col-12 no-padding">
-                                <input id="fullname" name="manager_id"  ng-model="manager_id" type="text" placeholder="Manager ID " class="form-control">
+                                <input id="fullname" name="manager_id"  autocomplete="off" ng-model="manager_id" type="text" placeholder="" class="form-control">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <!-- <label class="col-12 control-label no-padding" for="name">Name</label> -->
-
+                            <label class="col-12 control-label no-padding" for="name">User Name</label>
                             <div class="col-12 no-padding">
-                                <input id="username" name="username" ng-model="username" type="text" placeholder="User Name" class="form-control">
+                                <input id="username" name="username" autocomplete="off" ng-model="username" type="text" placeholder="" class="form-control">
                             </div>
                         </div>
 
                         <!-- Email input-->
                         <div class="form-group">
-                            <!-- <label class="col-12 control-label no-padding" for="email">Your E-mail</label> -->
-
+                            <label class="col-12 control-label no-padding" for="email">Email</label>
                             <div class="col-12 no-padding">
-                                <input id="email" name="email" ng-model="email"  type="text" placeholder="Email" class="form-control">
+                                <input id="email" name="email" autocomplete="off" ng-model="email"  type="text" placeholder="" class="form-control">
+                            </div>
+                        </div>
+                        
+                        <!-- Email input-->
+                        <div class="form-group">
+                            <label class="col-12 control-label no-padding" for="email">Group</label>
+                            <div class="col-12 no-padding">
+                                <input id="groups" name="groups" autocomplete="off" ng-model="groups"  type="text" placeholder="" class="form-control">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <!-- <label class="col-12 control-label no-padding" for="email">Your E-mail</label> -->
-
+                            <label class="col-12 control-label no-padding" for="email">Password</label>
                             <div class="col-12 no-padding">
-                                <input id="password" name="password"  ng-model="password" type="text" placeholder="Password" class="form-control">
+                                <input id="password" name="password"  autocomplete="off" ng-model="password" type="password" placeholder="" class="form-control">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <!-- <label class="col-12 control-label no-padding" for="email">Your E-mail</label> -->
-
+                            <label class="col-12 control-label no-padding" for="email">Confirm Password</label>
                             <div class="col-12 no-padding">
-                                <input id="confirmpassword" ng-model="confirmpassword" name="confirmpassword" type="text" placeholder="Confirm Password" class="form-control">
+                                <input id="confirmpassword" autocomplete="off" ng-model="confirmpassword" name="confirmpassword" type="password" placeholder="" class="form-control">
                             </div>
                         </div>
                        
                         <div class="form-group">
-                            <h6>Choose server</h1>
+                            <label class="col-12 control-label no-padding" for="email">Choose server</label>
                                 <div class="row">
                                      <div class="col-md-4 float-left" ng-repeat="ser in servers"> 
                                         <input type="checkbox" ng-checked="ser.checked" ng-model="ser.checked" value="{{ser.id}}" ng-change="change(ser.id, this)" />
                                         <label for="box1">{{ser.servername}} </label>
                                     </div>    
                                 </div>
-
                         </div>
 
                         <!-- Form actions -->

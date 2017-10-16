@@ -36,7 +36,7 @@ class UpdateUser extends Request
             'user_manager_id' => 'required|unique:users,manager_id,'.$user->id,
             'user_name' => 'required',
             'server_id' => 'required',
-            
+            'groups' => 'required'
         ];
     }
 }

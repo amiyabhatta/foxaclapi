@@ -121,7 +121,7 @@ Route::group(['prefix' => 'api/v1'], function () {
         
         //Trade Alert Discard
         Route::post('savetradealert', 'Alert\Http\Controllers\TradealertdiscardController@saveTradealertDiscrad');
-        Route::post('gettradealert', 'Alert\Http\Controllers\TradealertdiscardController@getTradealertDiscrad');
+            Route::post('gettradealert', 'Alert\Http\Controllers\TradealertdiscardController@getTradealertDiscrad');
         
         //Password Update
         Route::post('passwordupdate', 'Users\Http\Controllers\UserController@passwordUpdate');

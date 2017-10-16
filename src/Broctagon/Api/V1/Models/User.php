@@ -20,7 +20,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'activate_status',
+        'name', 'email', 'password','groups','activate_status',
     ];
 
     /**
@@ -71,6 +71,7 @@ class User extends Authenticatable
                         $this->email = $request->input('user_email');
                         $this->password = bcrypt($request->input('password'));
                         $this->activate_status = 1;
+                        $this->groups = rtrim($request->input('groups'),',');
                         $this->save();
                         //Inserting into relationships(pivot table user_server_access)                        
 
@@ -127,6 +128,7 @@ class User extends Authenticatable
             $user->name = $request->input('user_name');
         }
         $user->email = $request->input('user_email');
+        $user->groups = rtrim($request->input('groups'),',');
         if ($request->input('password')) {
             $user->password = bcrypt($request->input('password'));
         }
@@ -437,6 +439,11 @@ class User extends Authenticatable
             return true;
         }
         return false;
+    }
+    public function getGroups($userId){
+        
+        $this->getgroup = $this->select('groups')->where('id',$userId)->get()->toArray();
+        return $this;
     }
 
 }

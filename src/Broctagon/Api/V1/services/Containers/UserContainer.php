@@ -40,7 +40,7 @@ class UserContainer extends Base implements UserContract
      */
     public function getUsers($id)
     {
-        $limit = Input::get('limit', 20);
+        $limit = Input::get('limit', 100);
 
         $user = $this->usermodel->getAllUsers($limit, $id);
 
@@ -63,7 +63,7 @@ class UserContainer extends Base implements UserContract
      */
     public function login($request)
     {
-
+      
         //$credentials = $request->only('email', 'password');
         $credentials = $request->only('manager_id', 'password');
 
@@ -105,10 +105,11 @@ class UserContainer extends Base implements UserContract
         $gateway_details = $this->usermodel->getUserGatewayDetails($server_name);
         $db_detials = $this->usermodel->getDbDetails();
         $mail_setting = $this->usermodel->getMailSetting($user->id, $server_name);
-
+        $groups = head($this->usermodel->getGroups($user->id)->getgroup);
+        $usergroups = $groups['groups'];
         $token = encrypt($token);
         // all good so return the token
-        return $this->setStatusCode(200)->respondWithToken(compact('token', 'server_details', 'tab_details', 'gateway_details', 'db_detials', 'mail_setting'));
+        return $this->setStatusCode(200)->respondWithToken(compact('token', 'server_details', 'tab_details', 'gateway_details', 'db_detials', 'mail_setting','usergroups'));
     }
 
     /**
@@ -272,7 +273,6 @@ class UserContainer extends Base implements UserContract
      */
     public function setGlobalAlertOm($request)
     {
-
         //All value should be numeric
         foreach ($request->all() as $boFileds => $value) {
             if (!is_numeric($value) && $value != NULL) {
@@ -282,22 +282,18 @@ class UserContainer extends Base implements UserContract
                 ]);
             }
         }
-
-
         //get server name from token
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
         $userinfo = JWTAuth::parseToken()->authenticate();
         $login_id = $userinfo->manager_id;
         $res = $this->globalSettingOm->saveSetting($request, $server_name, $login_id);
-
         if (!$res) {
             return $this->setStatusCode(500)->respond([
                         'message' => trans('user.some_error_occur'),
                         'status_code' => 500
             ]);
         }
-
         return $this->setStatusCode(200)->respond([
                     'message' => (trans('user.global_alert')),
                     'status_code' => 200
@@ -333,7 +329,7 @@ class UserContainer extends Base implements UserContract
     }
 
     /**
-     * Delete overall monitoring by servere and loginmanager
+     * Delete overall monitoring by server and login manager
      * 
      * @param type $request
      * @return type

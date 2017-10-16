@@ -6,36 +6,43 @@
                 <form class="form-horizontal" action="" method="post" name="createRole" >
                     <fieldset>
                         <div class="form-group">
+                            <label class="col-12 control-label no-padding" for="name">Server Name</label>
                             <div class="col-12 no-padding">
-                                <input id="rolename" name="servername" ng-model="servername" type="text" placeholder="Server Name" class="form-control">
+                                <input id="rolename" name="servername" autocomplete="off" ng-model="servername" type="text" class="form-control">
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="col-12 control-label no-padding" for="name">IP Address</label>
                             <div class="col-12 no-padding">
-                                <input id="rolename" name="ipaddress" ng-model="ipaddress" type="text" placeholder="IP Address" class="form-control">
+                                <input id="rolename" name="ipaddress" autocomplete="off" ng-model="ipaddress" type="text" class="form-control">
                             </div>
                         </div>  
                         <div class="form-group">
+                            <label class="col-12 control-label no-padding" for="name">User Name</label>
                             <div class="col-12 no-padding">
-                                <input id="rolename" name="username" ng-model="username" type="text" placeholder="User Name" class="form-control">
+                                <input id="rolename" name="username" autocomplete="off" ng-model="username" type="text" class="form-control">
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="col-12 control-label no-padding" for="name">Password</label>
                             <div class="col-12 no-padding">
-                                <input id="rolename" name="password" ng-model="password" type="text" placeholder="Password" class="form-control">
+                                <input id="rolename" name="password" autocomplete="off" ng-model="password" type="text" class="form-control">
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="col-12 control-label no-padding" for="name">Database Name</label>
                             <div class="col-12 no-padding">
-                                <input id="rolename" name="databasename" ng-model="databasename" type="text" placeholder="Database Name" class="form-control">
+                                <input id="rolename" name="databasename" autocomplete="off" ng-model="databasename" type="text" class="form-control">
                             </div>
                         </div>  
                         <div class="form-group">
+                            <label class="col-12 control-label no-padding" for="name">Master ID</label>
                             <div class="col-12 no-padding">
-                                <input id="rolename" name="masterid" ng-model="masterid" ng-value="masterid" type="text" placeholder="Master ID" class="form-control">
+                                <input id="rolename" name="masterid" autocomplete="off" ng-model="masterid" ng-value="masterid" type="text" class="form-control">
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="col-12 control-label no-padding" for="name">Select Gateway</label>
                             <div class="col-12 no-padding"> 
                                 <select class="form-control pageList" name="gatwayid" required="" ng-model="gateway_id">
                                     <option ng-value = "" label = "Gateway ID"></option>

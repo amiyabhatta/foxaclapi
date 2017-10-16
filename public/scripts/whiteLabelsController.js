@@ -74,7 +74,7 @@
                             email: $scope.emails,
                         }, config)
                         .then(function (data, status, headers, config) {                           
-                            sessionStorage.succ_message = "White Label has been created successfully.";
+                            sessionStorage.succ_message = "Last trade alert has been created successfully.";
                             $state.go('whitelabels');
 
                         })
@@ -100,7 +100,7 @@
                             email: $scope.emails,
                         }, config)
                         .then(function (data, status, headers, config) {
-                            sessionStorage.succ_message = "White Label has been updated successfully.";
+                            sessionStorage.succ_message = "Last trade alert setting has been updated successfully.";
                             $state.go('whitelabels');
 
                         })
@@ -132,8 +132,8 @@
                 }).then(function (response) {
                     $scope.resp = response;
                     $scope.err_message = '';    
-                    $scope.succ_message = "White Label has been deleted successfully.";
-                    sessionStorage.succ_message = "White Label has been deleted successfully..";
+                    $scope.succ_message = "Last trade alert has been deleted successfully.";
+                    sessionStorage.succ_message = "Last trade alert has been deleted successfully.";
                    // $state.go('gateways');
                     //
                     $state.go($state.current, {}, {reload: true});
@@ -170,7 +170,7 @@
         vm.checkLogin();
         
         
-         $(".page-header h1").text("White Labels");
+         $(".page-header h1").text("Last Trade Alert Settings");
     }
 
 })();

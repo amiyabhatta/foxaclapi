@@ -119,6 +119,9 @@ return [
         ],
         'databasename' => [
            'required' => 'The database name field is required.',   
+        ],
+        'user_type' => [
+          'required' => 'Permission type field is required.',  
         ]
     ],
 
