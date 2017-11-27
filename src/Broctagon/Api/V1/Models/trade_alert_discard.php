@@ -5,6 +5,7 @@ namespace Fox\Models;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use DB;
+use Fox\Common\Common;
 
 class trade_alert_discard extends Model
 {
@@ -57,7 +58,8 @@ class trade_alert_discard extends Model
             $i = 0;
             foreach ($query as $queryResult) {
                 $result[$i]['Ticket'] = $queryResult->Ticket;
-                $result[$i]['Login'] = $queryResult->login_mgr;
+                //$result[$i]['Login'] = $queryResult->login_mgr;
+                $result[$i]['Login'] = common::getloginMgr($queryResult->login_mgr);
                 $result[$i]['Addedon'] = $queryResult->Addedon;
                 $i++;
             }

@@ -13,7 +13,7 @@
         sessionStorage.succ_message = '';
         
         $scope.modulename = 'Users';
-        var token = sessionStorage.AuthUser;
+        var token = localStorage.AuthUser;
         vm.getUsers = function () {
             $scope.showLoader       = true;
             $http.get('api/v1/users', {
@@ -48,13 +48,12 @@
             }
         }
         
-        vm.checkLogin = function() {            
-            var token = sessionStorage.AuthUser;        
-            if(token === '') {
-               $window.location.href = '/login';
-           }
-        }
-        vm.checkLogin();       
+        vm.checkLogin = function () {
+            var token = localStorage.AuthUser;
+            if (token === '' || token === undefined){
+                $window.location.href = '/login';
+            }
+        }();     
         
         $(".page-header h1").text("Users");
         

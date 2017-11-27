@@ -1,0 +1,45 @@
+<section class="row"  ng-init="user.getWhitelableSettings();">
+    <div class="col-sm-12 col-md-6">
+        <span style="color:green">{{succ_message}}</span>        
+        <span style="color:red; white-space: pre-line;">{{err_message}}</span>
+        <div class="card mb-4">
+            <div class="card-block"> <!-- user.getWhiteLabels(); -->
+
+                <form class="form-horizontal" action="" method="post" name="createUser" >
+                    <fieldset>
+                        <!-- Name input-->
+                        <div class="form-group"> 
+                            <label class="col-12 control-label no-padding" for="name">Manager ID: <b>{{managerid}}</b></label> 
+                        </div>
+
+                        
+                        <div class="form-group">
+                                <label class="col-12 control-label no-padding" for="email">White Labels</label>
+                                <div class="row">
+                                     <div class="col-md-4 float-left" ng-repeat="wl in wlsettings" style="border-right: 1px dashed;"> 
+                                       <br>
+                                       <input type="checkbox" ng-checked="wl.flag" ng-model="settings.flag[wl.wlid]" value="{{wl.id}}" ng-change="change(wl.wlid, this)" />
+                                       <label for="box1" style="font-weight: bold;">{{wl.wl_name}} </label><br>
+                                       Groups:  <input id="username" name="botime" ng-value="wl.groups" autocomplete="off" ng-model="settings.groups[wl.wlid]" type="text" placeholder="" class="form-control">
+                                       BO Time: <input id="username" name="botime" ng-value="wl.botime" autocomplete="off" ng-model="settings.botime[wl.wlid]" type="text" placeholder="" class="form-control">
+                                       FX Time: <input id="username" name="fxtime" ng-value="wl.fxtime" autocomplete="off" ng-model="settings.fxtime[wl.wlid]" type="text" placeholder="" class="form-control">
+                                    </div>    
+                                </div>
+                        </div>
+
+                        <!-- Form actions -->
+                        <div class="form-group">
+                            <div class="col-12 widget-right no-padding">
+
+                                <button type="button" class="btn btn-info btn-md float-right" ng-click="resetData()">Reset</button>
+                                <button type="button" class="btn mr-2 btn-primary btn-md float-right" ng-click="saveSettings()">Submit</button>                                
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+</section>

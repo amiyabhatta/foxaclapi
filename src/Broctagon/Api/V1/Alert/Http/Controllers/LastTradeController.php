@@ -40,7 +40,7 @@ class LastTradeController extends Controller
      * @return type json
      */
     public function updateLastTrade($id, Request $request)
-    {
+    {   
         return $this->alertContainer->updateLastTradeList($id, $request);
     }
 
@@ -113,4 +113,42 @@ class LastTradeController extends Controller
         return $this->alertContainer->saveLastTradeWlEmailAlert($request);
     }
 
+    /**
+     * Get Whitelable list with server
+     * 
+     * @param type $server
+     * @return type json
+     */
+    public function whitelableList($server){
+        return $this->alertContainer->whitelableList($server);
+    }
+    
+    /**
+     * Get Whitelable list with userId
+     * @param type $userId
+     * @return type json
+     */
+    public function getServerList($userId){
+        return $this->alertContainer->getServerList($userId);
+    }
+    
+    /**
+     * Assign whitelable to user botime,fxtime,groups settings
+     * 
+     * @param type $userid
+     * @return type json
+     * 
+     */
+    public function assignWhitelable($userId, Request $request){
+       return $this->alertContainer->assignWhitelable($userId, $request); 
+    }
+    
+    public function getMangerId($userId){
+        return $this->alertContainer->getMangerId($userId); 
+    }
+    
+    public function getWlSettings($userId){
+        return $this->alertContainer->getWlSettings($userId);
+    }
+    
 }

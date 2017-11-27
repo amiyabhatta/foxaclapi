@@ -30,11 +30,11 @@ class updateWhiteLabel extends Request
 //        $wl = lw::find($id);   
         
         return [
-          'servername'  => 'required',
+          'serverid'  => 'required',
           'whitelabels' => 'required|unique_whitelabel:'.$id,
           'groups' => 'required',  
-          'botime' => 'required|numeric',
-          'fxtime' => 'required|numeric', 
+          //'botime' => 'required|numeric',
+          //'fxtime' => 'required|numeric', 
         ];
     }
 }

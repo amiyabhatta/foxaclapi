@@ -31,6 +31,11 @@
                     templateUrl: '../views/createUser.html',
                     controller: 'UserController as user'
                 })
+                .state('lastTradeSetting', {
+                    url: '/lastTradeSetting',
+                    templateUrl: '../views/lastTradeSetting.html',
+                    controller: 'UserController as user'
+                })
                 .state('users', {
                     url: '/users',
                     templateUrl: '../views/userView.html',

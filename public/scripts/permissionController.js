@@ -20,7 +20,7 @@
         $scope.showLoader       = true;
         $scope.types = {"1": {"id": 1, "name": "Basic"}, "2": {"id": 2, "name": "Premium"}};
 
-        var token = sessionStorage.AuthUser;
+        var token = localStorage.AuthUser;
         vm.getPermissions = function () {
             $scope.showLoader       = true
             $http.get('api/v1/permission', {
@@ -223,12 +223,12 @@
             }
         }
         
-        vm.checkLogin = function() {            
-            var token = sessionStorage.AuthUser;        
-            if(token === '') {
-               $window.location.href = '/login';
-           }
-        }
+        vm.checkLogin = function () {
+            var token = localStorage.AuthUser;
+            if (token === '' || token === undefined){
+                $window.location.href = '/login';
+            }
+        }();  
         vm.clearData = function() {            
             $scope.permissionname = '';
             $scope.user_type= '';             
@@ -237,7 +237,6 @@
             vm.clearData();
         }
         
-        vm.checkLogin();
         
         $(".page-header h1").text("Permissions");
     }

@@ -286,7 +286,9 @@ class UserContainer extends Base implements UserContract
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
         $userinfo = JWTAuth::parseToken()->authenticate();
-        $login_id = $userinfo->manager_id;
+        $login_id = common::getUserid($userinfo->manager_id);
+        
+        
         $res = $this->globalSettingOm->saveSetting($request, $server_name, $login_id);
         if (!$res) {
             return $this->setStatusCode(500)->respond([
@@ -310,7 +312,7 @@ class UserContainer extends Base implements UserContract
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
         $userinfo = JWTAuth::parseToken()->authenticate();
-        $login_id = $userinfo->manager_id;
+        $login_id = common::getUserid($userinfo->manager_id);
         $getGloablSettingData = $this->globalSettingOm->getSetting($server_name, $login_id);
 
         $ret = [];
@@ -321,8 +323,9 @@ class UserContainer extends Base implements UserContract
             $ret[$dt->alert_type]['avg_volume_limit1'] = $dt->avg_volume_limit1;
             $ret[$dt->alert_type]['avg_volume_limit2'] = $dt->avg_volume_limit2;
             $ret[$dt->alert_type]['index_limit'] = $dt->index_limit;
-            $ret[$dt->alert_type]['server'] = $dt->server_name;
-            $ret[$dt->alert_type]['login'] = $dt->login;
+            //$ret[$dt->alert_type]['server'] = $dt->server_name;
+            $ret[$dt->alert_type]['server'] = common::getServerName($dt->server_name);
+            $ret[$dt->alert_type]['login'] = common::getloginMgr($dt->login);
         }
 
         return response()->json($ret);
@@ -339,7 +342,8 @@ class UserContainer extends Base implements UserContract
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
         $userinfo = JWTAuth::parseToken()->authenticate();
-        $login_id = $userinfo->manager_id;
+        $login_id = common::getUserid($userinfo->manager_id);
+        
         $deleteGloablSettingData = $this->globalSettingOm->deleteSetting($server_name, $login_id, $request);
 
         if (!$deleteGloablSettingData) {
@@ -363,11 +367,13 @@ class UserContainer extends Base implements UserContract
      */
     public function setBoAlert($request)
     {
+        
         //get server name from token
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
         $userinfo = JWTAuth::parseToken()->authenticate();
-        $login_id = $userinfo->manager_id;
+        $login_id = common::getUserid($userinfo->manager_id);
+        
         $res = $this->bolAlertSetting->saveBoAlertSetting($request, $server_name, $login_id);
 
         if (!$res) {
@@ -394,7 +400,8 @@ class UserContainer extends Base implements UserContract
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
         $userinfo = JWTAuth::parseToken()->authenticate();
-        $login_id = $userinfo->manager_id;
+        $login_id = common::getUserid($userinfo->manager_id);
+        
         $getGloablSettingData = $this->bolAlertSetting->getBoAlertSetting($server_name, $login_id);
 
         $ret = [];
@@ -405,9 +412,9 @@ class UserContainer extends Base implements UserContract
             $ret[$dt->alert_type]['avg_volume_limit1'] = $dt->avg_volume_limit1;
             $ret[$dt->alert_type]['avg_volume_limit2'] = $dt->avg_volume_limit2;
             $ret[$dt->alert_type]['index_limit'] = $dt->index_limit;
-            $ret[$dt->alert_type]['server'] = $dt->server_name;
+            $ret[$dt->alert_type]['server'] = common::getServerName($dt->server_name);
             $ret[$dt->alert_type]['symbol'] = $dt->symbol;
-            $ret[$dt->alert_type]['login'] = $dt->login;
+            $ret[$dt->alert_type]['login'] = common::getloginMgr($dt->login);
         }
 
         return response()->json($ret);
@@ -424,7 +431,8 @@ class UserContainer extends Base implements UserContract
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
         $userinfo = JWTAuth::parseToken()->authenticate();
-        $login_id = $userinfo->manager_id;
+        $login_id = common::getUserid($userinfo->manager_id);
+        
         $deleteGloablSettingData = $this->bolAlertSetting->deleteBoAlertSetting($server_name, $login_id, $request);
 
         if (!$deleteGloablSettingData) {
@@ -481,8 +489,7 @@ class UserContainer extends Base implements UserContract
      */
     public function saveTab($request)
     {
-
-
+        
         $validate = Validator::make($request->all(), [
                     "tab_setting" => 'required|check_validtab',
         ]);
@@ -491,7 +498,9 @@ class UserContainer extends Base implements UserContract
         }
 
         $servermgrId = common::serverManagerId();
-        $res = $this->tabselectmodel->saveTab($request, $servermgrId['server_name'], $servermgrId['login']);
+        $login = common::getUserid($servermgrId['login']);
+       
+        $res = $this->tabselectmodel->saveTab($request, $servermgrId['server_name'], $login);
 
         if (!$res) {
             return $this->setStatusCode(500)->respond([
@@ -513,9 +522,10 @@ class UserContainer extends Base implements UserContract
      */
     public function getTabSetting()
     {
-        
+       
         $servermgrId = common::serverManagerId();
-        return $res = $this->tabselectmodel->getTab($servermgrId['server_name'], $servermgrId['login']);
+        $login = common::getUserid($servermgrId['login']);
+        return $res = $this->tabselectmodel->getTab($servermgrId['server_name'], $login);
     }
 
     /**

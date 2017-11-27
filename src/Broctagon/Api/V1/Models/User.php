@@ -78,6 +78,8 @@ class User extends Authenticatable
 
                         $server_id = $request->input('server_id');
 
+                        $server_id = rtrim($server_id,',');
+                        
                         $ids = explode(',', $server_id);
 
                         foreach ($ids as $serve_ids) {
@@ -394,16 +396,16 @@ class User extends Authenticatable
         $loginmgr = $this->select('manager_id')
                         ->where('id', $loginid)->first();
 
-
+        $serverid = common::getServerId($server);
         $mailsetting = new Mailsetting();
         $getmailsetting = $mailsetting->select('login', 'server', 'smtpserver', 'mailfrom', 'mailto', 'password', 'port', 'ssl', 'enabled')
-                        ->where('login', '=', $loginmgr->manager_id)
-                        ->where('server', '=', $server)->get()->toArray();
+                        ->where('login', '=', $loginid)
+                        ->where('server', '=', $serverid)->get()->toArray();
 
         $mailsetting = [];
         if ($getmailsetting) {
-            $mailsetting[0]['login'] = $getmailsetting[0]['login'];
-            $mailsetting[0]['server'] = $getmailsetting[0]['server'];
+            $mailsetting[0]['login'] = common::getloginMgr($getmailsetting[0]['login']);
+            $mailsetting[0]['server'] = common::getServerName($getmailsetting[0]['server']);
             $mailsetting[0]['smtpserver'] = $getmailsetting[0]['smtpserver'];
             $mailsetting[0]['mailfrom'] = $getmailsetting[0]['mailfrom'];
             $mailsetting[0]['mailto'] = $getmailsetting[0]['mailto'];
@@ -445,5 +447,11 @@ class User extends Authenticatable
         $this->getgroup = $this->select('groups')->where('id',$userId)->get()->toArray();
         return $this;
     }
+    
+    public function getMangerId($userId){
+       $res = $this->select('manager_id')
+                   ->where('id','=',$userId)->get()->toArray();
+       return array('mangerid' => $res[0]['manager_id']);
+    } 
 
 }

@@ -10,8 +10,15 @@ class UserTransformer extends Fractal\TransformerAbstract {
 
     public function transform($user) {
        $srever_id = user_server_access::select('server_id')
-                                       ->where('user_id',$user['id'])->get()->toArray();
+                                       ->where('user_id',$user['id'])->get();
        
+       $serId = [];
+       $in = 0;
+       foreach($srever_id as $srever_ids){
+          $serId[$in]['server_id'] = (int) $srever_ids->server_id;
+          $in++;
+       }
+
        $user_role   = UserHasRole::select('roles_id')
                         ->where('user_id', '=', $user['id'])->get();
        
@@ -24,11 +31,11 @@ class UserTransformer extends Fractal\TransformerAbstract {
         return [
             'id' => $user['id'],
             'name' => $user['name'],
-            'manager_id' => $user['manager_id'],
+            'manager_id' => (int) $user['manager_id'],
             'email' => $user['email'],
             'groups' => $user['groups'],
-            'server_id' => $srever_id,
-            'role_id'  => $role_id,
+            'server_id' => $serId,
+            'role_id'  => (int) $role_id,
             'links' => [
                 'rel' => 'self',
                 'uri' => 'api/v1/users/' . $user['id']

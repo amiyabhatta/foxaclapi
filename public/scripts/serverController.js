@@ -17,7 +17,7 @@
         $scope.confirmpassword = '';
         $scope.module = 'server';    
        
-        var token = sessionStorage.AuthUser;
+        var token = localStorage.AuthUser;
         vm.getServers = function () {
             $scope.showLoader       = true;
             $http.get('api/v1/server', {
@@ -182,6 +182,12 @@
         $scope.resetData = function() {  
             vm.clearData();
         }
+        vm.checkLogin = function () {
+            var token = localStorage.AuthUser;
+            if (token === '' || token === undefined){
+                $window.location.href = '/login';
+            }
+        }();
         
         $(".page-header h1").text("Servers");
     }

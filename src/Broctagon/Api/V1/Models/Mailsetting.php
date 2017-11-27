@@ -4,6 +4,7 @@ namespace Fox\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use DB;
+use Fox\Common\Common;
 
 class Mailsetting extends Model {
 
@@ -25,9 +26,11 @@ class Mailsetting extends Model {
     public function saveMailSetting($request, $server_name, $loginmgrid) {
 
         //check data already saved or not for same server
-
+ 
+        $serverid = common::getServerId($server_name);
+        
         $checkresult = $this->where('login', '=', $loginmgrid)
-                        ->where('server', '=', $server_name)->get();
+                        ->where('server', '=', $serverid)->get();
 
         if (count($checkresult)) {
 
@@ -42,14 +45,15 @@ class Mailsetting extends Model {
 
             //update
             try {
-                DB::update("update mailsettings set smtpserver = '$smtpserver', mailfrom = '$mailfrom', mailto = '$mailto', `password` = '$password', `port` = '$port', `ssl` = $ssl,enabled = $enabled where `server` = '$server_name' AND `login` = '$loginmgrid'");
+                DB::update("update mailsettings set smtpserver = '$smtpserver', mailfrom = '$mailfrom', mailto = '$mailto', `password` = '$password', `port` = '$port', `ssl` = $ssl,enabled = $enabled where `server` = '$serverid' AND `login` = '$loginmgrid'");
             } catch (\Exception $exc) {
                 return false;
             }
         } else {
             //Insert
             $loginmgr = $loginmgrid;
-            $server = $server_name;
+            //$server = $server_name;
+            $server = $serverid;
             $smtpserver = $request->input('smtpserver');
             $mailfrom = $request->input('mailfrom');
             $mailto = $request->input('mailto');

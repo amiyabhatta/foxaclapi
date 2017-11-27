@@ -24,11 +24,11 @@ class createWhiteLabel extends Request
     public function rules()
     {
         return [
-          'servername'  => 'required',
+          'serverid'  => 'required',
           'whitelabels' => 'required|unique:lasttrade_whitelabels',
           'groups' => 'required',
-          'botime' => 'required|numeric',
-          'fxtime' => 'required|numeric'          
+          //'botime' => 'required|numeric',
+          //'fxtime' => 'required|numeric'          
         ];
     }
 }

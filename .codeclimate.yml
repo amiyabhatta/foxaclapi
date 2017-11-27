@@ -1,0 +1,32 @@
+---
+engines:
+  rubocop:
+    enabled: true
+  duplication:
+    enabled: true
+    config:
+      debug: true
+      languages:
+      - ruby
+  fixme:
+    enabled: true
+    exclude_paths:
+    - config/engines.yml
+  markdownlint:
+    enabled: true
+    checks:
+      MD002:
+        enabled: false
+  phpmd:
+    enabled: true
+    config:
+      debug: true
+      file_extensions: "php"
+      rulesets: "customrule_phpmd.xml"
+ratings:
+  paths:
+  - "**.rb"
+  - "**.php"
+exclude_paths:
+- "**/vendor/"
+- "**/nbproject/"

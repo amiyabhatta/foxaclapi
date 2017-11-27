@@ -5,6 +5,7 @@ namespace Fox\Models;
 use Illuminate\Database\Eloquent\Model;
 use Fox\Models\ReportGroupUser;
 use DB;
+use Fox\Common\Common;
 
 class ReportGroup extends Model
 {
@@ -33,7 +34,8 @@ class ReportGroup extends Model
                         $InsId = $this->insertGetId([
                             'login_mgr' => $logimanagerid,
                             'group_name' => $request->input('group_name'),
-                            'server' => $servername
+                            //'server' => $servername 
+                            'server' => common::getServerId($servername) 
                         ]);
 
 
@@ -66,6 +68,7 @@ class ReportGroup extends Model
     public function updateReportGroup($servername, $logimanagerid, $request)
     {
 
+        
         $group_id = $request->input('group_id');
         $check_group_id = $this->find($group_id);
 
@@ -75,9 +78,10 @@ class ReportGroup extends Model
                 $data = DB::transaction(function() use ($servername, $logimanagerid, $request, $group_id) {
 
                             //Update group name  
-
+                            $serverid = common::getServerId($servername);
                             $this->where('id', $group_id)
-                                    ->where('server', $servername)
+                                    //->where('server', $servername)
+                                    ->where('server', $serverid)
                                     ->where('login_mgr', $logimanagerid)
                                     ->update(['group_name' => $request->input('group_name')]);
 
@@ -135,16 +139,19 @@ class ReportGroup extends Model
         }
         else {
 
+            $serverid = common::getServerId($servername);
             $query = $this->select('*')
-                    ->where('report_group.server', '=', $servername)
+                    ->where('report_group.server', '=', $serverid)
                     ->where('report_group.login_mgr', '=', $logimanagerid);
 
+            
             $result = array_map(function($v) {
                 return [
                     'report_group_id' => $v['id'],
-                    'report_group_managerid' => $v['login_mgr'],
+                    'report_group_managerid' => common::getloginMgr($v['login_mgr']),
                     'report_group_groupname' => $v['group_name'],
-                    'report_group_servername' => $v['server'],
+                    //'report_group_servername' => $v['server'],
+                    'report_group_servername' => common::getServerName($v['server'])
                 ];
             }, $query->get()->toArray());
         }
@@ -169,15 +176,16 @@ class ReportGroup extends Model
             try {
                 $data = DB::transaction(function() use ($servername, $logimanagerid, $request) {
 
+                    $serverid = common::getServerId($servername);
                             //Delete data from report_group
                             $this->where('id', $request->input('group_id'))
-                                    ->where('server', $servername)
+                                    ->where('server', $serverid)
                                     ->where('login_mgr', $logimanagerid)
                                     ->delete();
 
                             //Delete data from report_gruoptousers
                             $reportusergroup = new ReportGroupUser;
-
+                            
                             $reportusergroup->where('report_group_id', $request->input('group_id'))->delete();
                         });
             }
@@ -199,8 +207,9 @@ class ReportGroup extends Model
      */
     public function checkGroupid($serverName, $logimanagerid, $request){
         
+        $serverid = common::getServerId($serverName);
         $check_id = $this->select('id')
-                         ->where('server', $serverName)
+                         ->where('server', $serverid)
                          ->where('login_mgr', $logimanagerid)
                          ->where('id', $request->input('group_id'))->get();
         

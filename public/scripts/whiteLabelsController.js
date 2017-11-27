@@ -10,13 +10,14 @@
         var vm = this;
         vm.users;
         vm.error;
-        $scope.servername = '';
+        $scope.serverid = 0;
+        $scope.selectedServerIndex = false;
         $scope.whitelabels = '';
         $scope.groups = '';
         $scope.botime =  '';
         $scope.fxtime = '';
         $scope.emails = '';
-        var token = sessionStorage.AuthUser;
+        var token = localStorage.AuthUser;
         var url = $location.search();
         $scope.module = 'gateway';
         vm.getWhiteLabels = function () {
@@ -41,13 +42,16 @@
                     "Authorization": 'Bearer ' + token
                 }
             }).then(function (response) {
-                $scope.whitelabel = response.data.data[0];  
-                $scope.servername = $scope.whitelabel.server;
+                $scope.whitelabel  = response.data.data[0];  
+                $scope.servername  = $scope.whitelabel.server;
+                $scope.serverid    = $scope.whitelabel.serverid;
                 $scope.whitelabels = $scope.whitelabel.whitelabels;
-                $scope.groups = $scope.whitelabel.groups;
-                $scope.botime = $scope.whitelabel.botime;
-                $scope.fxtime = $scope.whitelabel.fxtime;
-                $scope.emails = $scope.whitelabel.emails;
+                $scope.groups      = $scope.whitelabel.groups;
+                $scope.botime      = $scope.whitelabel.botime;
+                $scope.fxtime      = $scope.whitelabel.fxtime;
+                $scope.emails      = $scope.whitelabel.emails;
+                
+                
             }, function (error) {
 
             });
@@ -63,18 +67,19 @@
                     "Authorization": 'Bearer ' + token
                 }
             }
+            
             if (url.id ===  undefined ) {
                 $http.post('api/v1/createwhitelabel',
                         {
-                            servername: $scope.servername,
+                            serverid: $scope.selectedServerIndex['id'],
                             whitelabels: $scope.whitelabels,
                             groups: $scope.groups,
-                            botime: $scope.botime,
-                            fxtime: $scope.fxtime,
-                            email: $scope.emails,
+                            //botime: $scope.botime,
+                            //fxtime: $scope.fxtime,
+                            //email: $scope.emails,
                         }, config)
                         .then(function (data, status, headers, config) {                           
-                            sessionStorage.succ_message = "Last trade alert has been created successfully.";
+                            sessionStorage.succ_message = "Whitelable setting has been created successfully.";
                             $state.go('whitelabels');
 
                         })
@@ -92,15 +97,15 @@
             } else {
                 $http.put('api/v1/updatewhitelabel/' + url.id,
                         {
-                            servername: $scope.servername,
+                            serverid: $scope.selectedServerIndex['id'],
                             whitelabels: $scope.whitelabels,
                             groups: $scope.groups,
-                            botime: $scope.botime,
-                            fxtime: $scope.fxtime,
-                            email: $scope.emails,
+                            //botime: $scope.botime,
+                            //fxtime: $scope.fxtime,
+                            //email: $scope.emails,
                         }, config)
                         .then(function (data, status, headers, config) {
-                            sessionStorage.succ_message = "Last trade alert setting has been updated successfully.";
+                            sessionStorage.succ_message = "Whitelable setting has been updated successfully.";
                             $state.go('whitelabels');
 
                         })
@@ -132,8 +137,8 @@
                 }).then(function (response) {
                     $scope.resp = response;
                     $scope.err_message = '';    
-                    $scope.succ_message = "Last trade alert has been deleted successfully.";
-                    sessionStorage.succ_message = "Last trade alert has been deleted successfully.";
+                    $scope.succ_message = "Whitelable has been deleted successfully.";
+                    sessionStorage.succ_message = "Whitelable has been deleted successfully.";
                    // $state.go('gateways');
                     //
                     $state.go($state.current, {}, {reload: true});
@@ -148,12 +153,12 @@
             }
         }
         
-        vm.checkLogin = function() {            
-            var token = sessionStorage.AuthUser;        
-            if(token === '') {
-               $window.location.href = '/login';
-           }
-        }
+        vm.checkLogin = function () {
+            var token = localStorage.AuthUser;
+            if (token === '' || token === undefined){
+                $window.location.href = '/login';
+            }
+        }();
         
         vm.clearData = function() {            
             $scope.servername = '';
@@ -167,10 +172,33 @@
             vm.clearData();
         }
         
-        vm.checkLogin();
         
-        
-         $(".page-header h1").text("Last Trade Alert Settings");
+         $(".page-header h1").text("Whitelable Settings");
+         
+         vm.getServers = function () {
+            $scope.showLoader = true;
+            $http.get('api/v1/serverlist', {
+                headers: {
+                    "Authorization": 'Bearer ' + token
+                }
+            }).then(function (response) {
+                $scope.servers = response.data;
+                $scope.servers.unshift({id : '', servername: 'Select Server Name'});
+                vm.setSelectedServer($scope.servers);
+                $scope.showLoader = false;
+            }, function (error) {
+
+            });
+        };
+        vm.setSelectedServer = function(servers){
+            $scope.selectedServerIndex = servers[0];
+            for(var i= 0; i < servers.length; i++){
+                if(servers[i].id == $scope.serverid){ 
+                    $scope.selectedServerIndex = servers[i];
+                    break;
+                }
+            }
+        }
     }
 
 })();

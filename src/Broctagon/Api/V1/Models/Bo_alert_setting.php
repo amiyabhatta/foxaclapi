@@ -3,6 +3,7 @@
 namespace Fox\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Fox\Common\Common;
 
 class Bo_alert_setting extends Model
 {
@@ -22,8 +23,9 @@ class Bo_alert_setting extends Model
      */
     public function saveBoAlertSetting($request, $servername , $login)
     {
+        $serverid = common::getServerId($servername);
         
-        $server = $this->where('server_name', '=', $servername)
+        $server = $this->where('server_name', '=', $serverid)
                        ->where('login','=',$login)
                        ->get();
         
@@ -41,7 +43,6 @@ class Bo_alert_setting extends Model
         }
         
         
-        
         //Delete Details
         $alert_type = ['bo_buy', 'bo_sell'];
         $symbol_type_array = ['volume_limit1', 'volume_limit2', 'avg_volume_limit1', 'avg_volume_limit2', 'index_limit'];
@@ -51,7 +52,8 @@ class Bo_alert_setting extends Model
             $input[$key]['alert_type'] = $type;
             foreach ($symbol_type_array as $symbo_type) {
                 $input[$key][$symbo_type] = $request->input($type . '_' . $symbo_type);
-                $input[$key]['server_name'] = $servername;
+                //$input[$key]['server_name'] = $servername;
+                $input[$key]['server_name'] = $serverid;
                 $input[$key]['login'] = $login;
                 $input[$key]['symbol'] = $request->input('symbol');
                 if(!count($server)){
@@ -86,7 +88,7 @@ class Bo_alert_setting extends Model
                      $post_index_limit = (isset($index_limit)) ? $index_limit : $exist_record[$input_update->alert_type]['index_limit']; 
                      $post_symbol = (isset($symbol)) ? $symbol : $exist_record[$input_update->alert_type]['symbol']; 
                     
-                    $this->where('server_name', $servername)
+                    $this->where('server_name', $serverid)
                             ->where('alert_type', $input_update['alert_type'])
                             ->where('login', $login)
                             ->update(array(
@@ -128,9 +130,10 @@ class Bo_alert_setting extends Model
      */
     public function getBoAlertSetting($servername, $login)
     {
+        $serverid = common::getServerId($servername);
         return $this->select('*')
                     ->where('login',$login)
-                    ->where('server_name', $servername)
+                    ->where('server_name', $serverid)
                     ->get();
     }
 
@@ -146,10 +149,12 @@ class Bo_alert_setting extends Model
      */
     public function deleteBoAlertSetting($servername, $login, $request)
     {
+        
+        $serverid = common::getServerId($servername);
         try {
           if ($request->input('delete_type')) {   
             $this->where('login', '=', $login)
-                 ->where('server_name', '=', $servername)
+                 ->where('server_name', '=', $serverid)
                  ->where('alert_type', '=',$request->input('delete_type'))   
                  ->update(array(
                                 "volume_limit1" => '',
@@ -162,12 +167,11 @@ class Bo_alert_setting extends Model
           }
           else {
                 $this->where('login', '=', $login)
-                        ->where('server_name', '=', $servername)
+                        ->where('server_name', '=', $serverid)
                         ->delete();
             }
         }
         catch (\Exception $exc) {
-            dd($exc);
             return FALSE;
         }
         return true;

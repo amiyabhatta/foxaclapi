@@ -6,6 +6,7 @@ use Fox\common\Base;
 use Carbon\Carbon;
 use Tymon\JWTAuth\Facades\JWTAuth;
 Use Fox\Models\UserHasRole;
+use DB;
 
 class Common extends Base
 {
@@ -57,5 +58,45 @@ class Common extends Base
 
         return array('server_name' => $payload->get('server_name'), 'login' => $userinfo->manager_id);
     }
+    
+    //Get serverId from servername 
+    public static function getServerId($serverName = NULL){
+        $serverId = '';
+        if($serverName){
+            $serverId =  DB::select( DB::raw("SELECT id FROM serverlist WHERE servername = '$serverName'") );
+            return $serverId[0]->id;
+        }
+        return $serverId;
+    }
+    
+    //Get serverId from servername 
+    public static function getServerName($serverId = NULL){
+        $serverName = '';
+        if((int) $serverId){
+            $serverName =  DB::select( DB::raw("SELECT servername FROM serverlist WHERE id =".$serverId) );
+            return $serverName[0]->servername;
+        }
+        return $serverName;
+    }
 
+    //get user id from login mnager
+    public static function getUserid($loginmgr = NULL){
+        $userId = '';
+        if($loginmgr){
+            $userId =  DB::select( DB::raw("SELECT id FROM users WHERE manager_id =".$loginmgr) );
+            return $userId[0]->id;
+        }
+        return $userId;
+    }
+    
+    //get mangerid from login userid
+    public static function getloginMgr($userId = NULL){
+        
+        $loginmgr = '';
+        if($userId){
+            $loginmgr =  DB::select( DB::raw("SELECT manager_id FROM users WHERE id=".$userId) );
+            return $loginmgr[0]->manager_id;
+        }
+        return $loginmgr;
+    }
 }

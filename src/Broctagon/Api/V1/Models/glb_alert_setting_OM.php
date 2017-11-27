@@ -3,6 +3,7 @@
 namespace Fox\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Fox\Common\Common;
 
 class glb_alert_setting_OM extends Model
 {
@@ -24,7 +25,9 @@ class glb_alert_setting_OM extends Model
     public function saveSetting($request, $servername, $login)
     {
 
-        $server = $this->where('server_name', '=', $servername)
+        $serverid = common::getServerId($servername);
+        
+        $server = $this->where('server_name', '=', $serverid)
                 ->where('login', '=', $login)
                 ->get();
 
@@ -49,7 +52,8 @@ class glb_alert_setting_OM extends Model
             $input[$key]['alert_type'] = $type;
             foreach ($symbol_type_array as $symbo_type) {
                 $input[$key][$symbo_type] = $request->input($type . '_' . $symbo_type);
-                $input[$key]['server_name'] = $servername;
+                //$input[$key]['server_name'] = $servername;
+                $input[$key]['server_name'] = $serverid;
                 $input[$key]['login'] = $login;
                 if (!count($server)) {
                     $input[$key]['created_at'] = date('Y-m-d H:i:s');
@@ -85,7 +89,7 @@ class glb_alert_setting_OM extends Model
                      $post_index_limit = (isset($index_limit)) ? $index_limit : $exist_record[$input_update->alert_type]['index_limit']; 
                     
                     
-                    $this->where('server_name', $servername)
+                    $this->where('server_name', $serverid)
                             ->where('alert_type', $input_update['alert_type'])
                             ->where('login', $login)
                             ->update(array(
@@ -127,9 +131,10 @@ class glb_alert_setting_OM extends Model
      */
     public function getSetting($servername, $login)
     {
+        $serverid = common::getServerId($servername);
         return $this->select('*')
                         ->where('login', $login)
-                        ->where('server_name', $servername)
+                        ->where('server_name', $serverid)
                         ->get();
     }
 
@@ -144,11 +149,11 @@ class glb_alert_setting_OM extends Model
      */
     public function deleteSetting($servername, $login, $request)
     {
-        
+        $serverid = common::getServerId($servername);
         try {
             if ($request->input('delete_type')) {
               $this->where('login', '=', $login)
-                        ->where('server_name', '=', $servername)
+                        ->where('server_name', '=', $serverid)
                         ->where('alert_type', '=',$request->input('delete_type'))
                         ->update(array(
                                 "volume_limit1" => '',

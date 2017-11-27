@@ -8,7 +8,7 @@
 
     function AuthController($auth, $state, $window, $scope, $timeout) {
         var vm = this;
-        sessionStorage.AuthUser = ''; 
+        localStorage.AuthUser = ''; 
              
         vm.login = function() {
             var credentials = {
@@ -33,7 +33,7 @@
                      }, 4000); // 4 seconds   
                 }
                 
-                sessionStorage.AuthUser = data.data.data.token;                
+                localStorage.AuthUser = data.data.data.token;                
                 // If login is successful, redirect to the users state
                 $window.location.href = '/home#!/home';
             }).catch(function (response, status, header, config) {
@@ -48,11 +48,11 @@
         }
         
         $scope.logout = function($event) {
-            sessionStorage.AuthUser = '';     
+            localStorage.AuthUser = '';     
         }
         $scope.redirect = 0; 
         vm.checkLogin = function() {            
-            var token = sessionStorage.AuthUser;        
+            var token = localStorage.AuthUser;        
             if(token === '') {
                $window.location.href = '/login';
            }

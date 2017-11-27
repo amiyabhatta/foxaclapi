@@ -5,6 +5,7 @@ namespace Fox\Models;
 use Illuminate\Database\Eloquent\Model;
 use Fox\Models\Permissions;
 use DB;
+use Fox\Common\Common;
 
 class TabSelected extends Model {
 
@@ -55,7 +56,7 @@ class TabSelected extends Model {
         $permId = $perm->select('id')
                         ->whereIn('name', $perm_name)->get()->toArray();
 
-
+        $serverid = common::getServerId($server);
         //check tab is selected or not
         try {
             $perm_id = '';
@@ -63,7 +64,7 @@ class TabSelected extends Model {
 
                 $tabSelect = $this->select('*')
                                 ->where('permission_id', $permIds['id'])
-                                ->where('server', $server)
+                                ->where('server', $serverid)
                                 ->where('login_mgr', $loginmgr)->get()->toArray();
 
 
@@ -72,14 +73,14 @@ class TabSelected extends Model {
                     $data = $this->where('id', $tabSelect[0]['id'])
                             ->update(['status' => 1]);
                 } else if (empty($tabSelect)) { //Insert
-                    $this->create(['server' => $server, 'login_mgr' => $loginmgr,
+                    $this->create(['server' => $serverid, 'login_mgr' => $loginmgr,
                         'permission_id' => $permIds['id'], 'status' => 1]);
                 }
                 $perm_id .= $permIds['id'] . ',';
             }
             //Change status of permission if not selected
             $ids = rtrim($perm_id, ',');
-            $permId = DB::update("update tab_selected set status =0 where server = '$server' AND login_mgr = $loginmgr AND permission_id NOT IN ($ids)");
+            $permId = DB::update("update tab_selected set status =0 where server = '$serverid' AND login_mgr = $loginmgr AND permission_id NOT IN ($ids)");
             return true;
         } catch (\Exception $exc) {
             return false;
@@ -96,10 +97,12 @@ class TabSelected extends Model {
      * @return type array
      */
     public function getTab($server, $loginmgr) {
+        
+        $serverid = common::getServerId($server);
         $perm = new Permissions;
         $getTabSetting = $perm->select('permissions.name', 'tab_selected.status')
                         ->leftjoin('tab_selected', 'permissions.id', '=', 'tab_selected.permission_id')
-                        ->where('tab_selected.server', '=', $server)
+                        ->where('tab_selected.server', '=', $serverid)
                         ->where('tab_selected.login_mgr', '=', $loginmgr)->get()->toArray();
         $tabsetting = [];
         $i = 0;

@@ -11,7 +11,7 @@
                             <th>S. no.</th>
                             <th>Manager ID</th>
                             <th>Name</th>
-                            <th>Groups</th>
+                            <!--<th>Groups</th>-->
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -20,7 +20,7 @@
                            <td>{{$index+1}}</td>
                            <td>{{usr.manager_id}}</td>
                             <td>{{usr.name}}</td>
-                            <td>{{usr.groups}}</td>
+                            <!--<td>{{usr.groups}}</td>-->
                             <td>
                                 <a href="home#!/createUser?userid={{usr.id}}"  class="btn btn-sm btn-primary">
                                 <i class="fa fa-pencil-square" aria-hidden="true"></i>
@@ -28,6 +28,9 @@
                                 <a href="home#!/userPermission?userid={{usr.id}}" class="btn btn-sm btn-info"><i class="fa fa-pencil-square" aria-hidden="true"></i>
                                     Edit Role</a>
                                 <a ng-click="delete(usr.id)"  class="btn btn-sm btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i>
+                                 <a href="home#!/lastTradeSetting?userid={{usr.id}}"  class="btn btn-sm btn-primary">
+                                <i class="fa fa fa-gear" aria-hidden="true"></i>
+                                </a>
                                 </a>
                             </td>
                         </tr>                       

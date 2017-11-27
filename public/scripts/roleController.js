@@ -14,7 +14,7 @@
         $scope.rpermissions = '';
         // Using $location service
         var url = $location.search();
-        var token = sessionStorage.AuthUser;
+        var token = localStorage.AuthUser;
         $scope.module = 'role';
         $scope.showLoader = true;
         vm.getRole = function () {
@@ -42,8 +42,8 @@
                 }
             }).then(function (response) {
                 vm.roles = response.data.data;
-                $scope.succ_message = sessionStorage.succ_message;
-                sessionStorage.succ_message = '';
+                $scope.succ_message = localStorage.succ_message;
+                localStorage.succ_message = '';
                 $scope.showLoader = false;
 
             }, function (error) {
@@ -51,7 +51,7 @@
             });
         }
 
-        var token = sessionStorage.AuthUser;
+        var token = localStorage.AuthUser;
         //saving new role
         $scope.saveRole = function () {
 
@@ -70,7 +70,7 @@
                         }, config)
                         .then(function (data, status, headers, config) {
                             $scope.rolename = '';
-                            sessionStorage.succ_message = "Role has been created successfully.";
+                            localStorage.succ_message = "Role has been created successfully.";
                             $state.go('roles');
 
                         })
@@ -92,7 +92,7 @@
                         }, config)
                         .then(function (data, status, headers, config) {
                             $scope.rolename = '';
-                            sessionStorage.succ_message = "Role has been updated successfully.";
+                            localStorage.succ_message = "Role has been updated successfully.";
                             $state.go('roles');
 
                         })
@@ -124,7 +124,7 @@
                     $scope.resp = response;
                     $scope.err_message = '';
                     $scope.succ_message = "Record has been deleted successfully.";
-                    sessionStorage.succ_message = "Record has been deleted successfully..";
+                    localStorage.succ_message = "Record has been deleted successfully..";
                     // $state.go('gateways');
                     //
                     $state.go($state.current, {}, {reload: true});
@@ -149,8 +149,8 @@
                 vm.getRolePermissions();
 
 
-                $scope.succ_message = sessionStorage.succ_message;
-                sessionStorage.succ_message = '';
+                $scope.succ_message = localStorage.succ_message;
+                localStorage.succ_message = '';
                 $scope.showLoader = false
             }, function (error) {
 
@@ -232,21 +232,19 @@
 
 
         vm.checkLogin = function () {
-            var token = sessionStorage.AuthUser;
-            if (token === '') {
+            var token = localStorage.AuthUser;
+            if (token === '' || token === undefined){
                 $window.location.href = '/login';
             }
-        }
+        }();
 
         vm.clearData = function () {
             $scope.rolename = '';
 
-        }
+        };
         $scope.resetData = function () {
             vm.clearData();
-        }
-        vm.checkLogin();
-
+        };
 
 
         $(".page-header h1").text("Roles");

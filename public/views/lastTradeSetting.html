@@ -1,0 +1,97 @@
+ <style>
+        .whitelables{
+            width: 100%;
+            float:left;
+            border:1px solid #959595;
+            border-radius:10px;
+            -moz-border-radius:10px;
+            -webkit-border-radius:10px;
+            -ms-border-radius:10px;
+            -o-border-radius:10px;
+            -khtml-border-radius:10px;
+            padding:16px;
+            margin-right: 10px;
+            margin-bottom:25px;
+        }
+        .whitelables:nth-child(4n+0){
+            margin-right: 0;
+        }
+        .whitelables label{
+            color:#2c2c2c;
+            font-size: 14px;
+            width:100%;
+            float: left;
+        }
+        .whitelables .form-group{
+            float: left;
+            width:100%;
+        }
+        .whitelables input[type="text"]{
+            color:#2c2c2c;
+            font-size: 12px;
+            width:100%;
+            float: left;
+        }
+        </style>
+<section class=""  ng-init="user.getWhitelableSettings();">
+    <div class="col-sm-12 col-md-12">
+       
+        <div class="card mb-4">
+            <div class="card-block"> <!-- user.getWhiteLabels(); -->
+
+                <form class="form-horizontal" action="" method="post" name="createUser" >
+                    <fieldset>
+                        <!-- Name input-->
+                        
+
+                        
+                         <div class="row">
+                              <span style="color:green">{{succ_message}}</span>        
+                                <span style="color:red; white-space: pre-line;">{{err_message}}</span>
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mt-4 float-left widget-right">
+                                    <div class="form-group"> 
+                                        <label class="control-label w-100 float-left no-padding" for="name">Manager ID: <b>{{managerid}}</b></label> 
+                                        <label class="control-label w-100 float-left no-padding" for="email">White Labels</label>
+                                    </div>
+                                </div>
+                                     <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 float-left" ng-repeat="wl in wlsettings"> 
+                                         <div class="whitelables">
+                                       <div class="form-group">
+                                        <input type="checkbox" class="float-left mt-1" ng-checked="wl.flag" ng-model="settings.flag[wl.wlid]" value="{{wl.id}}" ng-change="changeWl(wl.wlid, this)" />
+                                        <div class="col-md-10 float-left">
+                                        <label for="box1" style="font-weight: bold;">{{wl.wl_name}} </label><br>
+                                        </div>
+                                        </div>  
+                                        <div class="form-group">
+                                            <label>Groups:</label>
+                                            <input id="username" name="botime" ng-value="wl.groups" autocomplete="off" ng-model="settings.groups[wl.wlid]" type="text" placeholder="" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>BO Time:</label>
+                                            <input id="username" name="botime" ng-value="wl.botime" autocomplete="off" ng-model="settings.botime[wl.wlid]" type="text" placeholder="" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>FX Time:</label>
+                                            <input id="username" name="fxtime" ng-value="wl.fxtime" autocomplete="off" ng-model="settings.fxtime[wl.wlid]" type="text" placeholder="" class="form-control">
+                                        </div>
+                                         </div>
+                                   
+                                </div>
+                                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 float-left widget-right">
+                                       <!-- <button type="button" class="btn btn-info btn-md float-right" ng-click="resetWlSettingData()">Reset</button>-->
+                                        <button type="button" class="btn mr-2 btn-primary btn-md float-right" ng-click="saveSettings()">Submit</button>                                
+                                </div>  
+                        </div>
+
+                        <!-- Form actions -->
+                        <div class="form-group">
+                            
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+</section>

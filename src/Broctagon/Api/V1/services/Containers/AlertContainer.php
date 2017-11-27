@@ -15,6 +15,7 @@ use Validator;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use Fox\Common\Common;
 use Fox\Common\Foxvalidation;
+use Fox\Models\User;
 
 class AlertContainer extends Base implements AlertContract
 {
@@ -23,7 +24,7 @@ class AlertContainer extends Base implements AlertContract
 
     protected $userTransformer;
 
-    public function __construct($usertrade, $lasttrade, $reportgroup, $reportgroupuser, $auditlog, $lasttradeemailalert, $mailsetting, $tradealertdiscard)
+    public function __construct($usertrade, $lasttrade, $reportgroup, $reportgroupuser, $auditlog, $lasttradeemailalert, $mailsetting, $tradealertdiscard, $userwhitelable)
     {
         $this->usertrade = $usertrade;
         $this->lasttrade = $lasttrade;
@@ -33,6 +34,7 @@ class AlertContainer extends Base implements AlertContract
         $this->lasttradeemailalert = $lasttradeemailalert;
         $this->mailsetting = $mailsetting;
         $this->tradealert = $tradealertdiscard;
+        $this->userwhitelable = $userwhitelable;
     }
 
     /**
@@ -43,10 +45,13 @@ class AlertContainer extends Base implements AlertContract
      */
     public function saveuserTrades($request)
     {
+        
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
         $userinfo = JWTAuth::parseToken()->authenticate();
-        $login_id = $userinfo->manager_id;
+        
+        $login_id = common::getUserid($userinfo->manager_id);
+       
         $res = $this->usertrade->saveTradeValue($request, $server_name, $login_id);
 
         if (!$res) {
@@ -73,7 +78,7 @@ class AlertContainer extends Base implements AlertContract
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
         $userinfo = JWTAuth::parseToken()->authenticate();
-        $login_id = $userinfo->manager_id;
+        $login_id = common::getUserid($userinfo->manager_id);
 
         //Check login is valid or not
         $checkLogin = $this->usertrade->checkTradelogin($login, $server_name, $login_id);
@@ -118,7 +123,7 @@ class AlertContainer extends Base implements AlertContract
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
         $userinfo = JWTAuth::parseToken()->authenticate();
-        $login_id = $userinfo->manager_id;
+        $login_id = common::getUserid($userinfo->manager_id);
 
         //Check login is valid or not
         $checkLogin = $this->usertrade->checkTradelogin($login, $server_name, $login_id);
@@ -157,10 +162,10 @@ class AlertContainer extends Base implements AlertContract
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
         $userinfo = JWTAuth::parseToken()->authenticate();
-        $login_id = $userinfo->manager_id;
+        $login_id = common::getUserid($userinfo->manager_id);
 
         $res = $this->usertrade->getTradeValue($server_name, $login_id, $id);
-
+        
         return response()->json($res);
     }
 
@@ -321,9 +326,11 @@ class AlertContainer extends Base implements AlertContract
      */
     public function saveReportGroup($request)
     {
+        
         $servermgrId = common::serverManagerId();
+        $login_id = common::getUserid($servermgrId['login']);
 
-        $res = $this->reportgroup->saveReportGroup($servermgrId['server_name'], $servermgrId['login'], $request);
+        $res = $this->reportgroup->saveReportGroup($servermgrId['server_name'], $login_id , $request);
 
         if (!$res) {
             return $this->setStatusCode(500)->respond([
@@ -347,10 +354,11 @@ class AlertContainer extends Base implements AlertContract
      */
     public function updateReportGroup($request)
     {
-
+        
         $servermgrId = common::serverManagerId();
 
-        $res = $this->reportgroup->updateReportGroup($servermgrId['server_name'], $servermgrId['login'], $request);
+        $login = common::getUserid($servermgrId['login']);
+        $res = $this->reportgroup->updateReportGroup($servermgrId['server_name'], $login, $request);
 
         if (!$res) {
             return $this->setStatusCode(500)->respond([
@@ -376,8 +384,9 @@ class AlertContainer extends Base implements AlertContract
     {
 
         $servermgrId = common::serverManagerId();
-
-        $res = $this->reportgroup->getTradeGrpList($servermgrId['server_name'], $servermgrId['login'], $id);
+        $login_id = common::getUserid($servermgrId['login']);
+        
+        $res = $this->reportgroup->getTradeGrpList($servermgrId['server_name'], $login_id, $id);
 
         return $res;
     }
@@ -562,7 +571,9 @@ class AlertContainer extends Base implements AlertContract
 
         //validation
         $servermgrId = common::serverManagerId();
-        $res = $this->mailsetting->saveMailSetting($request, $servermgrId['server_name'], $servermgrId['login']);
+        $login_id = common::getUserid($servermgrId['login']);
+       
+        $res = $this->mailsetting->saveMailSetting($request, $servermgrId['server_name'], $login_id);
         if (!$res) {
             return $this->setStatusCode(500)->respond([
                         'message' => trans('user.some_error_occur'),
@@ -584,7 +595,8 @@ class AlertContainer extends Base implements AlertContract
      * @return type json
      */
     public function saveTradeAlertDiscrad($request)
-    {
+    {   
+       
         //Validation
         $validate = Validator::make($request->all(), [
                     "ticket" => 'required|valid_ticket|unique:trade_alert_discard',
@@ -594,7 +606,9 @@ class AlertContainer extends Base implements AlertContract
         }
 
         $servermgrId = common::serverManagerId();
-        $res = $this->tradealert->saveTardeAlertDiscrd($request, $servermgrId['login']);
+        $login = common::getUserid($servermgrId['login']);
+        $res = $this->tradealert->saveTardeAlertDiscrd($request, $login);
+        
         if (!$res) {
             return $this->setStatusCode(500)->respond([
                         'message' => trans('user.some_error_occur'),
@@ -616,8 +630,7 @@ class AlertContainer extends Base implements AlertContract
      */
     public function getTradeAlertDiscrad($request)
     {
-
-        //validation
+        
         //Validation
         $validate = Validator::make($request->all(), [
                     "addedon" => 'required',
@@ -628,7 +641,8 @@ class AlertContainer extends Base implements AlertContract
         }
 
         $servermgrId = common::serverManagerId();
-        $res = $this->tradealert->getTardeAlertDiscrd($request, $servermgrId['login']);
+        $login = common::getUserid($servermgrId['login']);
+        $res = $this->tradealert->getTardeAlertDiscrd($request, $login);
         return $res;
     }
 
@@ -640,8 +654,84 @@ class AlertContainer extends Base implements AlertContract
     public function getLogin()
     {
         $servermgrId = common::serverManagerId();
-        $res = $this->usertrade->getLogin($servermgrId['server_name'], $servermgrId['login']);
+        $login_id = common::getUserid($servermgrId['login']);
+        
+        $res = $this->usertrade->getLogin($servermgrId['server_name'], $login_id);
         return $res;
     }
 
+    /**
+     * Get whtelable list
+     * 
+     * @param type $userId
+     * @return type json
+     */
+    public function whitelableList($server){
+        
+        return $this->lasttrade->whitelableList($server); 
+    }
+    /**
+     * Get server assign to user by userid
+     * 
+     * @param type $userId
+     * @return type json
+     */
+    public function getServerList($userId){
+        
+      return $this->lasttrade->getServerList($userId); 
+      
+    }
+
+    /**
+     * Assign whitelable settings to user
+     * 
+     * @param type $userId
+     * @param type $request
+     * @return type json
+     */
+    public function assignWhitelable($userId, $request){
+       
+        //Validation
+        $validate = Validator::make($request->all(), [
+             //"serverid" => 'required|numeric',
+             "whitelablesettings" => 'required',
+             //"botime" => 'required|numeric',
+             //"fxtime" => 'required|numeric',
+             //"groups" => 'required'
+        ]);
+
+        if ($validate->fails()) {
+            return $validate->errors();
+        }
+        
+      $res = $this->userwhitelable->assignWhitelable($userId, $request);
+       
+      if (!$res) {
+            return $this->setStatusCode(500)->respond([
+                        'message' => trans('user.some_error_occur'),
+                        'status_code' => 500
+            ]);
+        }
+
+        return $this->setStatusCode(200)->respond([
+                    'message' => (trans('user.user_wl_save')),
+                    'status_code' => 200
+        ]);
+    }
+    
+    /**
+     * Get manager id from Userid
+     * 
+     * 
+     * @param type $userId
+     * @return type json
+     */
+    public function getMangerId($userId){
+        $user = new User;
+        return $user->getMangerId($userId);
+    }
+    
+    public function getWlSettings($userId){
+       return $this->userwhitelable->getWlSettings($userId);
+    }
 }

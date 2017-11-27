@@ -17,7 +17,7 @@
         $scope.password         = '';
         $scope.confirmpassword  = '';        
 
-        var token = sessionStorage.AuthUser;
+        var token = localStorage.AuthUser;
         var url = $location.search();
         $scope.module = 'gateway';
         vm.getGateways = function () {
@@ -150,12 +150,12 @@
             }
         }
         
-        vm.checkLogin = function() {            
-            var token = sessionStorage.AuthUser;        
-            if(token === '') {
-               $window.location.href = '/login';
-           }
-        }
+        vm.checkLogin = function () {
+            var token = localStorage.AuthUser;
+            if (token === '' || token === undefined){
+                $window.location.href = '/login';
+            }
+        }();  
         
         vm.clearData = function() {            
             $scope.gatewayname = '';
@@ -167,8 +167,6 @@
         $scope.resetData = function() {  
             vm.clearData();
         }
-        
-        vm.checkLogin();
         
         
         $(".page-header h1").text("Gateways");

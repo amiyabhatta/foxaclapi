@@ -71,6 +71,17 @@ Route::group(['prefix' => 'api/v1'], function () {
 
             //logout
             Route::post('logout', 'Users\Http\Controllers\UserController@logout');
+            
+            //get all whitelable list with id
+            Route::get('whitelablelist/{server}', 'Alert\Http\Controllers\LastTradeController@whitelableList');
+            //get all whitelable list with id
+            Route::get('getserverlist/{userid}', 'Alert\Http\Controllers\LastTradeController@getServerList');
+            //Assign whitelables to user (with bo and fx settings)
+            Route::post('assignwhitelable/{userid}', 'Alert\Http\Controllers\LastTradeController@assignWhitelable');
+            //get manager id from user id
+            Route::get('getmangerid/{userid}', 'Alert\Http\Controllers\LastTradeController@getMangerId');
+            //Get Whitelable setting
+            Route::get('getwhitelablesettings/{userid}', 'Alert\Http\Controllers\LastTradeController@getWlSettings');
         });
 
 
@@ -121,7 +132,7 @@ Route::group(['prefix' => 'api/v1'], function () {
         
         //Trade Alert Discard
         Route::post('savetradealert', 'Alert\Http\Controllers\TradealertdiscardController@saveTradealertDiscrad');
-            Route::post('gettradealert', 'Alert\Http\Controllers\TradealertdiscardController@getTradealertDiscrad');
+        Route::post('gettradealert', 'Alert\Http\Controllers\TradealertdiscardController@getTradealertDiscrad');
         
         //Password Update
         Route::post('passwordupdate', 'Users\Http\Controllers\UserController@passwordUpdate');

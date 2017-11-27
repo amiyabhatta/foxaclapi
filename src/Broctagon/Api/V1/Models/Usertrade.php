@@ -4,6 +4,7 @@ namespace Fox\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use DB;
+use Fox\Common\Common;
 
 class Usertrade extends Model {
 
@@ -16,30 +17,15 @@ class Usertrade extends Model {
     public $timestamps = false;
 
     public function saveTradeValue($request, $server_name, $login_manager_id) {
-
-//        $server = $this->where('server', '=', $server_name)
-//                ->where('login', '=', $request->input('login'))
-//                ->first();
-//
-//
-//        $user_trade_data = [];
-//        $user_trade_data['login'] = $request->input('login');
-//        $user_trade_data['login_manager_id'] = $login_manager_id;
-//        $user_trade_data['server'] = $server_name;
-//        $user_trade_data['volume'] = $request->input('volume');
-//        $user_trade_data['isUpdate'] = 1;
-//        $user_trade_data['amount'] = $request->input('amount');
-//
-//        if (count($server)) {
-//            return $server->id;
-//        }
-
-        $explode_login = explode(',', $request->input('login'));
+        
+        $serverid = common::getServerId($server_name);
+        $explode_login = explode(',', rtrim($request->input('login'),','));
+        
 
         try {
             foreach ($explode_login as $login) {
                 $this->create(['login' => $login, 'login_manager_id' => $login_manager_id,
-                    'server' => $server_name, 'volume' => $request->input('volume'), 'isUpdate' => 1, 'amount' => $request->input('amount')]);
+                    'server' => $serverid, 'volume' => $request->input('volume'), 'isUpdate' => 1, 'amount' => $request->input('amount')]);
             }
             //$last_insert_id = $this->insertGetId($user_trade_data);
         } catch (\Exception $exc) {
@@ -51,7 +37,9 @@ class Usertrade extends Model {
 
     public function updateTradeValue($request, $server_name, $login_manager_id, $login) {
 
-        $server = $this->where('server', '=', $server_name)
+        $serverid = common::getServerId($server_name);
+        
+        $server = $this->where('server', '=', $serverid)
                 ->where('login_manager_id', '=', $login_manager_id)
                 ->first();
 
@@ -78,16 +66,16 @@ class Usertrade extends Model {
 
     public function deleteTradeValue($server_name, $login_manager_id, $login) {
 
-        
+        $serverid = common::getServerId($server_name);        
         if ($login) {
-            $server = $this->where('server', '=', $server_name)
+            $server = $this->where('server', '=', $serverid)
                     ->where('login_manager_id', '=', $login_manager_id)
                     ->where('login', '=', $login)
                     ->get();
 
             if (count($server)) {
                 try {
-                    $this->where('server', '=', $server_name)
+                    $this->where('server', '=', $serverid)
                             ->where('login_manager_id', '=', $login_manager_id)
                             ->where('login', '=', $login)
                             ->delete();
@@ -100,7 +88,7 @@ class Usertrade extends Model {
         } else {
             //Delete All record fro loginmgr and serever
             try {
-                $this->where('server', '=', $server_name)
+                $this->where('server', '=', $serverid)
                         ->where('login_manager_id', '=', $login_manager_id)
                         ->delete();
             } catch (\Exception $exc) {
@@ -118,8 +106,11 @@ class Usertrade extends Model {
      * @return type
      */
     public function getTradeValue($server_name, $login_id, $id) {
+        
+        $serverid = common::getServerId($server_name);
+        
         $query = $this->select('*')
-                ->where('server', '=', $server_name)
+                ->where('server', '=', $serverid)
                 ->where('login_manager_id', '=', $login_id);
         //->paginate($limit);
 
@@ -127,8 +118,22 @@ class Usertrade extends Model {
             $query->where('id', '=', $id);
         }
         $result = $query->get();
+        
+        $results = [];
+        $in = 0;
+        foreach($result as $usertrade){
+           $results[$in]['Id'] = $usertrade['Id'];
+           $results[$in]['login'] = $usertrade['login'];
+           $results[$in]['login_manager_id'] = common::getloginMgr($usertrade['login_manager_id']);
+           $results[$in]['server'] = common::getServerName($usertrade['server']);
+           $results[$in]['volume'] = $usertrade['volume'];
+           $results[$in]['isUpdate'] = $usertrade['isUpdate'];
+           $results[$in]['amount'] = $usertrade['amount'];
+           $in++;
+        }
+        
 
-        return array('data' => $result);
+        return array('data' => $results);
     }
 
     /**
@@ -139,8 +144,10 @@ class Usertrade extends Model {
      * @return type array
      */
     public function getLogin($servername, $loginmgr) {
+        
+        $serverid = common::getServerId($servername);
 
-        $query = DB::select("select GROUP_CONCAT(LOGIN) as login from trade_alertusers where `server` = '$servername' AND `login_manager_id` = $loginmgr ");
+        $query = DB::select("select GROUP_CONCAT(LOGIN) as login from trade_alertusers where `server` = '$serverid' AND `login_manager_id` = $loginmgr ");
 
         return array('login' => $query[0]->login);
     }
@@ -156,8 +163,10 @@ class Usertrade extends Model {
      */
     public function checkTradelogin($login, $servername, $login_mgr){
         
+        $serverid = common::getServerId($servername);
+        
         $checkLogin = $this->select('*')
-                           ->where('server', '=', $servername)
+                           ->where('server', '=', $serverid)
                            ->where('login_manager_id', '=', $login_mgr)
                            ->where('login','=',$login)->get();
         
