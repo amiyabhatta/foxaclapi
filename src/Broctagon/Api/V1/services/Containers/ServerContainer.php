@@ -36,7 +36,7 @@ class ServerContainer extends Base implements ServerContract
      */
     public function getServerList($id)
     {
-        $limit = Input::get('limit', 20);
+        $limit = Input::get('limit', 1000);
 
         $server = $this->servermodel->getAllServerList($limit, $id);
 

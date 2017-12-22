@@ -40,7 +40,7 @@ class UserContainer extends Base implements UserContract
      */
     public function getUsers($id)
     {
-        $limit = Input::get('limit', 100);
+        $limit = Input::get('limit', 1000);
 
         $user = $this->usermodel->getAllUsers($limit, $id);
 

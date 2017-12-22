@@ -116,7 +116,7 @@ class RoleContainer extends Base implements RoleContract
     public function getRoles($id)
     {
 
-        $limit = Input::get('limit', 20);
+        $limit = Input::get('limit', 1000);
 
         $role = $this->roleModel->getAllRoles($limit, $id);
 
