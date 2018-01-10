@@ -173,7 +173,7 @@
         }
         
         
-         $(".page-header h1").text("Whitelable Settings");
+         $(".page-header h1").text("Whitelabel Settings");
          
          vm.getServers = function () {
             $scope.showLoader = true;
