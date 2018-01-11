@@ -16,15 +16,13 @@ use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use Fox\Common\Common;
 use Fox\Models\Role;
 
-class UserContainer extends Base implements UserContract
-{
+class UserContainer extends Base implements UserContract {
 
     protected $userTransformer;
     private $usermodel;
     private $roleModel;
 
-    public function __construct($userTransformer, $user, $global_setting, $bo_alert, $tabselect)
-    {
+    public function __construct($userTransformer, $user, $global_setting, $bo_alert, $tabselect) {
         $this->userTransformer = $userTransformer;
         $this->usermodel = $user;
         $this->globalSettingOm = $global_setting;
@@ -38,9 +36,8 @@ class UserContainer extends Base implements UserContract
      * @param type $id
      * @return Collection
      */
-    public function getUsers($id)
-    {
-        $limit = Input::get('limit', 100);
+    public function getUsers($id) {
+        $limit = Input::get('limit', 1000);
 
         $user = $this->usermodel->getAllUsers($limit, $id);
 
@@ -61,9 +58,8 @@ class UserContainer extends Base implements UserContract
      * @param type $request
      * @return type
      */
-    public function login($request)
-    {
-      
+    public function login($request) {
+
         //$credentials = $request->only('email', 'password');
         $credentials = $request->only('manager_id', 'password');
 
@@ -109,7 +105,7 @@ class UserContainer extends Base implements UserContract
         $usergroups = $groups['groups'];
         $token = encrypt($token);
         // all good so return the token
-        return $this->setStatusCode(200)->respondWithToken(compact('token', 'server_details', 'tab_details', 'gateway_details', 'db_detials', 'mail_setting','usergroups'));
+        return $this->setStatusCode(200)->respondWithToken(compact('token', 'server_details', 'tab_details', 'gateway_details', 'db_detials', 'mail_setting', 'usergroups'));
     }
 
     /**
@@ -119,8 +115,7 @@ class UserContainer extends Base implements UserContract
      * @param type $request
      * @return type json
      */
-    public function createUser($request)
-    {
+    public function createUser($request) {
         $res = $this->usermodel->addUser($request);
 
         if (!$res) {
@@ -142,8 +137,7 @@ class UserContainer extends Base implements UserContract
      * @param type $request
      * @return type json
      */
-    public function updateUser($request)
-    {
+    public function updateUser($request) {
 
 
         if ($request->input('password')) {
@@ -176,8 +170,7 @@ class UserContainer extends Base implements UserContract
      * @param type $request
      * @return type json
      */
-    public function deleteUser($request)
-    {
+    public function deleteUser($request) {
 
         $res = $this->usermodel->deleteUser($request);
 
@@ -206,8 +199,7 @@ class UserContainer extends Base implements UserContract
      * @param type $request
      * @return type json
      */
-    public function assignRole($request)
-    {
+    public function assignRole($request) {
 
         $res = $this->usermodel->assignRoleToUser($request);
 
@@ -229,8 +221,7 @@ class UserContainer extends Base implements UserContract
      * 
      * @return type json
      */
-    public function logout()
-    {
+    public function logout() {
         JWTAuth::invalidate(JWTAuth::getToken());
         return $this->respond(['status_code' => 401, 'message' => trans('user.logout')]);
     }
@@ -241,8 +232,7 @@ class UserContainer extends Base implements UserContract
      * @param type $request
      * @return type json
      */
-    public function Uilogin($request)
-    {
+    public function Uilogin($request) {
 
         $credentials = $request->only('email', 'password');
 
@@ -271,8 +261,7 @@ class UserContainer extends Base implements UserContract
      * @param type $request
      * @return type json
      */
-    public function setGlobalAlertOm($request)
-    {
+    public function setGlobalAlertOm($request) {
         //All value should be numeric
         foreach ($request->all() as $boFileds => $value) {
             if (!is_numeric($value) && $value != NULL) {
@@ -287,8 +276,8 @@ class UserContainer extends Base implements UserContract
         $server_name = $payload->get('server_name');
         $userinfo = JWTAuth::parseToken()->authenticate();
         $login_id = common::getUserid($userinfo->manager_id);
-        
-        
+
+
         $res = $this->globalSettingOm->saveSetting($request, $server_name, $login_id);
         if (!$res) {
             return $this->setStatusCode(500)->respond([
@@ -307,8 +296,7 @@ class UserContainer extends Base implements UserContract
      * 
      * @return type json
      */
-    public function getGlobalAlertOm()
-    {
+    public function getGlobalAlertOm() {
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
         $userinfo = JWTAuth::parseToken()->authenticate();
@@ -337,13 +325,12 @@ class UserContainer extends Base implements UserContract
      * @param type $request
      * @return type
      */
-    public function deleteGlobalAlertOm($request)
-    {
+    public function deleteGlobalAlertOm($request) {
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
         $userinfo = JWTAuth::parseToken()->authenticate();
         $login_id = common::getUserid($userinfo->manager_id);
-        
+
         $deleteGloablSettingData = $this->globalSettingOm->deleteSetting($server_name, $login_id, $request);
 
         if (!$deleteGloablSettingData) {
@@ -365,15 +352,14 @@ class UserContainer extends Base implements UserContract
      * @param type $request
      * @return type json
      */
-    public function setBoAlert($request)
-    {
-        
+    public function setBoAlert($request) {
+
         //get server name from token
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
         $userinfo = JWTAuth::parseToken()->authenticate();
         $login_id = common::getUserid($userinfo->manager_id);
-        
+
         $res = $this->bolAlertSetting->saveBoAlertSetting($request, $server_name, $login_id);
 
         if (!$res) {
@@ -394,14 +380,13 @@ class UserContainer extends Base implements UserContract
      * 
      * @return type json
      */
-    public function getBoAlert()
-    {
+    public function getBoAlert() {
 
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
         $userinfo = JWTAuth::parseToken()->authenticate();
         $login_id = common::getUserid($userinfo->manager_id);
-        
+
         $getGloablSettingData = $this->bolAlertSetting->getBoAlertSetting($server_name, $login_id);
 
         $ret = [];
@@ -426,13 +411,12 @@ class UserContainer extends Base implements UserContract
      * @param type $request
      * @return type json
      */
-    public function deleteBoAlert($request)
-    {
+    public function deleteBoAlert($request) {
         $payload = JWTAuth::parseToken()->getPayload();
         $server_name = $payload->get('server_name');
         $userinfo = JWTAuth::parseToken()->authenticate();
         $login_id = common::getUserid($userinfo->manager_id);
-        
+
         $deleteGloablSettingData = $this->bolAlertSetting->deleteBoAlertSetting($server_name, $login_id, $request);
 
         if (!$deleteGloablSettingData) {
@@ -454,8 +438,7 @@ class UserContainer extends Base implements UserContract
      * @param type $request
      * @return type json
      */
-    public function passwordUpdate($request)
-    {
+    public function passwordUpdate($request) {
 
         //validate
         //Validation
@@ -487,9 +470,8 @@ class UserContainer extends Base implements UserContract
      * @param type $request
      * @return type json
      */
-    public function saveTab($request)
-    {
-        
+    public function saveTab($request) {
+
         $validate = Validator::make($request->all(), [
                     "tab_setting" => 'required|check_validtab',
         ]);
@@ -499,7 +481,7 @@ class UserContainer extends Base implements UserContract
 
         $servermgrId = common::serverManagerId();
         $login = common::getUserid($servermgrId['login']);
-       
+
         $res = $this->tabselectmodel->saveTab($request, $servermgrId['server_name'], $login);
 
         if (!$res) {
@@ -520,9 +502,8 @@ class UserContainer extends Base implements UserContract
      * 
      * @return type json
      */
-    public function getTabSetting()
-    {
-       
+    public function getTabSetting() {
+
         $servermgrId = common::serverManagerId();
         $login = common::getUserid($servermgrId['login']);
         return $res = $this->tabselectmodel->getTab($servermgrId['server_name'], $login);
@@ -534,9 +515,28 @@ class UserContainer extends Base implements UserContract
      * @param type $serverName
      * @return type json
      */
-    public function serverAssigntoUser($userId, $serverName)
-    {
+    public function serverAssigntoUser($userId, $serverName) {
         return $this->usermodel->checkServerAssign($userId, $serverName);
+    }
+
+    public function showTokenInfo() {
+        $payload = JWTAuth::parseToken()->getPayload();
+        $server_name = $payload->get('server_name');
+        $userinfo = JWTAuth::parseToken()->authenticate();
+        $login_id = common::getUserid($userinfo->manager_id);
+
+        $server_details = $this->usermodel->getUserServerDetails($login_id, $server_name);
+        $gateway_details = $this->usermodel->getUserGatewayDetails($server_name);
+        $groups = head($this->usermodel->getGroups($login_id)->getgroup);
+
+        $usergroups = $groups['groups'];
+
+        $responce = compact('server_details', 'gateway_details', 'usergroups');
+
+        return response()->json([
+                    'status_code' => 200,
+                    'data' => $responce
+        ]);
     }
 
 }

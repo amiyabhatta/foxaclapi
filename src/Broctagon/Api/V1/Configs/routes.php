@@ -84,7 +84,7 @@ Route::group(['prefix' => 'api/v1'], function () {
             Route::get('getwhitelablesettings/{userid}', 'Alert\Http\Controllers\LastTradeController@getWlSettings');
         });
 
-
+        
         //Set global alert for Overall Monitoring
         Route::post('setglobalalertom', 'Users\Http\Controllers\UserController@setGlobalAlertOm');
         Route::get('getglobalalertom', 'Users\Http\Controllers\UserController@getGlobalAlertOm');
@@ -139,6 +139,13 @@ Route::group(['prefix' => 'api/v1'], function () {
         
         //Tab showing selected by user
         Route::post('saveselectedtab', 'Users\Http\Controllers\TabselectController@savetab');
-        Route::get('tabeselect', 'Users\Http\Controllers\TabselectController@show');    
+        Route::get('tabeselect', 'Users\Http\Controllers\TabselectController@show');
+        
+        //Get db info , group, gw info, Wl Info from token
+        Route::get('showtokeninfo' , 'Users\Http\Controllers\UserController@showTokenInfo');
+        
+        //Logout API
+        Route::post('logoutapi', 'Users\Http\Controllers\UserController@logout');
     });
+    
 });

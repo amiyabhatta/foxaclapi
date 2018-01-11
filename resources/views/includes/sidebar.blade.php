@@ -8,5 +8,5 @@
     <li class="nav-item"><a class="nav-link" ui-sref-active="active" ui-sref="permissions()"><em class="fa fa-dashboard"></em> Permission <span class="sr-only">(current)</span></a></li>
     <li class="nav-item"><a class="nav-link" ui-sref-active="active" ui-sref="servers()"><em class="fa fa-dashboard"></em> Server <span class="sr-only">(current)</span></a></li>
     <li class="nav-item"><a class="nav-link" ui-sref-active="active" ui-sref="gateways()"><em class="fa fa-dashboard"></em> Gateway <span class="sr-only">(current)</span></a></li>  
-    <li class="nav-item"><a class="nav-link" ui-sref-active="active" ui-sref="whitelabels()"><em class="fa fa-dashboard"></em> Whitelable Setting <span class="sr-only">(current)</span></a></li>   
+    <li class="nav-item"><a class="nav-link" ui-sref-active="active" ui-sref="whitelabels()"><em class="fa fa-dashboard"></em> Whitelabel Setting <span class="sr-only">(current)</span></a></li>   
 </ul>

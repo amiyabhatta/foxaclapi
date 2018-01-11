@@ -119,5 +119,14 @@ class UserController extends Controller
     public function passwordUpdate(Request $request){
       return $this->userContainer->passwordUpdate($request);  
     }
+    
+    /**
+     * Get token from header
+     * return json
+     */
+    public function showTokenInfo(Request $request){
+        
+        return $this->userContainer->showTokenInfo();  
+    }
        
 }
