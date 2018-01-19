@@ -52,11 +52,13 @@ class AppServiceProvider extends ServiceProvider {
             $login = explode(',', rtrim($value, ','));
             $servermgrId = common::serverManagerId();
             $serverid = common::getServerId($servermgrId['server_name']);
+            
+            $userId = common::getUserid($servermgrId['login']);
             foreach ($login as $chkNumericLogin) {
                 //check login is already saved or not
                 
                 $chckLogin = DB::table('trade_alertusers')->where('login', '=', $chkNumericLogin)
-                                          ->where('login_manager_id','=',$servermgrId['login'])
+                                          ->where('login_manager_id','=',$userId)
                                           ->where('server','=',$serverid)
                                           ->get();
                 
@@ -125,6 +127,26 @@ class AppServiceProvider extends ServiceProvider {
                 return true;
             }
             return false;
+        });
+        
+        //Group should be unique per server and mangerid
+        $this->app['validator']->extend('unique_group', function ($attribute, $value, $parameters, $validator) {
+            
+            $groupName = $value;
+            $servermgrId = common::serverManagerId();
+            $serverid = common::getServerId($servermgrId['server_name']);
+            $userId = common::getUserid($servermgrId['login']);
+            
+            $getWlName = DB::table('report_group')->where('login_mgr', '=', $userId)->where('server', '=', $serverid)->where('group_name', '=', $groupName)
+                         ->get();
+
+            
+            if (!count($getWlName)) {
+                return true;
+            }
+            return false;
+            
+            
         });
     }
 

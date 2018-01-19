@@ -147,5 +147,6 @@ return [
     'check_valid_ticket' => 'The :attribute must be valid',
     'unique_whitelabel' => 'Whitelabel name already taken',
     'check_valid_whitelabel' => 'The :attribute must be valid',
+    'unique_group' => 'The :attribute must be unique'
     
 ];

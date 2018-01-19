@@ -37,8 +37,7 @@ class ReportGroup extends Model
                             //'server' => $servername 
                             'server' => common::getServerId($servername) 
                         ]);
-
-
+                        
                         $login = rtrim($request->input('login'), ',');
 
                         $login = explode(',', $login);
@@ -172,15 +171,16 @@ class ReportGroup extends Model
     public function deleteTradeGrpList($servername, $logimanagerid, $request)
     {
 
+        $userId = common::getUserid($logimanagerid);
         if ($request->input('group_id')) {
             try {
-                $data = DB::transaction(function() use ($servername, $logimanagerid, $request) {
+                $data = DB::transaction(function() use ($servername, $logimanagerid, $request, $userId) {
 
                     $serverid = common::getServerId($servername);
                             //Delete data from report_group
                             $this->where('id', $request->input('group_id'))
                                     ->where('server', $serverid)
-                                    ->where('login_mgr', $logimanagerid)
+                                    ->where('login_mgr', $userId)
                                     ->delete();
 
                             //Delete data from report_gruoptousers
@@ -208,9 +208,11 @@ class ReportGroup extends Model
     public function checkGroupid($serverName, $logimanagerid, $request){
         
         $serverid = common::getServerId($serverName);
+        $userId = common::getUserid($logimanagerid);
+        
         $check_id = $this->select('id')
                          ->where('server', $serverid)
-                         ->where('login_mgr', $logimanagerid)
+                         ->where('login_mgr', $userId)
                          ->where('id', $request->input('group_id'))->get();
         
         return count($check_id);
