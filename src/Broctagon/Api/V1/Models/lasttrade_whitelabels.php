@@ -41,25 +41,30 @@ class lasttrade_whitelabels extends Model {
             }
             $wlid = rtrim($wlid, ',');
         }
-        
-        $userId = $this->getUserId($mgrId);
-        $get_detials = DB::select('select `lasttrade_whitelabels`.`Id`, `lasttrade_whitelabels`.`Serverid`, `lasttrade_whitelabels`.`WhiteLabels`,`lasttrade_whitelabels`.`Emails`, `Userwhitelable`.`groups`, `Userwhitelable`.`botime`, `Userwhitelable`.`fxtime` from `lasttrade_whitelabels` inner join `Userwhitelable` on `Userwhitelable`.`whitelabelid` = `lasttrade_whitelabels`.`Id` where `Userwhitelable`.`whitelabelid` in (' . $wlid . ') and `Userwhitelable`.`userid` =' . $userId);
 
-        
         $result = [];
-        $in = 0;
-        foreach ($get_detials as $wlDetails) {
-            $result[$in]['id'] = $wlDetails->Id;
-            $result[$in]['servername'] = common::getServerName($wlDetails->Serverid);
-            $result[$in]['whitelabels'] = $wlDetails->WhiteLabels;
-            $result[$in]['groups'] = $wlDetails->groups;
-            $result[$in]['botime'] = $wlDetails->botime;
-            $result[$in]['fxtime'] = $wlDetails->fxtime;
-            $result[$in]['emails'] = $wlDetails->Emails;
-            $result[$in]['editurl'] = 'api/v1/updatelasttrade/' . $wlDetails->Id;
-            $in++;
+        try {
+            $userId = $this->getUserId($mgrId);
+            $get_detials = DB::select('select `lasttrade_whitelabels`.`Id`, `lasttrade_whitelabels`.`Serverid`, `lasttrade_whitelabels`.`WhiteLabels`,`lasttrade_whitelabels`.`Emails`, `Userwhitelable`.`groups`, `Userwhitelable`.`botime`, `Userwhitelable`.`fxtime` from `lasttrade_whitelabels` inner join `Userwhitelable` on `Userwhitelable`.`whitelabelid` = `lasttrade_whitelabels`.`Id` where `Userwhitelable`.`whitelabelid` in (' . $wlid . ') and `Userwhitelable`.`userid` =' . $userId);
+
+            $in = 0;
+            foreach ($get_detials as $wlDetails) {
+                $result[$in]['id'] = $wlDetails->Id;
+                $result[$in]['servername'] = common::getServerName($wlDetails->Serverid);
+                $result[$in]['whitelabels'] = $wlDetails->WhiteLabels;
+                $result[$in]['groups'] = $wlDetails->groups;
+                $result[$in]['botime'] = $wlDetails->botime;
+                $result[$in]['fxtime'] = $wlDetails->fxtime;
+                $result[$in]['emails'] = $wlDetails->Emails;
+                $result[$in]['editurl'] = 'api/v1/updatelasttrade/' . $wlDetails->Id;
+                $in++;
+            }
+        } catch (\Illuminate\Database\QueryException $ex) {
+            return array('data' => $result);
+            // Note any method of class PDOException can be called on $ex.
         }
-        
+
+
         return array('data' => $result);
     }
 
@@ -83,10 +88,10 @@ class lasttrade_whitelabels extends Model {
     public function updatelatsTrade($server_name, $mgrId, $id, $request) {
 
         $userWl = new Userwhitelable;
-        
+
         $userId = $this->getUserId($mgrId);
-        
-        
+
+
         $check_id = $this->find($id);
 
         if (count($check_id)) {
@@ -147,9 +152,9 @@ class lasttrade_whitelabels extends Model {
                         ->update(['Serverid' => $request->input('serverid'),
                             'WhiteLabels' => $request->input('whitelabels'),
                             'Groups' => $request->input('groups'),
-                            //'BoTime' => $request->input('botime'),
-                            //'FxTime' => $request->input('fxtime'),
-                            //'Emails' => $request->input('email'),
+                                //'BoTime' => $request->input('botime'),
+                                //'FxTime' => $request->input('fxtime'),
+                                //'Emails' => $request->input('email'),
                 ]);
                 return true;
             } catch (\Exception $exc) {
@@ -172,13 +177,13 @@ class lasttrade_whitelabels extends Model {
         if (count($check_id)) {
             try {
                 $this->where('Id', $id)->delete();
-                
+
                 //Delere record from userwhitelable
                 $userWl = new Userwhitelable;
                 $checkWlId = $userWl->where('whitelabelid', $id)->count();
-                if($checkWlId){
+                if ($checkWlId) {
                     $userWl->where('whitelabelid', $id)->delete();
-                }   
+                }
                 return true;
             } catch (\Exception $exc) {
                 return false;
@@ -197,7 +202,7 @@ class lasttrade_whitelabels extends Model {
      * @return boolean
      */
     public function getWhiteLabelList($server_name, $id) {
-        
+
         $check_user_role = common::checkRole();
 
         if ($check_user_role == 'super_administrator') {
@@ -281,14 +286,15 @@ class lasttrade_whitelabels extends Model {
         }
         return $server_array;
     }
-   
-    public function getServername($serverId){
-        $getServername = Serverlist::select('servername')->where('id','=',$serverId)->first();
+
+    public function getServername($serverId) {
+        $getServername = Serverlist::select('servername')->where('id', '=', $serverId)->first();
         return $getServername['servername'];
     }
-    public function getServerId($serverName){
-        
-        $getServerid = Serverlist::select('id')->where('servername','=',$serverName)->first();
+
+    public function getServerId($serverName) {
+
+        $getServerid = Serverlist::select('id')->where('servername', '=', $serverName)->first();
         return $getServerid['id'];
     }
 
