@@ -18,3 +18,4 @@ build_prod:
   - sudo chmod -R 775 /var/www/vhosts/fxmgr.broctagon.com-20180119.bak
   - sudo chown -R apache:apache /var/www/vhosts/fxmgr.broctagon.com-20180119.bak
   - sudo /usr/local/bin/composer update
+  - sudo /usr/local/bin/composer dump-autoload
