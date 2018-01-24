@@ -6,7 +6,7 @@ stages:
 build_prod:
   stage: build_dev
   tags:
-  - icomaindev
+  - mynewrunnerv3
   only:
   - /^.*-snapshot$/
   except:
