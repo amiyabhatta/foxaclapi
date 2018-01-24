@@ -1,0 +1,20 @@
+stages:
+- build_dev
+- build_prod
+
+
+build_prod:
+  stage: build_prod
+  tags:
+  - icomaindev
+  only:
+  - /^.*-snapshot$/
+  except:
+  - branches
+
+  
+  script:
+  - sudo /bin/rsync -aqziDHS --del $PWD/* /var/www/vhosts/fxmgr.broctagon.com-20180119.bak
+  - sudo chmod -R 775 /var/www/vhosts/fxmgr.broctagon.com-20180119.bak
+  - sudo chown -R apache:apache /var/www/vhosts/fxmgr.broctagon.com-20180119.bak
+  - sudo /usr/local/bin/composer update
