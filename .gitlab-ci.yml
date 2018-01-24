@@ -16,7 +16,7 @@ build_prod:
   script:
   - sudo /bin/rsync -aqziDHS --del $PWD/* /var/www/vhosts/fxmgr.broctagon.com-20180119.bak
   - cd /var/www/vhosts/fxmgr.broctagon.com-20180119.bak
-  - sudo /usr/local/bin/composer update --no-script
+  - sudo /usr/local/bin/composer update --no-scripts
   - sudo /usr/local/bin/composer dump-autoload
   - sudo chmod -R 775 /var/www/vhosts/fxmgr.broctagon.com-20180119.bak
   - sudo chown -R apache:apache /var/www/vhosts/fxmgr.broctagon.com-20180119.bak
