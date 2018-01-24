@@ -49,7 +49,9 @@
                     $scope.password = $scope.servers.password;
                     $scope.databasename = $scope.servers.databasename;
                     $scope.masterid = $scope.servers.master_id;
-                    $scope.gateway_id = $scope.servers.gateway_id;   
+                    $scope.port = $scope.servers.port;  
+                    $scope.mt4api = $scope.servers.mt4api;
+                    $scope.gateway_id = $scope.servers.gateway_id;
                     
                 }, function (error) {
 
@@ -90,6 +92,8 @@
                   password        : $scope.password,
                   databasename    : $scope.databasename,
                   masterid        : $scope.masterid,
+                  port            : $scope.port,
+                  mt4api          : $scope.mt4api,
                   GatewayID       : $scope.gateway_id,
                 }, config)
                 .then(function (data, status, headers, config) {
@@ -118,6 +122,8 @@
                   password        : $scope.password,
                   databasename    : $scope.databasename,
                   masterid        : $scope.masterid,
+                  port            : $scope.port,
+                  mt4api          : $scope.mt4api,
                   GatewayID       : $scope.gateway_id,
                 }, config)
                 .then(function (data, status, headers, config) {
@@ -177,6 +183,8 @@
             $scope.password = '';
             $scope.databasename = '';
             $scope.masterid = '';
+            $scope.port = '',
+            $scope.mt4api = '',
             $scope.gateway_id = '';         
         }
         $scope.resetData = function() {  

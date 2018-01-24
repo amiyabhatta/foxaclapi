@@ -18,6 +18,8 @@ class serverTransformer extends Fractal\TransformerAbstract {
             'gateway_name' => $data['gateway_name'],
             'gateway_id' => $data['GatewayID'],
             'master_id' => $data['masterid'],
+            'port' => $data['port'],
+            'mt4api' => $data['mt4api'],
             'links' => [
                 'rel' => 'self',
                 'uri' => 'api/v1/server/' . $data['id']

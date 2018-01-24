@@ -100,16 +100,18 @@ class UserContainer extends Base implements UserContract
                         'status_code' => 404]);
         }
 
-        $server_details = $this->usermodel->getUserServerDetails($user->id, $server_name);
+        //$server_details = $this->usermodel->getUserServerDetails($user->id, $server_name);
         $tab_details = $this->usermodel->getUserPermissionDetails($user->id);
-        $gateway_details = $this->usermodel->getUserGatewayDetails($server_name);
-        $db_detials = $this->usermodel->getDbDetails();
+        //$gateway_details = $this->usermodel->getUserGatewayDetails($server_name);
+        //$db_detials = $this->usermodel->getDbDetails();
         $mail_setting = $this->usermodel->getMailSetting($user->id, $server_name);
         $groups = head($this->usermodel->getGroups($user->id)->getgroup);
         $usergroups = $groups['groups'];
         $token = encrypt($token);
+        
+        $mt4api = $this->usermodel->getUserServerDetails($user->id, $server_name);
         // all good so return the token
-        return $this->setStatusCode(200)->respondWithToken(compact('token', 'server_details', 'tab_details', 'gateway_details', 'db_detials', 'mail_setting','usergroups'));
+        return $this->setStatusCode(200)->respondWithToken(compact('token','mt4api', 'tab_details', 'mail_setting','usergroups'));
     }
 
     /**
@@ -545,7 +547,7 @@ class UserContainer extends Base implements UserContract
         $userinfo = JWTAuth::parseToken()->authenticate();
         $login_id = common::getUserid($userinfo->manager_id);
 
-        $server_details = $this->usermodel->getUserServerDetails($login_id, $server_name);
+        $server_details = $this->usermodel->getUserServerDetailsToken($login_id, $server_name);
         $gateway_details = $this->usermodel->getUserGatewayDetails($server_name);
         $groups = head($this->usermodel->getGroups($login_id)->getgroup);
 

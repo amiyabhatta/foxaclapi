@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
+use Illuminate\Http\Request as Req;
+use Fox\Models\Serverlist;
 
 class serverlistUpdate extends Request
 {
@@ -21,15 +23,20 @@ class serverlistUpdate extends Request
      *
      * @return array
      */
-    public function rules()
+    public function rules(Req $request)
     {
+        $id = $request->segment(4);        
+        //$server = Serverlist::find($id);
+        
         return [
-            'servername' => 'required',
+            'servername' => 'required|unique:serverlist,servername,'.$id,
             'ipaddress' => 'required',
             'username' => 'required',
             'password' => 'required',
             'databasename' => 'required',
-            'GatewayID' => 'required|exists:mt4gateway,id'
+            'GatewayID' => 'required|exists:mt4gateway,id',
+            'port' => 'required|numeric',
+            'mt4api' => 'required'
         ];
     }
 }

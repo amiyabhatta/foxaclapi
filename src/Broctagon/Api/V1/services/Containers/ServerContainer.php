@@ -80,7 +80,10 @@ class ServerContainer extends Base implements ServerContract
             'databasename.required' => 'The database name field is required.',
             'masterid.numeric' => 'The masterid must be a number.',
             'GatewayID.required' => 'The gateway id field is required.',
-            'GatewayID.exists' => 'The selected gateway id is invalid.'
+            'GatewayID.exists' => 'The selected gateway id is invalid.',
+            'port.required' => 'The port field is required.',
+            'port.numeric' => 'The port must be a numeric.',
+            'mt4api.required' => 'The mt4api field is required.'
         );
 
         $rules = array(
@@ -90,7 +93,9 @@ class ServerContainer extends Base implements ServerContract
             'password' => 'required',
             'databasename' => 'required',
             'masterid' => 'numeric',
-            'GatewayID' => 'required|exists:mt4gateway,id'
+            'GatewayID' => 'required|exists:mt4gateway,id',
+            'port' => 'required|numeric',
+            'mt4api' => 'required'
         );
 
         $validate = Validator::make($request->all(), $rules, $messsages);

@@ -270,24 +270,30 @@ class User extends Authenticatable
     {
 
         $user_server_access = new user_server_access;
-        $result = $user_server_access->select('serverlist.servername', 'serverlist.ipaddress', 'serverlist.username', 'serverlist.password', 'serverlist.databasename', 'serverlist.GatewayID')
+        $result = $user_server_access->select('serverlist.servername', 'serverlist.ipaddress', 'serverlist.username', 'serverlist.password', 'serverlist.databasename', 'serverlist.GatewayID','serverlist.port','serverlist.mt4api')
                 ->leftjoin('users', 'user_server_access.user_id', '=', 'users.id')
                 ->leftjoin('serverlist', 'serverlist.id', '=', 'user_server_access.server_id')
                 ->where('user_server_access.user_id', '=', $user_id)
                 ->where('serverlist.servername', '=', $server_name)
-                ->get();
-        $server_array = [];
-        $i = 0;
-        foreach ($result as $serverdetails) {
-            $server_array[$i]['server_name'] = $serverdetails['servername'];
-            $server_array[$i]['server_ip'] = $serverdetails['ipaddress'];
-            $server_array[$i]['server_username'] = $serverdetails['username'];
-            $server_array[$i]['server_password'] = $serverdetails['password'];
-            $server_array[$i]['server_db'] = $serverdetails['databasename'];
-            $server_array[$i]['server_gw'] = $serverdetails['GatewayID'];
-            $i++;
-        }
-        return $server_array;
+                ->first();
+        return $result->mt4api;
+        
+        
+//        $server_array = [];
+//        $i = 0;
+//        foreach ($result as $serverdetails) {
+//           $server_array[$i]['server_name'] = $serverdetails['servername'];
+//            $server_array[$i]['server_ip'] = $serverdetails['ipaddress'];
+//            $server_array[$i]['server_username'] = $serverdetails['username'];
+//            $server_array[$i]['server_password'] = $serverdetails['password'];
+//            $server_array[$i]['server_db'] = $serverdetails['databasename'];
+//            $server_array[$i]['server_gw'] = $serverdetails['GatewayID'];
+//            //$server_array[$i]['mt4api'] = $serverdetails['mt4api'];
+//            //$server_array[$i]['port'] = $serverdetails['port'];
+//            
+//            $i++;
+//        }
+//        return $server_array;
     }
 
     /**
@@ -326,9 +332,13 @@ class User extends Authenticatable
     public function getUserGatewayDetails($server_name)
     {
         $gw_model = new Mt4gateway();
-        $gw_result = $gw_model->select('gateway_name', 'host', 'port', 'master_password', 'mt4gateway.username')
-                        ->join('serverlist', 'serverlist.GatewayID', '=', 'mt4gateway.id')
-                        ->where('serverlist.servername', '=', $server_name)->first();
+//        $gw_result = $gw_model->select('gateway_name', 'host', 'port', 'master_password', 'mt4gateway.username')
+//                        ->join('serverlist', 'serverlist.GatewayID', '=', 'mt4gateway.id')
+//                        ->where('serverlist.servername', '=', $server_name)->first();
+        $gw_result = $gw_model->select('mt4gateway.*')
+                              ->join('serverlist', 'serverlist.GatewayID', '=', 'mt4gateway.id')
+                              ->where('serverlist.servername', '=', $server_name)->first();
+        
         $gw_details = [];
         if ($gw_result) {
             $gw_details[0]['gateway_name'] = $gw_result->gateway_name;
@@ -453,5 +463,33 @@ class User extends Authenticatable
                    ->where('id','=',$userId)->get()->toArray();
        return array('mangerid' => $res[0]['manager_id']);
     } 
+    
+    public function getUserServerDetailsToken($user_id, $server_name = null)
+    {
+
+        $user_server_access = new user_server_access;
+        $result = $user_server_access->select('serverlist.servername', 'serverlist.ipaddress', 'serverlist.username', 'serverlist.password', 'serverlist.databasename', 'serverlist.GatewayID','serverlist.port','serverlist.mt4api')
+                ->leftjoin('users', 'user_server_access.user_id', '=', 'users.id')
+                ->leftjoin('serverlist', 'serverlist.id', '=', 'user_server_access.server_id')
+                ->where('user_server_access.user_id', '=', $user_id)
+                ->where('serverlist.servername', '=', $server_name)
+                ->get();
+        
+        $server_array = [];
+        $i = 0;
+        foreach ($result as $serverdetails) {
+           $server_array[$i]['server_name'] = $serverdetails['servername'];
+            $server_array[$i]['server_ip'] = $serverdetails['ipaddress'];
+            $server_array[$i]['server_username'] = $serverdetails['username'];
+            $server_array[$i]['server_password'] = $serverdetails['password'];
+            $server_array[$i]['server_db'] = $serverdetails['databasename'];
+            $server_array[$i]['server_gw'] = $serverdetails['GatewayID'];
+            $server_array[$i]['mt4api'] = $serverdetails['mt4api'];
+            $server_array[$i]['port'] = $serverdetails['port'];
+            
+            $i++;
+        }
+        return $server_array;
+    }
 
 }
