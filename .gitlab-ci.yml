@@ -6,7 +6,7 @@ stages:
 build_prod:
   stage: build_dev
   tags:
-  - mynewrunnerv3
+  - foxmagr
   only:
   - /^.*-snapshot$/
   except:
