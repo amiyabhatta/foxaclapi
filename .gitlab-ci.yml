@@ -35,6 +35,6 @@ build_qa:
   - sudo /bin/rsync -aqziDHS --del $PWD/* /var/www/vhosts/fxmgr-qa.c64f.com
   - cd /var/www/vhosts/fxmgr-qa.c64f.com
   - sudo /usr/local/bin/composer update --no-scripts
-  - sudo /usr/local/bin/composer dump-autoload
+  - sudo /usr/local/bin/composer dump-autoload -o
   - sudo chmod -R 775 /var/www/vhosts/fxmgr-qa.c64f.com
   - sudo chown -R apache:apache /var/www/vhosts/fxmgr-qa.c64f.com
