@@ -8,11 +8,8 @@ build_prod:
   tags:
   - foxmagr
   only:
-  - /^.*-snapshot$/
-  except:
-  - branches
+  - dev
 
-  
   script:
   - sudo /bin/rsync --dry-run -vaqziDHS --del $PWD/ /var/www/vhosts/fxmgr-dev.c64f.com
   - sudo /bin/rsync -aqziDHS --del $PWD/ /var/www/vhosts/fxmgr-dev.c64f.com
