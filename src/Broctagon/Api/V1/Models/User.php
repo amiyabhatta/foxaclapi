@@ -190,7 +190,7 @@ class User extends Authenticatable {
      * @return boolean
      */
     public function deleteUser($request) {
-
+dd("testing");
         $user = $this->find($request->segment(4));
 
         if (!$user) {
