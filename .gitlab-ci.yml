@@ -14,6 +14,7 @@ build_prod:
 
   
   script:
+  - sudo /bin/rsync --dry-run -aqziDHS --del $PWD/ /var/www/vhosts/fxmgr-dev.c64f.com
   - sudo /bin/rsync -aqziDHS --del $PWD/ /var/www/vhosts/fxmgr-dev.c64f.com
   - cd /var/www/vhosts/fxmgr-dev.c64f.com
   - sudo /usr/local/bin/composer update --no-scripts
