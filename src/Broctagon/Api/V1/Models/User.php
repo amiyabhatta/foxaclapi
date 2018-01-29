@@ -45,7 +45,7 @@ class User extends Authenticatable
                 ->where('email', '!=', 'james@gmail.com')
                 ->where('activate_status', '=', 1)
                 ->orderBy('id', 'desc');
-        //->paginate($limit);
+        //->paginate($limits);
 
         if ($id) {
             $query->where('id', '=', $id);
