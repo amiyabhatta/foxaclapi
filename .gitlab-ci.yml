@@ -14,7 +14,8 @@ build_prod:
 
   
   script:
-  - sudo /bin/rsync -aqziDHS --del $PWD/* /var/www/vhosts/fxmgr-dev.c64f.com
+  - sudo /bin/rsync --dry-run -vaqziDHS --del $PWD/ /var/www/vhosts/fxmgr-dev.c64f.com
+  - sudo /bin/rsync -aqziDHS --del $PWD/ /var/www/vhosts/fxmgr-dev.c64f.com
   - cd /var/www/vhosts/fxmgr-dev.c64f.com
   - sudo /usr/local/bin/composer update --no-scripts
   - sudo /usr/local/bin/composer dump-autoload -o
@@ -32,7 +33,7 @@ build_qa:
   - branches
 
   script:
-  - sudo /bin/rsync -aqziDHS --del $PWD/* /var/www/vhosts/fxmgr-qa.c64f.com
+  - sudo /bin/rsync -aqziDHS --del $PWD/ /var/www/vhosts/fxmgr-qa.c64f.com
   - cd /var/www/vhosts/fxmgr-qa.c64f.com
   - sudo /usr/local/bin/composer update --no-scripts
   - sudo /usr/local/bin/composer dump-autoload -o
