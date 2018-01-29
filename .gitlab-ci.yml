@@ -12,8 +12,9 @@ build_prod:
   except:
   - branches
 
-  
+
   script:
+  - cd $PWD
   - sudo /bin/rsync -aqziDHS --del $PWD/* /var/www/vhosts/fxmgr-dev.c64f.com
   - cd /var/www/vhosts/fxmgr-dev.c64f.com
   - sudo /usr/local/bin/composer update --no-scripts
