@@ -1,0 +1,41 @@
+stages:
+- build_dev
+- build_qa
+
+
+build_prod:
+  stage: build_dev
+  tags:
+  - foxmagr
+  only:
+  - /^.*-snapshot$/
+  except:
+  - branches
+
+
+  script:
+  - sudo /bin/rsync --dry-run -vaqziDHS --del $PWD/ /var/www/vhosts/fxmgr-dev.c64f.com
+  - sudo /bin/rsync -aqziDHS --del $PWD/ /var/www/vhosts/fxmgr-dev.c64f.com
+  - cd /var/www/vhosts/fxmgr-dev.c64f.com
+  - sudo /usr/local/bin/composer update --no-scripts
+  - sudo /usr/local/bin/composer dump-autoload -o
+  - sudo chmod -R 775 /var/www/vhosts/fxmgr-dev.c64f.com
+  - sudo chown -R apache:apache /var/www/vhosts/fxmgr-dev.c64f.com
+
+build_qa:
+  when: manual
+  stage: build_qa
+  tags:
+  - foxmagr
+  only:
+  - /^.*-snapshot$/
+  except:
+  - branches
+
+  script:
+  - sudo /bin/rsync -aqziDHS --del $PWD/ /var/www/vhosts/fxmgr-qa.c64f.com
+  - cd /var/www/vhosts/fxmgr-qa.c64f.com
+  - sudo /usr/local/bin/composer update --no-scripts
+  - sudo /usr/local/bin/composer dump-autoload -o
+  - sudo chmod -R 775 /var/www/vhosts/fxmgr-qa.c64f.com
+  - sudo chown -R apache:apache /var/www/vhosts/fxmgr-qa.c64f.com
