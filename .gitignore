@@ -7,3 +7,4 @@ Homestead.json
 /backup26oct/nbproject/private/
 /backup26oct/vendor/
 composer.lock
+.gitlab-ci.yml
