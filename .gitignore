@@ -6,3 +6,4 @@ Homestead.json
 .env
 /backup26oct/nbproject/private/
 /backup26oct/vendor/
+composer.lock
